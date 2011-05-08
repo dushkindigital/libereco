@@ -31,7 +31,6 @@
 			</copy-by-references> -->
 
 	</configuration>
-
 	
     <mapping map-id="Marketplace">
         <class-a>com.libereco.server.model.Marketplace</class-a>
