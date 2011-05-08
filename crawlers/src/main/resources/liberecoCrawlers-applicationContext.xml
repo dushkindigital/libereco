@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:p="http://www.springframework.org/schema/p" xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:aop="http://www.springframework.org/schema/aop"
+    xmlns:tx="http://www.springframework.org/schema/tx"
+    xmlns:util="http://www.springframework.org/schema/util"
+    xsi:schemaLocation="
+    http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+    http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+    http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-3.0.xsd
+    http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd    
+    http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+    http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd
+    ">
+    
+    <context:component-scan base-package="cs"/>
+    
+    <!-- Configuration properties -->
+    <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="location">
+            <value>classpath:liberecoCrawlers.properties</value>
+        </property>
+    </bean>
+
+    <!-- eBay API Account -->   
+    <bean id="ebayApiAccount" class="com.ebay.sdk.ApiAccount">
+         <property name="developer" value="${libereco.server.crawler.ebay.apiContext.sandbox.apiAccount.developer}" />
+         <property name="application" value="${libereco.server.crawler.ebay.apiContext.sandbox.apiAccount.application}" />
+         <property name="certificate" value="${libereco.server.crawler.ebay.apiContext.sandbox.apiAccount.certificate}" />
+    </bean>
+    
+    <bean id="ebayApiCredential" class="com.ebay.sdk.ApiCredential">
+         <property name="apiAccount" ref="ebayApiAccount" />                 
+         <property name="eBayToken" value="${libereco.server.crawler.ebay.apiContext.sandbox.eBayToken}" />
+    </bean>
+    
+     <bean id="ebayApiContext" class="com.ebay.sdk.ApiContext">
+         <property name="apiCredential" ref="ebayApiCredential" />                 
+         <property name="apiServerUrl" value="${libereco.server.crawler.ebay.apiContext.sandbox.apiServerUrl}" />
+    </bean>
+    
+    <!-- eBay crawler -->   
+    <bean id="ebayCrawler" class="com.libereco.server.crawler.ebay.EbayCrawler">
+        <constructor-arg>        
+            <ref bean="ebayApiContext" />
+        </constructor-arg>            
+        <constructor-arg>
+            <value>${libereco.server.crawler.ebay.maxLevel}</value>
+        </constructor-arg>        
+    </bean>
+
+
+    <bean id="etsyCrawler" class="com.libereco.server.crawler.etsy.EtsyCrawler">
+        <constructor-arg>
+            <value>${libereco.server.crawler.etsy.sandbox.categoriesUrl}</value>
+        </constructor-arg>
+        <constructor-arg>
+            <value>${libereco.server.crawler.etsy.sandbox.apiKey}</value>
+        </constructor-arg>
+        <constructor-arg>
+            <value>${libereco.server.crawler.etsy.sandbox.maxRequestPerSecond}</value>
+        </constructor-arg>            
+    </bean>
+
+    <!-- Crawling service -->
+    <bean id="crawlingServiceOutputConfig" class="com.libereco.server.crawler.CrawlerOutputConfig">
+         <property name="owlOutputFolder">
+            <value>${libereco.server.service.crawling.outputConfig.owlOutputFolder}</value>
+         </property>
+    </bean>
+
+
+    <!-- Crawling service -->
+    <bean id="crawlingService" class="com.libereco.server.crawler.impl.CrawlingServiceImpl">
+        <property name="crawlers">
+            <list>
+                <ref bean="ebayCrawler" />
+                <ref bean="etsyCrawler" />
+            </list>
+        </property>
+        <property name="outputConfig">
+            <ref bean="crawlingServiceOutputConfig" />
+        </property>
+
+        <!-- 
+        <constructor-arg index="0" type="java.util.List">
+            <list>
+                <ref bean="ebayCrawler" />
+            </list>
+        </constructor-arg>
+        -->
+    </bean>
+    
+    <!-- Scheduler -->
+    <bean name="marketplaceCrawlerJob" class="org.springframework.scheduling.quartz.JobDetailBean">
+        <property name="jobClass" value="com.libereco.server.crawler.CrawlerJob" />
+<!--        
+        <property name="jobDataAsMap">
+            <map>
+                <entry key="timeout" value="5" />
+            </map>
+        </property>
+-->     
+    </bean>
+
+    <bean id="marketplaceCrawlingTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+        <property name="jobDetail" ref="marketplaceCrawlerJob" />
+        
+        <!--
+        Cron-Expressions are used to configure instances of CronTrigger. Cron-Expressions are strings that are actually made up of seven sub-expressions, that describe individual details of the schedule. These sub-expression are separated with white-space, and represent:
+
+            Seconds
+            Minutes
+            Hours
+            Day-of-Month
+            Month
+            Day-of-Week
+            Year (optional field)
+            
+        An example of a complete cron-expression is the string "0 0 12 ? * WED" - which means "every Wednesday at 12:00 pm".
+        
+        Individual sub-expressions can contain ranges and/or lists. For example, the day of week field in the previous (which reads "WED") example could be replaces with "MON-FRI", "MON, WED, FRI", or even "MON-WED,SAT".
+        
+        Wild-cards (the '*' character) can be used to say "every" possible value of this field. Therefore the '*' character in the "Month" field of the previous example simply means "every month". A '*' in the Day-Of-Week field would obviously mean "every day of the week".
+        
+        All of the fields have a set of valid values that can be specified. These values should be fairly obvious - such as the numbers 0 to 59 for seconds and minutes, and the values 0 to 23 for hours. Day-of-Month can be any value 0-31, but you need to be careful about how many days are in a given month! Months can be specified as values between 0 and 11, or by using the strings JAN, FEB, MAR, APR, MAY, JUN, JUL, AUG, SEP, OCT, NOV and DEC. Days-of-Week can be specified as vaules between 1 and 7 (1 = Sunday) or by using the strings SUN, MON, TUE, WED, THU, FRI and SAT.
+        
+        The '/' character can be used to specify increments to values. For example, if you put '0/15' in the Minutes field, it means 'every 15 minutes, starting at minute zero'. If you used '3/20' in the Minutes field, it would mean 'every 20 minutes during the hour, starting at minute three' - or in other words it is the same as specifying '3,23,43' in the Minutes field.
+        
+        The '?' character is allowed for the day-of-month and day-of-week fields. It is used to specify "no specific value". This is useful when you need to specify something in one of the two fields, but not the other. See the examples below (and CronTrigger JavaDoc) for clarification.
+        
+        The 'L' character is allowed for the day-of-month and day-of-week fields. This character is short-hand for "last", but it has different meaning in each of the two fields. For example, the value "L" in the day-of-month field means "the last day of the month" - day 31 for January, day 28 for February on non-leap years. If used in the day-of-week field by itself, it simply means "7" or "SAT". But if used in the day-of-week field after another value, it means "the last xxx day of the month" - for example "6L" or "FRIL" both mean "the last friday of the month". When using the 'L' option, it is important not to specify lists, or ranges of values, as you'll get confusing results.
+        
+        The 'W' is used to specify the weekday (Monday-Friday) nearest the given day. As an example, if you were to specify "15W" as the value for the day-of-month field, the meaning is: "the nearest weekday to the 15th of the month".
+        
+        The '#' is used to specify "the nth" XXX weekday of the month. For example, the value of "6#3" or "FRI#3" in the day-of-week field means "the third Friday of the month".
+
+    -->
+        <!-- Run every minute -->
+<!--        
+        <property name="cronExpression" value="0 0/1 * * * ?" />
+-->     
+        <property name="cronExpression" value="${libereco.server.service.crawling.schedule}" />
+        <!-- run every morning at 6 AM -->
+<!--        
+        <property name="cronExpression" value="0 0 6 * * ?" />
+-->     
+    </bean>
+           
+    <bean id="marketplaceCrawlerSchedulerProperties" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+        <property name="singleton" value="true"/>
+        <property name="properties">
+	        <props>
+	                <!--                         
+	                <prop key="org.quartz.scheduler.instanceId">AUTO</prop>
+	                <prop key="org.quartz.scheduler.instanceName">JobCluster</prop>
+	                <prop key="org.quartz.jobStore.class">org.quartz.impl.jdbcjobstore.JobStoreTX</prop>
+	                <prop key="org.quartz.jobStore.driverDelegateClass">org.quartz.impl.jdbcjobstore.StdJDBCDelegate</prop>
+	                <prop key="org.quartz.jobStore.isClustered">true</prop>
+	                <prop key="org.quartz.jobStore.useProperties">false</prop>
+	                -->
+	                <prop key="org.quartz.scheduler.skipUpdateCheck">true</prop>
+	                
+	        </props>
+        </property>
+    </bean>
+    
+    <bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+        <property name="triggers">
+            <list>
+                <ref bean="marketplaceCrawlingTrigger" />
+            </list>
+        </property>
+        <property name="quartzProperties" ref="marketplaceCrawlerSchedulerProperties" />        
+    </bean>
+        
+</beans>

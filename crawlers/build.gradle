@@ -1,0 +1,73 @@
+apply plugin: 'java'
+apply plugin: 'eclipse'
+//apply plugin: 'maven'  // Maven plugin to install artifact in local Maven repo.
+
+sourceCompatibility = 1.6
+version = '1.0'
+
+jar {
+    manifest {
+        attributes 'Implementation-Title': 'Libereco', 'Implementation-Version': version
+    }
+}
+
+repositories {
+    repositories {
+		// Using either toURI().toURL().toString() or explicitly mavenLocal() work
+		mavenRepo urls: new File(System.getProperty("user.home"), ".m2/repository").toURI().toURL().toString() 
+		//mavenLocal()
+        //mavenRepo urls: "file://" + System.getProperty('user.home') + "/.m2/repository/"
+		
+        mavenCentral()
+        mavenRepo urls: "http://repository.jboss.org/nexus/content/groups/public"
+    }
+}
+
+dependencies {
+    //compile group: 'commons-collections', name: 'commons-collections', version: '3.2'
+	
+	//compile (
+	compile (
+		'org.springframework:spring-core:3.0.5.RELEASE',
+        'org.springframework:spring-beans:3.0.5.RELEASE',
+        'org.springframework:spring-context:3.0.5.RELEASE',
+        'org.springframework:spring-aop:3.0.5.RELEASE',
+        'org.springframework:spring-context-support:3.0.5.RELEASE',
+        'org.springframework:spring-tx:3.0.5.RELEASE',
+        'org.springframework:spring-orm:3.0.5.RELEASE',
+        'org.springframework:spring-jdbc:3.0.5.RELEASE',
+        'org.springframework:spring-test:3.0.5.RELEASE',
+        'com.ebay.ebaysdk:ebaysdkcore:687',
+        'com.ebay.ebaysdk:ebaycalls:687',
+        'com.ebay.ebaysdk:attributes:687',
+        'com.ebay.ebaysdk:helper:687',
+        'org.opensymphony.quartz:quartz:1.6.1',	
+		// TODO: Check if this is only runtime
+		
+		
+		
+		
+		group: 'commons-collections', name: 'commons-collections', version: '3.2',
+	)
+	
+	runtime (
+	    'org.slf4j:jcl-over-slf4j:1.6.1',	
+	    'org.slf4j:slf4j-api:1.6.1',
+	    'org.slf4j:slf4j-log4j12:1.6.1',
+	    'log4j:log4j:1.2.16'		
+	)
+	
+	testCompile "junit:junit:4.8.1"
+    //testCompile group: 'junit', name: 'junit', version: '4.+'
+	
+}
+
+test {
+    systemProperties 'property': 'value'
+}
+
+uploadArchives {
+    repositories {
+       flatDir(dirs: file('repos'))
+    }
+}

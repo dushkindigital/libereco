@@ -1,0 +1,561 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.dushkindigital</groupId>
+	<artifactId>libereco-crawlers</artifactId>
+	<!-- <packaging>war</packaging> -->
+	<packaging>jar</packaging>
+
+	<version>1.0-SNAPSHOT</version>
+	<name>libereco-crawlers</name>
+	
+	<parent>
+		<groupId>com.dushkindigital</groupId>
+		<artifactId>libereco</artifactId>
+		<version>1.0-SNAPSHOT</version>
+	</parent>
+
+	<organization>
+		<name>Dushkin Digital Media, LLC</name>
+		<url>http://www.dushkindigital.com.com</url>
+	</organization>
+
+	<developers>
+		<developer>
+			<id>aleksandar</id>
+			<name>Aleksandar Miljusevic</name>
+			<email>miljusevic@yahoo.com</email>
+			<url></url>
+			<organization></organization>
+			<organizationUrl></organizationUrl>
+			<roles>
+				<role></role>
+			</roles>
+			<timezone>-5</timezone>
+		</developer>
+	</developers>
+
+	<reporting>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<configuration>
+					<show>private</show>
+					<doclet>gr.spinellis.umlgraph.doclet.UmlGraphDoc</doclet>
+					<docletArtifact>
+						<groupId>gr.spinellis</groupId>
+						<artifactId>UmlGraph</artifactId>
+						<version>4.6</version>
+					</docletArtifact>
+					<additionalparam>-inferrel -collpackages java.util.* -hide java.*</additionalparam>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>cobertura-maven-plugin</artifactId>
+				<version>2.0</version>
+			</plugin>
+			<plugin>
+				<artifactId>maven-changes-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>jxr-maven-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-report-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-pmd-plugin</artifactId>
+				<configuration>
+					<targetjdk>1.5</targetjdk>
+					<rulesets>
+						<ruleset>/rulesets/basic.xml</ruleset>
+						<ruleset>/rulesets/controversial.xml</ruleset>
+					</rulesets>
+					<format>xml</format>
+					<linkXref>true</linkXref>
+					<sourceEncoding>utf-8</sourceEncoding>
+					<minimumTokens>100</minimumTokens>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>taglist-maven-plugin</artifactId>
+			</plugin>
+		</plugins>
+	</reporting>
+
+	<dependencies>
+
+		<!-- Spring dependencies -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-core</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		<!-- <dependency> <groupId>org.springframework</groupId> <artifactId>spring-web</artifactId> 
+			<version>${spring.version}</version> </dependency> -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-beans</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context</artifactId>
+			<version>${spring.version}</version>
+			<!-- commons-logging should be excluded if we want to use SLF4J as the 
+				logging facade -->
+			<exclusions>
+				<exclusion>
+					<groupId>commons-logging</groupId>
+					<artifactId>commons-logging</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-aop</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context-support</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-tx</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-orm</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-jdbc</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-test</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+
+		<!-- <dependency> <groupId>org.apache.commons</groupId> <artifactId>com.springsource.org.apache.commons.logging</artifactId> 
+			<version>1.1.1</version> <scope>provided</scope> </dependency> -->
+		<dependency>
+			<groupId>commons-logging</groupId>
+			<artifactId>commons-logging</artifactId>
+			<version>1.1.1</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<!-- Logging dependencies -->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>jcl-over-slf4j</artifactId>
+			<version>${slf4j.version}</version>
+			<scope>runtime</scope>
+		</dependency>
+
+		<!-- slf4j configuration if we want to use log4j as back-end. If logback 
+			is used as back-end the only slf4j artifactId we need is jcl-over-slf4j -->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>${slf4j.version}</version>
+			<!-- <scope>runtime</scope> -->
+		</dependency>
+
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+			<version>${slf4j.version}</version>
+			<scope>runtime</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<version>${log4j.version}</version>
+			<scope>runtime</scope>
+		</dependency>
+
+		<!-- logback - enable only if we want to use it as SLF4J back-end -->
+		<!-- <dependency> <groupId>ch.qos.logback</groupId> <artifactId>logback-classic</artifactId> 
+			<version>${logback.version}</version> <scope>runtime</scope> </dependency> -->
+
+		<!-- TODO: Check what versions of aspectjrt and aspectjweaver should be 
+			used with Spring 3.0.5 -->
+		<!-- Compile time dependencies -->
+		<dependency>
+			<groupId>org.aspectj</groupId>
+			<artifactId>aspectjrt</artifactId>
+			<version>${aspectj-rt.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.aspectj</groupId>
+			<artifactId>aspectjweaver</artifactId>
+			<version>${aspectj-weaver.version}</version>
+		</dependency>
+
+		<!-- Hibernate -->
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-core</artifactId>
+			<version>${hibernate-core.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-annotations</artifactId>
+			<version>${hibernate-annotations.version}</version>
+		</dependency>
+
+		<!-- MySQL JDBC driver (Connector/J) -->
+		<!-- <dependency> <groupId>mysql</groupId> <artifactId>mysql-connector-java</artifactId> 
+			<version>${mysqlConnector.version}</version> </dependency> <dependency> <groupId>commons-cli</groupId> 
+			<artifactId>commons-cli</artifactId> <version>1.2</version> </dependency> -->
+
+
+		<!-- ebay SDK -->
+		<dependency>
+			<groupId>com.sun.xml.ws</groupId>
+			<artifactId>jaxws-rt</artifactId>
+			<version>2.1.4</version>
+		</dependency>
+
+		<!-- Xalan -->
+		<dependency>
+			<groupId>xalan</groupId>
+			<artifactId>xalan</artifactId>
+			<version>2.7.1</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.ebay.ebaysdk</groupId>
+			<artifactId>ebaysdkcore</artifactId>
+			<version>${ebaysdk.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.ebay.ebaysdk</groupId>
+			<artifactId>ebaycalls</artifactId>
+			<version>${ebaysdk.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.ebay.ebaysdk</groupId>
+			<artifactId>attributes</artifactId>
+			<version>${ebaysdk.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.ebay.ebaysdk</groupId>
+			<artifactId>helper</artifactId>
+			<version>${ebaysdk.version}</version>
+		</dependency>
+
+		<!-- <dependency> <groupId>org.json</groupId> <artifactId>json</artifactId> 
+			<version>20090211</version> </dependency> -->
+		<dependency>
+			<groupId>com.google.code.gson</groupId>
+			<artifactId>gson</artifactId>
+			<version>1.6</version>
+			<scope>compile</scope>
+		</dependency>
+
+		<!-- Signpost - if we need to do Etsy authentication (OAuth) -->
+		<!-- <dependency> <groupId>oauth.signpost</groupId> <artifactId>signpost-core</artifactId> 
+			<version>1.2.1.1</version> </dependency> -->
+
+		<dependency>
+			<groupId>org.restlet.jse</groupId>
+			<artifactId>org.restlet</artifactId>
+			<version>2.0.5</version>
+		</dependency>
+
+		<!-- <dependency> <groupId>org.restlet.jse</groupId> <artifactId>org.restlet.example</artifactId> 
+			<version>2.0.5</version> </dependency> <dependency> <groupId>org.restlet.jse</groupId> 
+			<artifactId>org.restlet.ext.json</artifactId> <version>2.0.5</version> </dependency> 
+			<dependency> <groupId>org.restlet.jse</groupId> <artifactId>org.restlet.ext.xstream</artifactId> 
+			<version>2.0.5</version> </dependency> -->
+
+		<!-- For Quartz up-to 1.6.1 -->
+		<!-- <dependency> <groupId>org.opensymphony.quartz</groupId> <artifactId>quartz</artifactId> 
+			<version>${quartz.version}</version> </dependency> -->
+
+		<!-- For Quartz 1.7.2+ -->
+		<dependency>
+			<groupId>org.quartz-scheduler</groupId>
+			<artifactId>quartz</artifactId>
+			<version>${quartz.version}</version>
+		</dependency>
+
+
+
+		<!-- Quartz 1.6.1 depends on commons collections -->
+		<dependency>
+			<groupId>commons-collections</groupId>
+			<artifactId>commons-collections</artifactId>
+			<version>3.2</version>
+			<!-- <version>3.1</version> -->
+			<scope>runtime</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>net.sourceforge.owlapi</groupId>
+			<artifactId>owlapi-parent</artifactId>
+			<version>3.2.2</version>
+		</dependency>
+
+		<dependency>
+			<groupId>commons-codec</groupId>
+			<artifactId>commons-codec</artifactId>
+			<version>1.5</version>
+		</dependency>
+
+		<!-- TESTING Dependencies -->
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>${junit.version}</version>
+			<scope>test</scope>
+			<exclusions>
+				<exclusion>
+					<groupId>org.slf4j</groupId>
+					<artifactId>slf4j-nop</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+
+	</dependencies>
+
+	<repositories>
+		<repository>
+			<id>Codehaus Snapshots</id>
+			<url>http://snapshots.repository.codehaus.org/</url>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+			<releases>
+				<enabled>false</enabled>
+			</releases>
+		</repository>
+
+		<repository>
+			<id>maven2-repository.dev.java.net</id>
+			<name>Java.net Repository for Maven</name>
+			<url>http://download.java.net/maven/2/</url>
+			<layout>default</layout>
+		</repository>
+
+		<repository>
+			<id>jboss</id>
+			<url>http://repository.jboss.com/maven2</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>false</enabled>
+				<updatePolicy>never</updatePolicy>
+			</snapshots>
+		</repository>
+
+		<!-- <repository> <id>mvnrepository</id> <name>MVN repository</name> <url>http://mvnrepository.com/</url> 
+			</repository> -->
+
+		<!-- <repository> <id>geogoogle</id> <name>geogoogle repo</name> <url>http://www.cs.drexel.edu/~zl25/maven2/repo</url> 
+			<releases> <updatePolicy>never</updatePolicy> <checksumPolicy>warn</checksumPolicy> 
+			<enabled>true</enabled> </releases> </repository> -->
+
+		<!-- <repository> <id>itextMavenRepository</id> <name>itext Maven Repository</name> 
+			<url>http://maven.itextpdf.com/</url> </repository> -->
+
+		<!-- <repository> <id>signpost-snapshots</id> <url>http://oss.sonatype.org/content/repositories/signpost-snapshots</url> 
+			<releases> <enabled>true</enabled> </releases> <snapshots> <enabled>true</enabled> 
+			</snapshots> </repository> <repository> <id>signpost-releases</id> <url>http://oss.sonatype.org/content/repositories/signpost-releases</url> 
+			<releases> <enabled>true</enabled> </releases> <snapshots> <enabled>false</enabled> 
+			</snapshots> </repository> -->
+
+		<repository>
+			<id>maven-restlet</id>
+			<name>Public online Restlet repository</name>
+			<url>http://maven.restlet.org</url>
+		</repository>
+
+		<repository>
+			<id>gson</id>
+			<url>http://google-gson.googlecode.com/svn/mavenrepo</url>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+		</repository>
+
+	</repositories>
+
+	<pluginRepositories>
+		<pluginRepository>
+			<id>Codehaus Snapshots</id>
+			<url>http://snapshots.repository.codehaus.org/</url>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+			<releases>
+				<enabled>false</enabled>
+			</releases>
+		</pluginRepository>
+	</pluginRepositories>
+	<build>
+		<resources>
+			<resource>
+				<filtering>false</filtering>
+				<directory>src/main/java</directory>
+				<includes>
+					<include>**/*.html</include>
+					<include>**/*.xml</include>
+				</includes>
+				<excludes>
+					<exclude>**/*.java</exclude>
+				</excludes>
+			</resource>
+			<resource>
+				<filtering>false</filtering>
+				<directory>src/main/resources</directory>
+				<includes>
+					<include>**/*.xml</include>
+					<include>**/*.properties</include>
+					<include>**/*.ftl</include>
+					<include>mime.types</include>
+				</includes>
+				<excludes>
+					<exclude>**/*.java</exclude>
+				</excludes>
+			</resource>
+		</resources>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>attach-sources</id>
+						<phase>verify</phase>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<source>1.6</source>
+					<target>1.6</target>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>hibernate3-maven-plugin</artifactId>
+				<configuration>
+					<components>
+						<component>
+							<name>hbm2ddl</name>
+						</component>
+						<component>
+							<name>hbm2java</name>
+							<outputDirectory>src/main/java</outputDirectory>
+						</component>
+						<component>
+							<name>hbm2doc</name>
+							<outputDirectory>target/site/hibernate3/javadoc</outputDirectory>
+						</component>
+					</components>
+					<componentProperties>
+						<configurationfile>/src/main/resources/fh-hibernate.cfg.xml</configurationfile>
+					</componentProperties>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+
+				<!-- If we want to have a single jar with dependencies and main class. -->
+				<!-- <configuration> <archive> <manifest> <addClasspath>true</addClasspath> 
+					<mainClass>com.libereco.server.LiberecoLauncher</mainClass> </manifest> </archive> 
+					</configuration> -->
+
+				<executions>
+					<execution>
+						<id>make-a-jar</id>
+						<phase>compile</phase>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
+			<!-- If we want to build single jar with all dependencies. -->
+			<!-- <plugin> <artifactId>maven-assembly-plugin</artifactId> <configuration> 
+				<descriptorRefs> <descriptorRef>jar-with-dependencies</descriptorRef> </descriptorRefs> 
+				</configuration> </plugin> -->
+
+			<plugin>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<executions>
+					<execution>
+						<!-- Switch the phase if we want to copy dependencies for packaging -->
+						<!-- <phase>install</phase> -->
+						<phase>package</phase>
+						<goals>
+							<goal>copy-dependencies</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>${project.build.directory}/lib</outputDirectory>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+
+	<properties>
+		<junit.version>4.8.1</junit.version>
+		<spring.version>3.0.5.RELEASE</spring.version>
+		<!-- <mysqlConnector.version>5.1.12</mysqlConnector.version> -->
+
+		<hibernate-annotations.version>3.5.1-Final</hibernate-annotations.version>
+		<hibernate-core.version>3.5.1-Final</hibernate-core.version>
+
+		<aspectj-rt.version>1.6.6</aspectj-rt.version>
+		<aspectj-weaver.version>1.6.8</aspectj-weaver.version>
+
+		<slf4j.version>1.6.1</slf4j.version>
+		<log4j.version>1.2.16</log4j.version>
+
+		<!-- 1.8.4 is the latest version at this point. However, it seems that 
+			versions 1.7.2+ automatically run update check. If we don't want this we 
+			should either explicitely disable this option or use one of older versions. 
+			http://martijndashorst.com/blog/2011/02/21/ehcache-and-quartz-phone-home-during-startup/ 
+			http://forums.terracotta.org/forums/posts/list/3395.page -->
+		<!-- <quartz.version>1.7.2</quartz.version> -->
+		<quartz.version>1.8.4</quartz.version>
+		<!-- <quartz.version>1.6.1</quartz.version> -->
+
+		<ebaysdk.version>687</ebaysdk.version>
+
+		<!-- <logback.version>0.9.20</logback.version> -->
+	</properties>
+
+</project>
