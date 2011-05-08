@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mappings xmlns="http://dozer.sourceforge.net" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://dozer.sourceforge.net http://dozer.sourceforge.net/schema/beanmapping.xsd">
+
+	<configuration>
+		<stop-on-errors>true</stop-on-errors>
+		<date-format>MM/dd/yyyy HH:mm</date-format> <!-- default dateformat will apply to all class maps unless the class mapping 
+			explicitly overrides it -->
+		<wildcard>true</wildcard> <!-- default wildcard policy that will apply to all class maps unless the 
+			class mapping explicitly overrides it -->
+
+		<!-- these are always considered bi-directional -->
+		<!-- <custom-converters> -->
+		<!-- <converter type="org.dozer.functional_tests.support.TestCustomConverter"> 
+			<class-a>org.dozer.vo.CustomDoubleObjectIF</class-a> <class-b>java.lang.Double</class-b> 
+			</converter> -->
+
+		<!-- this is a top level custom mapping. You are responsible for mapping 
+			everything between class-a and class-b -->
+		<!-- keep the carriage returns...this tests parsing the xml -->
+		<!-- <converter type="org.dozer.functional_tests.support.TestCustomHashMapConverter"> 
+			<class-a> org.dozer.vo.TestCustomConverterHashMapObject </class-a> <class-b>org.dozer.vo.TestCustomConverterHashMapPrimeObject 
+			</class-b> </converter> -->
+
+		<!-- testing converters with hints -->
+		<!-- <converter type="org.dozer.functional_tests.support.HintedOnlyConverter"> 
+			<class-a>org.dozer.vo.HintedOnly</class-a> <class-b>java.lang.String</class-b> 
+			</converter> -->
+		<!-- </custom-converters> -->
+		<!-- <copy-by-references> <copy-by-reference>org.dozer.vo.NoExtendBaseObjectGlobalCopyByReference</copy-by-reference> 
+			</copy-by-references> -->
+
+	</configuration>
+
+	
+    <mapping map-id="Marketplace">
+        <class-a>com.libereco.server.model.Marketplace</class-a>
+        <class-b>com.libereco.server.dto.MarketplaceDto</class-b>
+    </mapping>
+
+    <mapping map-id="User">
+        <class-a>com.libereco.server.model.User</class-a>
+        <class-b>com.libereco.server.dto.UserDto</class-b>
+    </mapping>
+
+    <mapping map-id="AuthRequestToken">
+        <class-a>com.libereco.server.model.AuthRequestToken</class-a>
+        <class-b>com.libereco.server.dto.AuthRequestTokenDto</class-b>
+    </mapping>
+
+</mappings>

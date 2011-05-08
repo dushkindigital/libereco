@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd" >
+
+<hibernate-mapping package="com.libereco.server.model" schema="libereco">
+    
+    <class name="User" table="liberecoUser" lazy="false" >      
+        <id name="id" column="id" type="java.lang.Long">
+            <generator class="native" />
+        </id>       
+        <property name="userName" type="java.lang.String" not-null="true"/>
+        <property name="password" type="java.lang.String" not-null="true"/>        
+        <property name="created" type="java.sql.Timestamp" not-null="true"/>
+        <property name="lastUpdated" type="java.sql.Timestamp" not-null="true"/>        
+        <property name="status" type="java.lang.Integer" not-null="true"/>
+        <!--  <property name="role" type="java.lang.Integer"/> -->
+    </class>
+    
+
+    <class name="Marketplace" table="marketplace" lazy="false" >
+        <!-- <cache usage="read-only"/>  -->    
+        <id name="id" column="id" type="java.lang.Long">
+            <generator class="native" />
+        </id>       
+        <property name="marketplaceName" type="java.lang.String" not-null="true"/>
+    </class>
+    
+    <class name="MarketplaceAuthorizations" table="marketplaceAuthorizations" lazy="false" > 
+        <!--  
+        <id name="id" column="id" type="java.lang.Long">
+            <generator class="native" />
+        </id> 
+        -->        
+        <composite-id>
+            <key-many-to-one name="user" column="userId" class="com.libereco.server.model.User" />
+            <key-many-to-one name="marketplace" column="marketplaceId" class="com.libereco.server.model.Marketplace" />
+        </composite-id>
+     
+        <property name="token" type="java.lang.String" not-null="false"/>
+        <property name="tokenSecret" type="java.lang.String" not-null="false"/>
+        <property name="expirationTime" type="java.sql.Timestamp" not-null="false"/>
+    </class>
+
+
+    <class name="PendingMarketplaceAuthorizations" table="pendingMarketplaceAuthorizations" lazy="false" > 
+        <composite-id>
+            <key-many-to-one name="user" column="userId" class="com.libereco.server.model.User" />
+            <key-many-to-one name="marketplace" column="marketplaceId" class="com.libereco.server.model.Marketplace" />
+        </composite-id>
+     
+        <property name="requestToken" type="java.lang.String" not-null="false"/>
+        <property name="requestTokenSecret" type="java.lang.String" not-null="false"/>
+    </class>
+    
+</hibernate-mapping>
+
+<!-- 
+<hibernate-configuration>
+    <session-factory>
+        <mapping class="com.libereco.server.model.User" />
+    </session-factory>
+</hibernate-configuration>
+
+ -->
