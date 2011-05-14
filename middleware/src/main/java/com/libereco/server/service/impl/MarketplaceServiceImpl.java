@@ -56,6 +56,7 @@ public class MarketplaceServiceImpl extends
 	@Autowired
 	private PendingMarketplaceAuthorizationsDao pendingMarketplaceAuthorizationsDao;
 
+	
 	@PostConstruct
 	public void init() throws Exception {
 	}
@@ -67,7 +68,7 @@ public class MarketplaceServiceImpl extends
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
 	public void addMarketplace(MarketplaceDto marketplace) {
-		saveOrUpdate(marketplace);
+		saveOrUpdate(marketplace, marketplaceDao);
 		// marketplaceDao.saveOrUpdate(marketplace);
 	}
 
@@ -81,9 +82,11 @@ public class MarketplaceServiceImpl extends
 	@Override
 	public MarketplaceAuthorizationsDto getAuthorization(UserDto user,
 			MarketplaceDto marketplace) {
+		
 		// TODO: Expose toDto and toEntity methods in generic service and invoke
 		// them that way rather than calling DozerHelper and passing class as
 		// parameter
+		
 		DozerHelper dh = new DozerHelper();
 		User userEntity = dh.map(user, User.class);
 		MarketplaceAuthorizations mpaEntity = marketplaceAuthorizationsDao
@@ -144,12 +147,13 @@ public class MarketplaceServiceImpl extends
 	@Override
 	public void saveAuthorization(String userName, String marketplaceName,
 			AuthTokenDto authorizationToken) {
+		
 		User user = userDao.findByUserName(userName);
 		Marketplace marketplace = marketplaceDao
 				.getMarketplace(marketplaceName);
 
 		AuthToken authorizationTokenEntity = new DozerHelper().map(
-				authorizationToken, AuthRequestToken.class);
+				authorizationToken, AuthToken.class);
 		MarketplaceAuthorizations mpa = new MarketplaceAuthorizations(user,
 				marketplace, authorizationTokenEntity);
 
