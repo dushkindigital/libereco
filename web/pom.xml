@@ -162,7 +162,7 @@
 	
 	<build>
 		<!-- TODO: Find out whether we still want to keep the same war file name-->
-		<!-- <finalName>libereco</finalName> -->
+		<finalName>libereco</finalName>
 
 		<resources>
 			<resource>
