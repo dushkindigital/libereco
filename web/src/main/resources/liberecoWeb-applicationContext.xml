@@ -30,7 +30,7 @@
 		<property name="locations">
 			<list>
 				<value>classpath:liberecoWeb.properties</value>
-				<!-- <value>WEB-INF/libereco.properties</value> -->
+				<!-- <value>WEB-INF/liberecoWeb.properties</value> -->
 			</list>
 		</property>
 	</bean>
@@ -237,35 +237,5 @@
             <value>${libereco.server.crawler.etsy.sandbox.authorizationWebsiteUrl}</value>
         </constructor-arg>
     </bean>
-
-
-	<!-- Marketplace authorization service -->
-	<!-- <bean id="marketplaceAuthService" class="com.libereco.server.auth.impl.MarketplaceAuthServiceImpl"> 
-		<property name="authorizers"> <list> <ref bean="ebayAuthorizer" /> </list> 
-		</property> </bean> -->
-
-	<!-- User service  -->
-	<bean id="userService" class="com.libereco.server.service.impl.UserServiceImpl">
-	</bean>
-
-    <!-- Marketplace service -->
-	<bean id="marketplaceService" class="com.libereco.server.service.impl.MarketplaceServiceImpl" />
-
-
-	<!-- TODO: Remove if we're not going to use restlet's Spring extension -->	
-	<bean id="liberecoRestletComponent" class="org.restlet.ext.spring.SpringComponent">
-		<property name="defaultTarget" ref="liberecoRestletAppliction" />
-	</bean>
-
-	<bean id="liberecoRestletAppliction" class="com.libereco.server.rest.restlet.RestletApplication">
-		<property name="root" ref="router" />
-	</bean>
-
-	<bean name="router" class="org.restlet.ext.spring.SpringBeanRouter" />
-
-	<!-- Define all the routes. -->
-	<bean name="/users/user/"
-		class="com.libereco.server.rest.restlet.resource.UserResource" scope="prototype"
-		autowire="byName" />
 
 </beans>
