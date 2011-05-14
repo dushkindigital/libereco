@@ -237,6 +237,9 @@
 
 	<!-- User service -->
 	<bean id="userService" class="com.libereco.server.service.impl.UserServiceImpl">
+	   <constructor-arg>
+	       <ref bean="userDao" />
+	   </constructor-arg>
 	</bean>
 
 	<!-- Marketplace service -->
