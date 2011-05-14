@@ -8,6 +8,9 @@ package com.libereco.server.service.impl;
 import java.lang.reflect.ParameterizedType;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.libereco.server.dao.AbstractDao;
 import com.libereco.server.dto.dozer.DozerHelper;
 import com.libereco.server.service.BasicService;
@@ -18,10 +21,12 @@ import com.libereco.server.service.BasicService;
  */
 public abstract class AbstractBasicService<K, E, T> implements BasicService<T> {
 
+	private static Logger logger = LoggerFactory.getLogger(AbstractBasicService.class);
+	
 	protected Class<E> entityClass;
 	protected Class<T> dtoClass;
 
-	protected AbstractDao<K, E> abstractDao;
+	protected AbstractDao<K, E> mainDao;
 
 	protected AbstractBasicService() {
 		this(null);
@@ -29,7 +34,7 @@ public abstract class AbstractBasicService<K, E, T> implements BasicService<T> {
 
 	@SuppressWarnings("unchecked")
 	protected AbstractBasicService(AbstractDao<K, E> abstractDao) {
-		this.abstractDao = abstractDao;
+		this.mainDao = abstractDao;
 		
 		ParameterizedType genericSuperclass = (ParameterizedType) getClass()
 				.getGenericSuperclass();
@@ -66,12 +71,12 @@ public abstract class AbstractBasicService<K, E, T> implements BasicService<T> {
 
 	@Override
 	public T saveOrUpdate(T dto) {
-		return saveOrUpdate(dto, abstractDao);
+		return saveOrUpdate(dto, mainDao);
 	}
 
 	@Override
 	public void delete(T dto) {
-		delete(dto, abstractDao);
+		delete(dto, mainDao);
 	}
 
 	protected T saveOrUpdate(T dto, AbstractDao<K, E> dao) {
@@ -93,9 +98,21 @@ public abstract class AbstractBasicService<K, E, T> implements BasicService<T> {
 		E entity = toEntity(dto);
 		dao.delete(entity);
 	}
+
+	protected AbstractDao<K, E> getMainDao() {
+		return mainDao;
+	}
+
+	protected void setMainDao(AbstractDao<K, E> dao) {
+		this.mainDao = dao;
+	}
 	
 	// protected List<T> loadAll(AbstractDao<K, E> dao) {
 	// List<E> entityList = dao.loadAll();
 	// return toDto(entityList);
 	// }
+	
+	protected Logger getLogger() {
+		return logger;
+	}
 }
