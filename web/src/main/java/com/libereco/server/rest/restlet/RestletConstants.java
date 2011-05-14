@@ -22,5 +22,4 @@ public interface RestletConstants {
 	
 	public static final Variant APPLICATION_JSON_VARIANT = new Variant(
 			MediaType.APPLICATION_JSON);
-
 }

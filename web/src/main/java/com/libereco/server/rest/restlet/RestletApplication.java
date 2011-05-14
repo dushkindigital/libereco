@@ -36,7 +36,12 @@ public class RestletApplication extends Application {
 	// Implemented to handle double slash at the start of URL
 	@Override
 	public Restlet getRoot() {
-		Filter doubleSlashFilter = new Filter() {
+		Router router = new Router();
+		return configureRouter(router);
+	}
+
+	private Filter createDoubleSlashFilter() {
+	 return new Filter() {
 			@Override
 			protected int beforeHandle(Request request, Response response) {
 				Reference ref = request.getResourceRef();
@@ -48,28 +53,26 @@ public class RestletApplication extends Application {
 				return Filter.CONTINUE;
 			}
 		};
-
-		Router router = new Router();
-		attachRoutes(router);
-		doubleSlashFilter.setNext(router);
-		
-		return doubleSlashFilter;
 	}
-
 	/**
 	 * Creates a root Restlet that will receive all incoming calls.
 	 */
+	
 	// TODO: Wire mappings if we decide to manually load Spring
-
 	@Override
 	public synchronized Restlet createInboundRoot() {
 
 		Router router = new Router(getContext());
-		attachRoutes(router);
-
-		return router;
+		return configureRouter(router);		
 	}
 
+	private Restlet configureRouter(Router router) {
+		Filter doubleSlashFilter = createDoubleSlashFilter();
+		attachRoutes(router);
+		doubleSlashFilter.setNext(router);		
+		return doubleSlashFilter;
+	}
+	
 	private void attachRoutes(Router router) {
 		// User-related methods
 		router.attach("/users/user/edit/id/{id}", UserResource.class);

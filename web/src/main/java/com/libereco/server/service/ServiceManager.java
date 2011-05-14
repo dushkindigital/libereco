@@ -53,6 +53,7 @@ public class ServiceManager {
 	public static MarketplaceService getMarketplaceService() {
 		return (MarketplaceService) ctx.getBean("marketplaceService");
 	}
+	
 //	
 //	public static CrawlingService getCrawlingService() {
 //		return (CrawlingService) ctx.getBean("crawlingService");
