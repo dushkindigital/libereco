@@ -89,4 +89,13 @@ public class UserDto implements Serializable {
 	public boolean isActive() {
 		return (status == UserConstants.UserStatus.ACTIVE);
 	}
+
+	@Override
+	public String toString() {
+		return "UserDto [id=" + id + ", userName=" + userName + ", password="
+				+ password + ", created=" + created + ", lastUpdated="
+				+ lastUpdated + ", status=" + status
+				+ ", marketplaceAuthorizations=" + marketplaceAuthorizations
+				+ "]";
+	}
 }
