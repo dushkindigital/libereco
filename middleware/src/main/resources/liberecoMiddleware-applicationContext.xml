@@ -217,16 +217,13 @@
 			<value>${libereco.server.crawler.etsy.sandbox.sharedSecret}</value>
 		</constructor-arg>
 		<constructor-arg>
-			<value>${libereco.server.crawler.etsy.sandbox.requestTokenEndpointUrl}
-			</value>
+			<value>${libereco.server.crawler.etsy.sandbox.requestTokenEndpointUrl}</value>
 		</constructor-arg>
 		<constructor-arg>
-			<value>${libereco.server.crawler.etsy.sandbox.accessTokenEndpointUrl}
-			</value>
+			<value>${libereco.server.crawler.etsy.sandbox.accessTokenEndpointUrl}</value>
 		</constructor-arg>
 		<constructor-arg>
-			<value>${libereco.server.crawler.etsy.sandbox.authorizationWebsiteUrl}
-			</value>
+			<value>${libereco.server.crawler.etsy.sandbox.authorizationWebsiteUrl}</value>
 		</constructor-arg>
 	</bean>
 
