@@ -179,6 +179,7 @@ public class AuthDemoResource extends AbstractLiberecoResource {
 
 		if (marketplaceService.isAuthorized(userName, MarketplaceName.ETSY) == false) {
 			EtsyAuthorizer etsyAuthorizer = ServiceManager.getEtsyAuthorizer();
+			logger.debug("Etsy authorizer: " + etsyAuthorizer);
 //
 //			EtsySignInResponse signInResponse = etsyAuthorizer.sendSignInRequest();
 //			logger.debug("SignIn response: " + signInResponse);
