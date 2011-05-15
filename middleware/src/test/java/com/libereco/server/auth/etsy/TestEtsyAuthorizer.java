@@ -51,174 +51,26 @@ public class TestEtsyAuthorizer extends TestCase {
 
 	private static final String SANDBOX_SHARED_SECRET = "b3neUpXsXnWe";
 
-	// private static final String SANDBOX_API_KEY = "yms7ywfz5rk42a7w9wxmaxxb";
-	//
-	// private static final String SANDBOX_SHARED_SECRET = "9gRQkGfYJ7FV";
-
-	// private static final String PROTECTED_RESOURCE_URL =
-	// "http://api.twitter.com/1/account/verify_credentials.xml";
-
-	// @Test
-	// public void testScribe() throws Exception {
-	//
-	// OAuthService service = new ServiceBuilder()
-	// .provider(EtsySandboxScribeOauthApi.class)
-	// .apiKey(SANDBOX_API_KEY).apiSecret(SANDBOX_SHARED_SECRET)
-	// .build();
-	//
-	// Scanner in = new Scanner(System.in);
-	//
-	// System.out.println("=== Etsy OAuth Workflow ===");
-	// System.out.println();
-	//
-	// // Obtain the Request Token
-	// System.out.println("Fetching the Request Token...");
-	// Token requestToken = service.getRequestToken();
-	// System.out.println("Got the Request Token : " + requestToken);
-	// System.out.println();
-	//
-	// System.out.println("Now go and authorize Scribe here:");
-	// String verificationUrl = service.getAuthorizationUrl(requestToken);
-	// System.out.println(verificationUrl);
-	// System.out.println("And paste the verifier here");
-	// System.out.print(">>");
-	// Verifier verifier = new Verifier(in.nextLine());
-	// System.out.println();
-	//
-	// // Trade the Request Token and Verfier for the Access Token
-	// System.out.println("Trading the Request Token for an Access Token...");
-	// Token accessToken = service.getAccessToken(requestToken, verifier);
-	// System.out.println("Got the Access Token!");
-	// System.out.println("(if your curious it looks like this: "
-	// + accessToken + " )");
-	// System.out.println();
-	//
-	// // Now let's go and ask for a protected resource!
-	// System.out.println("Now we're going to access a protected resource...");
-	// // TODO: Update to point to a
-	// String protectedResourceUrl =
-	// "http://api.twitter.com/1/account/verify_credentials.xml";
-	// OAuthRequest request = new OAuthRequest(Verb.GET, protectedResourceUrl);
-	// service.signRequest(accessToken, request);
-	// Response response = request.send();
-	// System.out.println("Got it! Lets see what we found...");
-	// System.out.println();
-	// System.out.println(response.getBody());
-	//
-	// System.out.println();
-	// System.out
-	// .println("Thats it man! Go and build something awesome with Scribe! :)");
-	//
-	// }
-
-	// @Test
-	// public void testSignpost_1_2_1() throws Exception {
-	//
-	// // OAuthConsumer consumer = new DefaultOAuthConsumer(SANDBOX_API_KEY,
-	// // SANDBOX_SHARED_SECRET, SignatureMethod.HMAC_SHA1);
-	//
-	// OAuthConsumer consumer = new DefaultOAuthConsumer(SANDBOX_API_KEY,
-	// SANDBOX_SHARED_SECRET);
-	//
-	// // OAuthProvider provider = new DefaultOAuthProvider(consumer,
-	// // "http://openapi.etsy.com/v2/oauth/request_token",
-	// // "http://openapi.etsy.com/v2/oauth/access_token",
-	// // "http://www.etsy.com/oauth/signin");
-	//
-	// OAuthProvider provider = new DefaultOAuthProvider(
-	// "http://openapi.etsy.com/v2/oauth/request_token",
-	// "http://openapi.etsy.com/v2/oauth/access_token",
-	// "http://www.etsy.com/oauth/signin");
-	//
-	// // OAuthProvider provider = new DefaultOAuthProvider(
-	// // "http://openapi.etsy.com/v2/sandbox/oauth/request_token",
-	// // "http://openapi.etsy.com/v2/sandbox/oauth/access_token",
-	// // "http://www.etsy.com/oauth/signin");
-	//
-	// System.out.println("Fetching request token from Etsy...");
-	//
-	// // we do not support callbacks, thus pass OOB
-	// //String authUrl = provider.retrieveRequestToken(OAuth.OUT_OF_BAND);
-	// String authUrl = provider.retrieveRequestToken(consumer,
-	// OAuth.OUT_OF_BAND);
-	//
-	// System.out.println("Request token: " + consumer.getToken());
-	// System.out.println("Token secret: " + consumer.getTokenSecret());
-	//
-	// System.out.println("Now visit:\n" + authUrl
-	// + "\n... and grant this app authorization");
-	// System.out
-	// .println("Enter the PIN code and hit ENTER when you're done:");
-	//
-	// BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-	// String pin = br.readLine();
-	//
-	// System.out.println("Fetching access token from Etsy...");
-	//
-	// //provider.retrieveAccessToken(pin);
-	// provider.retrieveAccessToken(consumer, pin);
-	//
-	// System.out.println("Access token: " + consumer.getToken());
-	// System.out.println("Token secret: " + consumer.getTokenSecret());
-	//
-	// URL url = new URL("http://openapi.etsy.com/v2/private/users/__SELF__");
-	// HttpURLConnection request = (HttpURLConnection) url.openConnection();
-	//
-	// consumer.sign(request);
-	//
-	// System.out.println("Sending request to Etsy...");
-	// request.connect();
-	//
-	// System.out.println("Response: " + request.getResponseCode() + " "
-	// + request.getResponseMessage());
-	//
-	// System.out.println("Payload:");
-	// InputStream stream = request.getInputStream();
-	// String stringbuff = "";
-	// byte[] buffer = new byte[4096];
-	//
-	// while (stream.read(buffer) > 0) {
-	// for (byte b : buffer) {
-	// stringbuff += (char) b;
-	// }
-	// }
-	//
-	// System.out.print(stringbuff);
-	// stream.close();
-	// }
-	//
-
+	// TODO: Implement test cases, the current test methods are intended to
+	// primarily explore interaction with the Etsy API
+	
 	@Test
-	public void testSignpost_1_2_1_CommonsHttp() throws Exception {
-
-		// OAuthConsumer consumer = new DefaultOAuthConsumer(SANDBOX_API_KEY,
-		// SANDBOX_SHARED_SECRET, SignatureMethod.HMAC_SHA1);
+	public void demoListingCreation() throws Exception {
 
 		OAuthConsumer consumer = new CommonsHttpOAuthConsumer(SANDBOX_API_KEY,
 				SANDBOX_SHARED_SECRET);
-
-		// OAuthProvider provider = new DefaultOAuthProvider(consumer,
-		// "http://openapi.etsy.com/v2/oauth/request_token",
-		// "http://openapi.etsy.com/v2/oauth/access_token",
-		// "http://www.etsy.com/oauth/signin");
 
 		OAuthProvider provider = new CommonsHttpOAuthProvider(
 				"http://openapi.etsy.com/v2/sandbox/oauth/request_token",
 				"http://openapi.etsy.com/v2/sandbox/oauth/access_token",
 				"http://www.etsy.com/oauth/signin");
 
-		// OAuthProvider provider = new DefaultOAuthProvider(
-		// "http://openapi.etsy.com/v2/sandbox/oauth/request_token",
-		// "http://openapi.etsy.com/v2/sandbox/oauth/access_token",
-		// "http://www.etsy.com/oauth/signin");
-
 		System.out.println("Fetching request token from Etsy...");
 
-		// we do not support callbacks, thus pass OOB
-		// String authUrl = provider.retrieveRequestToken(OAuth.OUT_OF_BAND);
-
+		// Callbacks are not supported, pass OOB
 		String authUrl = provider.retrieveRequestToken(consumer,
 				OAuth.OUT_OF_BAND);
+
 		// String authUrl = provider.retrieveRequestToken(consumer,
 		// "http://example.com");
 
@@ -236,38 +88,11 @@ public class TestEtsyAuthorizer extends TestCase {
 		System.out.println("Fetching access token from Etsy...");
 
 		// provider.setOAuth10a(false);
-
 		// provider.retrieveAccessToken(pin);
 		provider.retrieveAccessToken(consumer, pin);
 
 		System.out.println("Access token: " + consumer.getToken());
 		System.out.println("Token secret: " + consumer.getTokenSecret());
-
-		// URL url = new
-		// URL("http://openapi.etsy.com/v2/private/users/__SELF__");
-		// HttpURLConnection request = (HttpURLConnection) url.openConnection();
-		//
-		// consumer.sign(request);
-		//
-		// System.out.println("Sending request to Etsy...");
-		// request.connect();
-		//
-		// System.out.println("Response: " + request.getResponseCode() + " "
-		// + request.getResponseMessage());
-		//
-		// System.out.println("Payload:");
-		// InputStream stream = request.getInputStream();
-		// String stringbuff = "";
-		// byte[] buffer = new byte[4096];
-		//
-		// while (stream.read(buffer) > 0) {
-		// for (byte b : buffer) {
-		// stringbuff += (char) b;
-		// }
-		// }
-		//
-		// System.out.print(stringbuff);
-		// stream.close();
 
 		// Test sending a message to itself
 		HttpPost request = new HttpPost(
@@ -285,17 +110,12 @@ public class TestEtsyAuthorizer extends TestCase {
 
 		printResponse(response);
 
+		String userId = "13210389";
+
 		// Get shipping templates
-		// HttpGet getRequest = new
-		// HttpGet("http://openapi.etsy.com/v2/sandbox/public/users/13210389/shipping/templates");
 		HttpGet getRequest = new HttpGet(
-				"http://openapi.etsy.com/v2/sandbox/private/users/13210389/shipping/templates");
-
-		// HttpGet getRequest = new HttpGet(
-		// "http://openapi.etsy.com/v2/sandbox/public/users/14451731");
-
-		// body.setContentType("application/x-www-form-urlencoded");
-		// request.setEntity(body);
+				"http://openapi.etsy.com/v2/sandbox/private/users/" + userId
+						+ "/shipping/templates");
 		consumer.sign(getRequest);
 
 		System.out
@@ -311,18 +131,9 @@ public class TestEtsyAuthorizer extends TestCase {
 
 		printResponse(response);
 
-		// Get all shipping templates
-		// HttpGet getRequest = new HttpGet(
-		// "http://openapi.etsy.com/v2/sandbox/public/users/13210389/shipping/templates");
-
+		// Get user
 		getRequest = new HttpGet(
-				"http://openapi.etsy.com/v2/sandbox/private/users/13210389");
-
-		// HttpGet getRequest = new HttpGet(
-		// "http://openapi.etsy.com/v2/sandbox/public/users/14451731");
-
-		// body.setContentType("application/x-www-form-urlencoded");
-		// request.setEntity(body);
+				"http://openapi.etsy.com/v2/sandbox/private/users/" + userId);
 		consumer.sign(getRequest);
 
 		System.out.println("Sending get user request to etsy...");
@@ -340,10 +151,6 @@ public class TestEtsyAuthorizer extends TestCase {
 		// Create shipping template
 		request = new HttpPost(
 				"http://openapi.etsy.com/v2/sandbox/private/shipping/templates");
-
-		// body = new StringEntity(
-		// "title=myTemplate&origin_country_id=209&primary_cost=2&secondary_cost=1");
-
 		body = new StringEntity(
 				"title:myTemplate&origin_country_id=209&primary_cost=2&secondary_cost=1");
 
@@ -396,30 +203,19 @@ public class TestEtsyAuthorizer extends TestCase {
 		printResponse(response, false);
 
 		GsonBuilder gsonBuilder = new GsonBuilder();
-
-		// gsonBuilder.registerTypeAdapter(EtsyCategory.class,
-		// new EtsyCategoryDeserializer());
-		//
-		// gsonBuilder.registerTypeAdapter(EtsyCategoryResponse.class,
-		// new EtsyCategoryResponseDeserializer());
-
-		// gson = new GsonBuilder().setPrettyPrinting().create();
-
 		Gson gson = gsonBuilder.create();
 		String responseJson = EntityUtils.toString(response.getEntity());
 
 		System.out.println("Resonse JSON: " + responseJson);
-		CreateListingResponse createListingResponse = gson.fromJson(responseJson,
-				CreateListingResponse.class);
+		CreateListingResponse createListingResponse = gson.fromJson(
+				responseJson, CreateListingResponse.class);
 
 		System.out.println("Create listing response: " + createListingResponse);
 
-		// String listingId = "73184451";
-		// String listingId = "73184457";
 		String listingId = createListingResponse.getResults().get(0)
 				.getListingId().toString();
 
-		// Upload listing image
+		// Test upload listing image
 		request = new HttpPost(
 				"http://openapi.etsy.com/v2/sandbox/private/listings/"
 						+ listingId + "/images");
@@ -456,8 +252,6 @@ public class TestEtsyAuthorizer extends TestCase {
 
 		consumer.sign(request);
 
-		// listingId = "73184458";
-
 		System.out
 				.println("------------------- Sending upload listing image request to etsy...");
 
@@ -470,8 +264,8 @@ public class TestEtsyAuthorizer extends TestCase {
 		responseJson = EntityUtils.toString(response.getEntity());
 
 		System.out.println("Resonse JSON: " + responseJson);
-		UploadListingImageResponse uploadImageResponse = gson.fromJson(responseJson,
-				UploadListingImageResponse.class);
+		UploadListingImageResponse uploadImageResponse = gson.fromJson(
+				responseJson, UploadListingImageResponse.class);
 
 		System.out.println("Upload listing image response: "
 				+ uploadImageResponse);
@@ -490,23 +284,6 @@ public class TestEtsyAuthorizer extends TestCase {
 		entity.addPart("rank", new StringBody("1"));
 
 		request.setEntity(entity);
-
-		// FileBody imageFileBody = new FileBody(new
-		// File("C:\\temp\\testThumbnail2.jpg"));
-		// StringBody comment = new StringBody("Etsy listing image");
-		//
-		// MultipartEntity multipartEntity = new MultipartEntity();
-		// multipartEntity.addPart("bin", imageFileBody);
-		// multipartEntity.addPart("comment", comment);
-		//
-		// request.setEntity(multipartEntity);
-
-		// body = new StringEntity(
-		// "quantity=1&title=libEtsyTest&description=libEtsyDesc&price=2&tags=accessories&shipping_template_id=7071909");
-		//
-		// //body.setContentType("application/x-www-form-urlencoded");
-		// body.setContentType("multipart/form-data");
-		// request.setEntity(body);
 		consumer.sign(request);
 
 		System.out
@@ -526,7 +303,6 @@ public class TestEtsyAuthorizer extends TestCase {
 
 		System.out.println("Upload listing image response: "
 				+ uploadImageResponse);
-
 	}
 
 	private void printResponse(HttpResponse response) throws ParseException,
@@ -566,7 +342,7 @@ public class TestEtsyAuthorizer extends TestCase {
 	}
 
 	@Test
-	public void testSignpostCommonsHttp() throws Exception {
+	public void demoSignpostCommonsHttpBasic() throws Exception {
 
 		OAuthConsumer consumer = new CommonsHttpOAuthConsumer(SANDBOX_API_KEY,
 				SANDBOX_SHARED_SECRET);
@@ -661,26 +437,22 @@ public class TestEtsyAuthorizer extends TestCase {
 
 		GsonBuilder gsonBuilder = new GsonBuilder();
 		Gson gson = gsonBuilder.create();
-		CreateListingResponse createListingResponse = gson.fromJson(responseJson,
-				CreateListingResponse.class);
+		CreateListingResponse createListingResponse = gson.fromJson(
+				responseJson, CreateListingResponse.class);
 
 		System.out.println("Create listing response: " + createListingResponse);
-
 	}
 
 	@Test
 	public void testGetSignInDetails() throws Exception {
-		
-		EtsyAuthorizer etsyAuthorizer = new EtsyAuthorizer(SANDBOX_API_KEY, SANDBOX_SHARED_SECRET,
+
+		EtsyAuthorizer etsyAuthorizer = new EtsyAuthorizer(SANDBOX_API_KEY,
+				SANDBOX_SHARED_SECRET,
 				"http://openapi.etsy.com/v2/sandbox/oauth/request_token",
 				"http://openapi.etsy.com/v2/sandbox/oauth/access_token",
 				"http://www.etsy.com/oauth/signin");
-		
+
 		SignInDetails signInDetails = etsyAuthorizer.sendSignInRequest();
 		System.out.println("Sign in details: " + signInDetails);
-		
-		
 	}
-	
-	
 }

@@ -37,19 +37,17 @@ import com.ebay.soap.eBLBaseComponents.VATDetailsType;
  */
 public class TestAddListing extends AbstractEbayTestCase {
 
+	// TODO: Implement test cases, the current test methods are intended to
+	// primarily explore interaction with the eBay API
+
 	@Override
 	protected void setUp() throws Exception {
 		super.setUp();
 	}
 
 	@Test
-	public void testAddListingSandbox() throws Exception {
-
-		String token = "AgAAAA**AQAAAA**aAAAAA**N8KhTQ**nY+sHZ2PrBmdj6wVnY+sEZ2PrA2dj6wFk4CoAZOAoQSdj6x9nY+seQ**nH4BAA**AAMAAA**o13rdzTB5LY1PJQ3n9joB2O896klL9R7+7lpICrBlkNw3sCJRlIAQ6h+1QQn64sa1kyWldEQaWjeak+tiX/MzW4rDRxwW/RY8tMaTnEgg5Eh6Bfqp0RvrtP+wFGoYcRvWu7CNsYmodvsXYJUVxCntQ8TJTPC637MSQLG/g7o+k0IEdGZhC/9KBGtBMHO4KiUWjkoTCDaIdi/ld0FXrnbhaoSfB28/3pph1iyK2jiAVOlVVP840VBLku1Ui71aM39UxKH61jizIbxBr2ikoktE3TGBU+j/J7g7MJtIuf7yBMaG1yOBpAkfWMpZff/VzyLOjcAjc8RapsGkyht/5BQeJffeXXlbFbyFEQHtBIIy/xXneGbIi4UaHnvP6Ev11NORzJx1u2bzmSx5vtlfd2vdg+9KQ9Sp4W4Wgq395rpu9SHEpkxJzeWMRvJnZEG2vJAzt9j6cJnkn24YbH27w7BzA/i6gDPUVTr+pO22BqPpX4FJTsdsa4vBl7Xw1lYCijJCpIwgN1xrD5oGLr1YoE8nxtJBHy7UV3Ijlo9SmD8FqiioBJD952S+8vqybSmL1X/boeOyE4E3r3tpj1CbT3lUAwfugiFkBOnwK3ieXj3daxxPYv7Ofy/Hm08zKsmrK2VbQI5bXn311mO+w8YmFWOVPEbCViBd/dviPPZQLh86GHIN1BMBOmvLWe/WvKUXLkcGU5xfAZkNdWCmDoocl7dbiQJy+lSuhJWkgq4WPWvuWuLJvgkJ3Tu6cnuqz/nuUhv";
+	public void demoAddListingSandbox() throws Exception {
 		ApiContext apiContext = getApiContextSandbox();
-
-		apiContext.getApiCredential().seteBayToken(token);
-
 		AddItemCall api = new AddItemCall(apiContext);
 
 		CurrencyCodeType currency = CurrencyCodeType.USD;
@@ -71,95 +69,18 @@ public class TestAddListing extends AbstractEbayTestCase {
 		ebayListingItem.setCategoryId("139971");
 
 		ebayListingItem.setStartPrice(1.00);
+
 		// A Dutch auction, Buy It Now, Best Offer Only, Classified Ad, or
 		// Fixed-Price item cannot have a reserve price.
 		// ebayListingItem.setReservePrice(2.00);
 
 		// ebayListingItem.setBuyItNowPrice(3.00);
-		
-//		ebayListingItem.setVatPercent(2.00f);
-//		ebayListingItem.setPayPalEmail("test@example.com");
-		
+
+		// ebayListingItem.setVatPercent(2.00f);
+		// ebayListingItem.setPayPalEmail("test@example.com");
+
 		// ebayListingItem.setBorderChecked(true);
 		ebayListingItem.setBoldTitleChecked(true);
-
-		// ShippingService is required if Insurance, SalesTax, or AutoPay is
-		// specified.
-		// ebayListingItem.setSetAutoPay(true);
-
-		//ebayListingItem.setLotSize(10);
-
-		// ebayListingItem.setBestOfferEnabled(true);
-
-		ItemType item = buildItem(ebayListingItem);
-
-		// fill in mandatory fields
-		// handling time
-		item.setDispatchTimeMax(Integer.valueOf(1));
-		// return policy
-		ReturnPolicyType returnPolicy = new ReturnPolicyType();
-		returnPolicy.setReturnsAcceptedOption("ReturnsAccepted");
-		item.setReturnPolicy(returnPolicy);
-
-		item.setCurrency(currency);
-
-		// TODO: Test
-		//api.setPictureFiles(this.getPicturePathList());
-
-		item.setListingType(ListingTypeCodeType.FIXED_PRICE_ITEM);
-
-		// 1000 - New
-		item.setConditionID(1000);
-
-		api.setItem(item);
-		FeesType fees = api.addItem();
-
-		String itemId = item.getItemID();
-		System.out.println("Item: " + itemId);
-		FeeType ft = eBayUtil.findFeeByName(fees.getFee(), "ListingFee");
-		System.out.println("Listing fee: " + ft.getFee().getValue());
-	}
-
-	@Test
-	public void testAddListingWithImageSandbox() throws Exception {
-
-//		String token = "AgAAAA**AQAAAA**aAAAAA**N8KhTQ**nY+sHZ2PrBmdj6wVnY+sEZ2PrA2dj6wFk4CoAZOAoQSdj6x9nY+seQ**nH4BAA**AAMAAA**o13rdzTB5LY1PJQ3n9joB2O896klL9R7+7lpICrBlkNw3sCJRlIAQ6h+1QQn64sa1kyWldEQaWjeak+tiX/MzW4rDRxwW/RY8tMaTnEgg5Eh6Bfqp0RvrtP+wFGoYcRvWu7CNsYmodvsXYJUVxCntQ8TJTPC637MSQLG/g7o+k0IEdGZhC/9KBGtBMHO4KiUWjkoTCDaIdi/ld0FXrnbhaoSfB28/3pph1iyK2jiAVOlVVP840VBLku1Ui71aM39UxKH61jizIbxBr2ikoktE3TGBU+j/J7g7MJtIuf7yBMaG1yOBpAkfWMpZff/VzyLOjcAjc8RapsGkyht/5BQeJffeXXlbFbyFEQHtBIIy/xXneGbIi4UaHnvP6Ev11NORzJx1u2bzmSx5vtlfd2vdg+9KQ9Sp4W4Wgq395rpu9SHEpkxJzeWMRvJnZEG2vJAzt9j6cJnkn24YbH27w7BzA/i6gDPUVTr+pO22BqPpX4FJTsdsa4vBl7Xw1lYCijJCpIwgN1xrD5oGLr1YoE8nxtJBHy7UV3Ijlo9SmD8FqiioBJD952S+8vqybSmL1X/boeOyE4E3r3tpj1CbT3lUAwfugiFkBOnwK3ieXj3daxxPYv7Ofy/Hm08zKsmrK2VbQI5bXn311mO+w8YmFWOVPEbCViBd/dviPPZQLh86GHIN1BMBOmvLWe/WvKUXLkcGU5xfAZkNdWCmDoocl7dbiQJy+lSuhJWkgq4WPWvuWuLJvgkJ3Tu6cnuqz/nuUhv";
-		ApiContext apiContext = getApiContextSandbox();
-//		apiContext.getApiCredential().seteBayToken(token);
-
-		AddItemCall api = new AddItemCall(apiContext);
-
-		CurrencyCodeType currency = CurrencyCodeType.USD;
-
-		// Let the call object to automatically generate UUID for my item.
-		api.setAutoSetItemUUID(false);
-		api.setSite(SiteCodeType.US);
-
-		// Set detail level to retrieve item description.
-		api.addDetailLevel(DetailLevelCodeType.ITEM_RETURN_DESCRIPTION);
-
-		EbayListingItem ebayListingItem = new EbayListingItem();
-
-		ebayListingItem.setItemTitle("Test item");
-		ebayListingItem.setSubTitle("Subtitle");
-		ebayListingItem.setDescription("Description");
-		ebayListingItem.setListingDuration("Days_7");
-		ebayListingItem.setQuantity(1);
-		ebayListingItem.setCategoryId("139971");
-
-		ebayListingItem.setStartPrice(1.00);
-		// A Dutch auction, Buy It Now, Best Offer Only, Classified Ad, or
-		// Fixed-Price item cannot have a reserve price.
-		// ebayListingItem.setReservePrice(2.00);
-
-		// ebayListingItem.setBuyItNowPrice(3.00);
-		
-		//ebayListingItem.setVatPercent(2.00f);
-		
-//		ebayListingItem.setPayPalEmail("test@example.com");
-		
-		// ebayListingItem.setBorderChecked(true);
-		//ebayListingItem.setBoldTitleChecked(true);
 
 		// ShippingService is required if Insurance, SalesTax, or AutoPay is
 		// specified.
@@ -181,19 +102,96 @@ public class TestAddListing extends AbstractEbayTestCase {
 
 		item.setCurrency(currency);
 
-//		PictureService picService = eBayPictureServiceFactory.getPictureService(apiContext);
-//		api.setPictureService(picService);
-//		
-//		String[] picPaths = getPicturePathList();
-//		if (picPaths != null) {
-//			for (String pp : picPaths) {
-//				uploadPicture(picService, apiContext, pp);
-//			}
-//			
-//			api.setPictureFiles(picPaths);
-//		}
+		// TODO: Test
+		// api.setPictureFiles(this.getPicturePathList());
 
-		String[] picPaths = getPicturePathList();		
+		item.setListingType(ListingTypeCodeType.FIXED_PRICE_ITEM);
+
+		// 1000 - New
+		item.setConditionID(1000);
+
+		api.setItem(item);
+		FeesType fees = api.addItem();
+
+		String itemId = item.getItemID();
+		System.out.println("Item: " + itemId);
+		FeeType ft = eBayUtil.findFeeByName(fees.getFee(), "ListingFee");
+		System.out.println("Listing fee: " + ft.getFee().getValue());
+	}
+
+	@Test
+	public void testAddListingWithImageSandbox() throws Exception {
+
+		ApiContext apiContext = getApiContextSandbox();
+		AddItemCall api = new AddItemCall(apiContext);
+
+		CurrencyCodeType currency = CurrencyCodeType.USD;
+
+		// Let the call object to automatically generate UUID for my item.
+		api.setAutoSetItemUUID(false);
+		api.setSite(SiteCodeType.US);
+
+		// Set detail level to retrieve item description.
+		api.addDetailLevel(DetailLevelCodeType.ITEM_RETURN_DESCRIPTION);
+
+		EbayListingItem ebayListingItem = new EbayListingItem();
+
+		ebayListingItem.setItemTitle("Test item");
+		ebayListingItem.setSubTitle("Subtitle");
+		ebayListingItem.setDescription("Description");
+		ebayListingItem.setListingDuration("Days_7");
+		ebayListingItem.setQuantity(1);
+		ebayListingItem.setCategoryId("139971");
+
+		ebayListingItem.setStartPrice(1.00);
+
+		// A Dutch auction, Buy It Now, Best Offer Only, Classified Ad, or
+		// Fixed-Price item cannot have a reserve price.
+		// ebayListingItem.setReservePrice(2.00);
+
+		// ebayListingItem.setBuyItNowPrice(3.00);
+
+		// ebayListingItem.setVatPercent(2.00f);
+
+		// ebayListingItem.setPayPalEmail("test@example.com");
+
+		// ebayListingItem.setBorderChecked(true);
+		// ebayListingItem.setBoldTitleChecked(true);
+
+		// ShippingService is required if Insurance, SalesTax, or AutoPay is
+		// specified.
+		// ebayListingItem.setSetAutoPay(true);
+
+		// ebayListingItem.setLotSize(10);
+
+		// ebayListingItem.setBestOfferEnabled(true);
+
+		ItemType item = buildItem(ebayListingItem);
+
+		// fill in mandatory fields
+		// handling time
+		item.setDispatchTimeMax(Integer.valueOf(1));
+		// return policy
+		ReturnPolicyType returnPolicy = new ReturnPolicyType();
+		returnPolicy.setReturnsAcceptedOption("ReturnsAccepted");
+		item.setReturnPolicy(returnPolicy);
+
+		item.setCurrency(currency);
+
+		// PictureService picService =
+		// eBayPictureServiceFactory.getPictureService(apiContext);
+		// api.setPictureService(picService);
+		//
+		// String[] picPaths = getPicturePathList();
+		// if (picPaths != null) {
+		// for (String pp : picPaths) {
+		// uploadPicture(picService, apiContext, pp);
+		// }
+		//
+		// api.setPictureFiles(picPaths);
+		// }
+
+		String[] picPaths = getPicturePathList();
 		api.setPictureFiles(picPaths);
 
 		item.setListingType(ListingTypeCodeType.FIXED_PRICE_ITEM);
@@ -209,22 +207,24 @@ public class TestAddListing extends AbstractEbayTestCase {
 		FeeType ft = eBayUtil.findFeeByName(fees.getFee(), "ListingFee");
 		System.out.println("Listing fee: " + ft.getFee().getValue());
 	}
-	
+
 	@Test
-	public void testUploadPicture() {
-		//String token = "AgAAAA**AQAAAA**aAAAAA**N8KhTQ**nY+sHZ2PrBmdj6wVnY+sEZ2PrA2dj6wFk4CoAZOAoQSdj6x9nY+seQ**nH4BAA**AAMAAA**o13rdzTB5LY1PJQ3n9joB2O896klL9R7+7lpICrBlkNw3sCJRlIAQ6h+1QQn64sa1kyWldEQaWjeak+tiX/MzW4rDRxwW/RY8tMaTnEgg5Eh6Bfqp0RvrtP+wFGoYcRvWu7CNsYmodvsXYJUVxCntQ8TJTPC637MSQLG/g7o+k0IEdGZhC/9KBGtBMHO4KiUWjkoTCDaIdi/ld0FXrnbhaoSfB28/3pph1iyK2jiAVOlVVP840VBLku1Ui71aM39UxKH61jizIbxBr2ikoktE3TGBU+j/J7g7MJtIuf7yBMaG1yOBpAkfWMpZff/VzyLOjcAjc8RapsGkyht/5BQeJffeXXlbFbyFEQHtBIIy/xXneGbIi4UaHnvP6Ev11NORzJx1u2bzmSx5vtlfd2vdg+9KQ9Sp4W4Wgq395rpu9SHEpkxJzeWMRvJnZEG2vJAzt9j6cJnkn24YbH27w7BzA/i6gDPUVTr+pO22BqPpX4FJTsdsa4vBl7Xw1lYCijJCpIwgN1xrD5oGLr1YoE8nxtJBHy7UV3Ijlo9SmD8FqiioBJD952S+8vqybSmL1X/boeOyE4E3r3tpj1CbT3lUAwfugiFkBOnwK3ieXj3daxxPYv7Ofy/Hm08zKsmrK2VbQI5bXn311mO+w8YmFWOVPEbCViBd/dviPPZQLh86GHIN1BMBOmvLWe/WvKUXLkcGU5xfAZkNdWCmDoocl7dbiQJy+lSuhJWkgq4WPWvuWuLJvgkJ3Tu6cnuqz/nuUhv";
+	public void demoUploadPicture() {
+		// String token =
+		// "AgAAAA**AQAAAA**aAAAAA**N8KhTQ**nY+sHZ2PrBmdj6wVnY+sEZ2PrA2dj6wFk4CoAZOAoQSdj6x9nY+seQ**nH4BAA**AAMAAA**o13rdzTB5LY1PJQ3n9joB2O896klL9R7+7lpICrBlkNw3sCJRlIAQ6h+1QQn64sa1kyWldEQaWjeak+tiX/MzW4rDRxwW/RY8tMaTnEgg5Eh6Bfqp0RvrtP+wFGoYcRvWu7CNsYmodvsXYJUVxCntQ8TJTPC637MSQLG/g7o+k0IEdGZhC/9KBGtBMHO4KiUWjkoTCDaIdi/ld0FXrnbhaoSfB28/3pph1iyK2jiAVOlVVP840VBLku1Ui71aM39UxKH61jizIbxBr2ikoktE3TGBU+j/J7g7MJtIuf7yBMaG1yOBpAkfWMpZff/VzyLOjcAjc8RapsGkyht/5BQeJffeXXlbFbyFEQHtBIIy/xXneGbIi4UaHnvP6Ev11NORzJx1u2bzmSx5vtlfd2vdg+9KQ9Sp4W4Wgq395rpu9SHEpkxJzeWMRvJnZEG2vJAzt9j6cJnkn24YbH27w7BzA/i6gDPUVTr+pO22BqPpX4FJTsdsa4vBl7Xw1lYCijJCpIwgN1xrD5oGLr1YoE8nxtJBHy7UV3Ijlo9SmD8FqiioBJD952S+8vqybSmL1X/boeOyE4E3r3tpj1CbT3lUAwfugiFkBOnwK3ieXj3daxxPYv7Ofy/Hm08zKsmrK2VbQI5bXn311mO+w8YmFWOVPEbCViBd/dviPPZQLh86GHIN1BMBOmvLWe/WvKUXLkcGU5xfAZkNdWCmDoocl7dbiQJy+lSuhJWkgq4WPWvuWuLJvgkJ3Tu6cnuqz/nuUhv";
 		ApiContext apiContext = getApiContextSandbox();
-		//apiContext.setEpsServerUrl("https://api.sandbox.ebay.com/ws/api.dll");
-			
-		PictureService picService = eBayPictureServiceFactory.getPictureService(apiContext);
-		uploadPicture(picService, apiContext, "C:\\temp\\testThumbnail2.jpg");		
+		// apiContext.setEpsServerUrl("https://api.sandbox.ebay.com/ws/api.dll");
+
+		PictureService picService = eBayPictureServiceFactory
+				.getPictureService(apiContext);
+		uploadPicture(picService, apiContext, "C:\\temp\\testThumbnail2.jpg");
 	}
-	
+
 	@Test
-	public void testAddListingSandboxRequiredParamsOnly() throws Exception {
+	public void demoAddListingSandboxRequiredParamsOnly() throws Exception {
 
 		String token = "AgAAAA**AQAAAA**aAAAAA**N8KhTQ**nY+sHZ2PrBmdj6wVnY+sEZ2PrA2dj6wFk4CoAZOAoQSdj6x9nY+seQ**nH4BAA**AAMAAA**o13rdzTB5LY1PJQ3n9joB2O896klL9R7+7lpICrBlkNw3sCJRlIAQ6h+1QQn64sa1kyWldEQaWjeak+tiX/MzW4rDRxwW/RY8tMaTnEgg5Eh6Bfqp0RvrtP+wFGoYcRvWu7CNsYmodvsXYJUVxCntQ8TJTPC637MSQLG/g7o+k0IEdGZhC/9KBGtBMHO4KiUWjkoTCDaIdi/ld0FXrnbhaoSfB28/3pph1iyK2jiAVOlVVP840VBLku1Ui71aM39UxKH61jizIbxBr2ikoktE3TGBU+j/J7g7MJtIuf7yBMaG1yOBpAkfWMpZff/VzyLOjcAjc8RapsGkyht/5BQeJffeXXlbFbyFEQHtBIIy/xXneGbIi4UaHnvP6Ev11NORzJx1u2bzmSx5vtlfd2vdg+9KQ9Sp4W4Wgq395rpu9SHEpkxJzeWMRvJnZEG2vJAzt9j6cJnkn24YbH27w7BzA/i6gDPUVTr+pO22BqPpX4FJTsdsa4vBl7Xw1lYCijJCpIwgN1xrD5oGLr1YoE8nxtJBHy7UV3Ijlo9SmD8FqiioBJD952S+8vqybSmL1X/boeOyE4E3r3tpj1CbT3lUAwfugiFkBOnwK3ieXj3daxxPYv7Ofy/Hm08zKsmrK2VbQI5bXn311mO+w8YmFWOVPEbCViBd/dviPPZQLh86GHIN1BMBOmvLWe/WvKUXLkcGU5xfAZkNdWCmDoocl7dbiQJy+lSuhJWkgq4WPWvuWuLJvgkJ3Tu6cnuqz/nuUhv";
-		
+
 		ApiContext apiContext = getApiContextSandbox();
 		apiContext.getApiCredential().seteBayToken(token);
 
@@ -250,19 +250,19 @@ public class TestAddListing extends AbstractEbayTestCase {
 
 		ebayListingItem.setStartPrice(1.00);
 		ebayListingItem.setVatPercent(2.00f);
-		
-//		ebayListingItem.setPayPalEmail("test@example.com");
-		
-		//ebayListingItem.setBoldTitleChecked(true);
-		//ebayListingItem.setLotSize(10);
+
+		// ebayListingItem.setPayPalEmail("test@example.com");
+
+		// ebayListingItem.setBoldTitleChecked(true);
+		// ebayListingItem.setLotSize(10);
 
 		ItemType item = buildItemRequiredParamsOnly(ebayListingItem);
 
-		// fill in mandatory fields 
-		
+		// fill in mandatory fields
+
 		// handling time
 		item.setDispatchTimeMax(Integer.valueOf(1));
-		
+
 		// return policy
 		ReturnPolicyType returnPolicy = new ReturnPolicyType();
 		returnPolicy.setReturnsAcceptedOption("ReturnsAccepted");
@@ -305,7 +305,7 @@ public class TestAddListing extends AbstractEbayTestCase {
 		boolean borderChecked = ebayListingItem.isBorderChecked();
 		boolean boldTitleChecked = ebayListingItem.isBoldTitleChecked();
 		boolean setAutoPay = ebayListingItem.isSetAutoPay();
-		Integer lotSize = ebayListingItem.getLotSize();
+		// Integer lotSize = ebayListingItem.getLotSize();
 		Boolean bestOfferEnabled = ebayListingItem.getBestOfferEnabled();
 
 		ItemType item = new ItemType();
@@ -354,10 +354,11 @@ public class TestAddListing extends AbstractEbayTestCase {
 		// .processUserPaymentMethods(this.ckbPaymentServices,
 		// this.ctrlPaymentServices);
 
-		//BuyerPaymentMethodCodeType[] arrPaymentMethods = { BuyerPaymentMethodCodeType.PAY_PAL };
+		// BuyerPaymentMethodCodeType[] arrPaymentMethods = {
+		// BuyerPaymentMethodCodeType.PAY_PAL };
 		BuyerPaymentMethodCodeType[] arrPaymentMethods = { BuyerPaymentMethodCodeType.AM_EX };
 		item.setPaymentMethods(arrPaymentMethods);
-		
+
 		//
 		// ShippingDetailsType shippingDetails = manager
 		// .processUserShippingDetails(this.shippingServiceOptions,
@@ -377,9 +378,7 @@ public class TestAddListing extends AbstractEbayTestCase {
 
 		ShippingServiceOptionsType[] shippingServiceOptions = { shippingServiceOption };
 		shippingDetails.setShippingServiceOptions(shippingServiceOptions);
-		if (shippingDetails != null) {
-			item.setShippingDetails(shippingDetails);
-		}
+		item.setShippingDetails(shippingDetails);
 
 		// ArrayList list = manager
 		// .getSelectedCheckBoxList(this.ckbShipToLocations);
@@ -425,9 +424,9 @@ public class TestAddListing extends AbstractEbayTestCase {
 			item.setListingEnhancement(enhancements);
 		}
 
-//		if (lotSize != null) {
-//			item.setLotSize(lotSize);
-//		}
+		// if (lotSize != null) {
+		// item.setLotSize(lotSize);
+		// }
 
 		if (bestOfferEnabled != null) {
 			BestOfferDetailsType bo = new BestOfferDetailsType();
@@ -438,31 +437,33 @@ public class TestAddListing extends AbstractEbayTestCase {
 		return item;
 	}
 
-	private void uploadPicture(PictureService picService, ApiContext apiContext, String filePath) {
-		
-    	PictureInfo picInfo = new PictureInfo();
-    	picInfo.setPictureFilePath(filePath);
-    	UploadSiteHostedPicturesRequestType request = new UploadSiteHostedPicturesRequestType();
-    	
-    	// Enable watermark
-    	// request.setPictureWatermark(new PictureWatermarkCodeType[] {PictureWatermarkCodeType.USER});
-    	
-    	// Extension in days    	
-    	// request.setExtensionInDays(days);
-    	
-    	
-//    	boolean success = picService.uploadPicture(PhotoDisplayCodeType.NONE, picInfo, true);    	
-//    	System.out.println("Upload [" + filePath + "], success: " + success);
-    	
-    	boolean success = picService.UpLoadSiteHostedPicture(picInfo, request);    	
-    	System.out.println("Upload [" + filePath + "], success: " + success);
+	private void uploadPicture(PictureService picService,
+			ApiContext apiContext, String filePath) {
+
+		PictureInfo picInfo = new PictureInfo();
+		picInfo.setPictureFilePath(filePath);
+		UploadSiteHostedPicturesRequestType request = new UploadSiteHostedPicturesRequestType();
+
+		// Enable watermark
+		// request.setPictureWatermark(new PictureWatermarkCodeType[]
+		// {PictureWatermarkCodeType.USER});
+
+		// Extension in days
+		// request.setExtensionInDays(days);
+
+		// boolean success = picService.uploadPicture(PhotoDisplayCodeType.NONE,
+		// picInfo, true);
+		// System.out.println("Upload [" + filePath + "], success: " + success);
+
+		boolean success = picService.UpLoadSiteHostedPicture(picInfo, request);
+		System.out.println("Upload [" + filePath + "], success: " + success);
 	}
-	
+
 	private ItemType buildItemRequiredParamsOnly(EbayListingItem ebayListingItem)
 			throws Exception {
 
 		String itemTitle = ebayListingItem.getItemTitle();
-		String subTitle = ebayListingItem.getSubTitle();
+		// String subTitle = ebayListingItem.getSubTitle();
 		String description = ebayListingItem.getDescription();
 		String listingDuration = ebayListingItem.getListingDuration();
 		Integer quantity = ebayListingItem.getQuantity();
@@ -481,9 +482,9 @@ public class TestAddListing extends AbstractEbayTestCase {
 		ItemType item = new ItemType();
 		item.setTitle(itemTitle);
 
-//		if (subTitle != null && subTitle.length() > 0) {
-//			item.setSubTitle(subTitle);
-//		}
+		// if (subTitle != null && subTitle.length() > 0) {
+		// item.setSubTitle(subTitle);
+		// }
 
 		item.setDescription(description);
 
@@ -548,9 +549,7 @@ public class TestAddListing extends AbstractEbayTestCase {
 
 		ShippingServiceOptionsType[] shippingServiceOptions = { shippingServiceOption };
 		shippingDetails.setShippingServiceOptions(shippingServiceOptions);
-		if (shippingDetails != null) {
-			item.setShippingDetails(shippingDetails);
-		}
+		item.setShippingDetails(shippingDetails);
 
 		// ArrayList list = manager
 		// .getSelectedCheckBoxList(this.ckbShipToLocations);
@@ -610,7 +609,7 @@ public class TestAddListing extends AbstractEbayTestCase {
 	}
 
 	private String[] getPicturePathList() {
-		//String[] pathList = { "C:\\Temp//testThumbnail2.jpg" };
+		// String[] pathList = { "C:\\Temp//testThumbnail2.jpg" };
 		String[] pathList = { "C:\\Temp\\testThumbnail2.jpg" };
 		return pathList;
 	}
@@ -761,6 +760,5 @@ public class TestAddListing extends AbstractEbayTestCase {
 		public void setBestOfferEnabled(Boolean bestOfferEnabled) {
 			this.bestOfferEnabled = bestOfferEnabled;
 		}
-
 	}
 }
