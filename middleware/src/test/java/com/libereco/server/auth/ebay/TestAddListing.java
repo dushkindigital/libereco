@@ -46,7 +46,7 @@ public class TestAddListing extends AbstractEbayTestCase {
 	}
 
 	@Test
-	public void demoAddListingSandbox() throws Exception {
+	public void testDemoAddListingSandbox() throws Exception {
 		ApiContext apiContext = getApiContextSandbox();
 		AddItemCall api = new AddItemCall(apiContext);
 
@@ -120,7 +120,7 @@ public class TestAddListing extends AbstractEbayTestCase {
 	}
 
 	@Test
-	public void testAddListingWithImageSandbox() throws Exception {
+	public void testDemoAddListingWithImageSandbox() throws Exception {
 
 		ApiContext apiContext = getApiContextSandbox();
 		AddItemCall api = new AddItemCall(apiContext);
@@ -209,11 +209,8 @@ public class TestAddListing extends AbstractEbayTestCase {
 	}
 
 	@Test
-	public void demoUploadPicture() {
-		// String token =
-		// "AgAAAA**AQAAAA**aAAAAA**N8KhTQ**nY+sHZ2PrBmdj6wVnY+sEZ2PrA2dj6wFk4CoAZOAoQSdj6x9nY+seQ**nH4BAA**AAMAAA**o13rdzTB5LY1PJQ3n9joB2O896klL9R7+7lpICrBlkNw3sCJRlIAQ6h+1QQn64sa1kyWldEQaWjeak+tiX/MzW4rDRxwW/RY8tMaTnEgg5Eh6Bfqp0RvrtP+wFGoYcRvWu7CNsYmodvsXYJUVxCntQ8TJTPC637MSQLG/g7o+k0IEdGZhC/9KBGtBMHO4KiUWjkoTCDaIdi/ld0FXrnbhaoSfB28/3pph1iyK2jiAVOlVVP840VBLku1Ui71aM39UxKH61jizIbxBr2ikoktE3TGBU+j/J7g7MJtIuf7yBMaG1yOBpAkfWMpZff/VzyLOjcAjc8RapsGkyht/5BQeJffeXXlbFbyFEQHtBIIy/xXneGbIi4UaHnvP6Ev11NORzJx1u2bzmSx5vtlfd2vdg+9KQ9Sp4W4Wgq395rpu9SHEpkxJzeWMRvJnZEG2vJAzt9j6cJnkn24YbH27w7BzA/i6gDPUVTr+pO22BqPpX4FJTsdsa4vBl7Xw1lYCijJCpIwgN1xrD5oGLr1YoE8nxtJBHy7UV3Ijlo9SmD8FqiioBJD952S+8vqybSmL1X/boeOyE4E3r3tpj1CbT3lUAwfugiFkBOnwK3ieXj3daxxPYv7Ofy/Hm08zKsmrK2VbQI5bXn311mO+w8YmFWOVPEbCViBd/dviPPZQLh86GHIN1BMBOmvLWe/WvKUXLkcGU5xfAZkNdWCmDoocl7dbiQJy+lSuhJWkgq4WPWvuWuLJvgkJ3Tu6cnuqz/nuUhv";
+	public void testDemoUploadPicture() {
 		ApiContext apiContext = getApiContextSandbox();
-		// apiContext.setEpsServerUrl("https://api.sandbox.ebay.com/ws/api.dll");
 
 		PictureService picService = eBayPictureServiceFactory
 				.getPictureService(apiContext);
@@ -221,13 +218,8 @@ public class TestAddListing extends AbstractEbayTestCase {
 	}
 
 	@Test
-	public void demoAddListingSandboxRequiredParamsOnly() throws Exception {
-
-		String token = "AgAAAA**AQAAAA**aAAAAA**N8KhTQ**nY+sHZ2PrBmdj6wVnY+sEZ2PrA2dj6wFk4CoAZOAoQSdj6x9nY+seQ**nH4BAA**AAMAAA**o13rdzTB5LY1PJQ3n9joB2O896klL9R7+7lpICrBlkNw3sCJRlIAQ6h+1QQn64sa1kyWldEQaWjeak+tiX/MzW4rDRxwW/RY8tMaTnEgg5Eh6Bfqp0RvrtP+wFGoYcRvWu7CNsYmodvsXYJUVxCntQ8TJTPC637MSQLG/g7o+k0IEdGZhC/9KBGtBMHO4KiUWjkoTCDaIdi/ld0FXrnbhaoSfB28/3pph1iyK2jiAVOlVVP840VBLku1Ui71aM39UxKH61jizIbxBr2ikoktE3TGBU+j/J7g7MJtIuf7yBMaG1yOBpAkfWMpZff/VzyLOjcAjc8RapsGkyht/5BQeJffeXXlbFbyFEQHtBIIy/xXneGbIi4UaHnvP6Ev11NORzJx1u2bzmSx5vtlfd2vdg+9KQ9Sp4W4Wgq395rpu9SHEpkxJzeWMRvJnZEG2vJAzt9j6cJnkn24YbH27w7BzA/i6gDPUVTr+pO22BqPpX4FJTsdsa4vBl7Xw1lYCijJCpIwgN1xrD5oGLr1YoE8nxtJBHy7UV3Ijlo9SmD8FqiioBJD952S+8vqybSmL1X/boeOyE4E3r3tpj1CbT3lUAwfugiFkBOnwK3ieXj3daxxPYv7Ofy/Hm08zKsmrK2VbQI5bXn311mO+w8YmFWOVPEbCViBd/dviPPZQLh86GHIN1BMBOmvLWe/WvKUXLkcGU5xfAZkNdWCmDoocl7dbiQJy+lSuhJWkgq4WPWvuWuLJvgkJ3Tu6cnuqz/nuUhv";
-
+	public void testDemoAddListingSandboxRequiredParamsOnly() throws Exception {
 		ApiContext apiContext = getApiContextSandbox();
-		apiContext.getApiCredential().seteBayToken(token);
-
 		AddItemCall api = new AddItemCall(apiContext);
 
 		CurrencyCodeType currency = CurrencyCodeType.USD;
@@ -242,16 +234,16 @@ public class TestAddListing extends AbstractEbayTestCase {
 		EbayListingItem ebayListingItem = new EbayListingItem();
 
 		ebayListingItem.setItemTitle("Test item");
-		ebayListingItem.setSubTitle("Subtitle");
+		//ebayListingItem.setSubTitle("Subtitle");
 		ebayListingItem.setDescription("Description");
 		ebayListingItem.setListingDuration("Days_7");
 		ebayListingItem.setQuantity(1);
 		ebayListingItem.setCategoryId("139971");
 
 		ebayListingItem.setStartPrice(1.00);
-		ebayListingItem.setVatPercent(2.00f);
+		//ebayListingItem.setVatPercent(2.00f);
 
-		// ebayListingItem.setPayPalEmail("test@example.com");
+		ebayListingItem.setPayPalEmail("test@example.com");
 
 		// ebayListingItem.setBoldTitleChecked(true);
 		// ebayListingItem.setLotSize(10);
@@ -273,7 +265,7 @@ public class TestAddListing extends AbstractEbayTestCase {
 		// TODO: Test
 		// api.setPictureFiles(this.getPicturePathList());
 
-		item.setListingType(ListingTypeCodeType.FIXED_PRICE_ITEM);
+		//item.setListingType(ListingTypeCodeType.FIXED_PRICE_ITEM);
 
 		item.setConditionID(3000);
 
@@ -370,6 +362,7 @@ public class TestAddListing extends AbstractEbayTestCase {
 
 		ShippingDetailsType shippingDetails = new ShippingDetailsType();
 		shippingDetails.setShippingType(ShippingTypeCodeType.FLAT);
+		
 		ShippingServiceOptionsType shippingServiceOption = new ShippingServiceOptionsType();
 		shippingServiceOption.setShippingService("USPSMedia");
 		at = new AmountType();
@@ -475,7 +468,7 @@ public class TestAddListing extends AbstractEbayTestCase {
 		String payPalEmail = ebayListingItem.getPayPalEmail();
 		boolean borderChecked = ebayListingItem.isBorderChecked();
 		boolean boldTitleChecked = ebayListingItem.isBoldTitleChecked();
-		boolean setAutoPay = ebayListingItem.isSetAutoPay();
+//		boolean setAutoPay = ebayListingItem.isSetAutoPay();
 		Integer lotSize = ebayListingItem.getLotSize();
 		Boolean bestOfferEnabled = ebayListingItem.getBestOfferEnabled();
 
@@ -492,9 +485,9 @@ public class TestAddListing extends AbstractEbayTestCase {
 			item.setListingDuration(listingDuration);
 		}
 
-		item.setRegionID("0");
+//		item.setRegionID("0");
 		item.setLocation("San Jose, CA");
-		item.setCurrency(CurrencyCodeType.USD);
+//		item.setCurrency(CurrencyCodeType.USD);
 
 		item.setQuantity(quantity);
 		item.setCountry(CountryCodeType.US);
@@ -539,8 +532,11 @@ public class TestAddListing extends AbstractEbayTestCase {
 		// }
 		//
 
+		
 		ShippingDetailsType shippingDetails = new ShippingDetailsType();
-		shippingDetails.setShippingType(ShippingTypeCodeType.FLAT);
+//		shippingDetails.setShippingType(ShippingTypeCodeType.FLAT);
+		
+		// At least one valid shipping service needs to be specified
 		ShippingServiceOptionsType shippingServiceOption = new ShippingServiceOptionsType();
 		shippingServiceOption.setShippingService("USPSMedia");
 		at = new AmountType();
@@ -551,16 +547,9 @@ public class TestAddListing extends AbstractEbayTestCase {
 		shippingDetails.setShippingServiceOptions(shippingServiceOptions);
 		item.setShippingDetails(shippingDetails);
 
-		// ArrayList list = manager
-		// .getSelectedCheckBoxList(this.ckbShipToLocations);
-		// int size = list.size();
-		// if (size > 0) {
-		// String[] stl = new String[size];
-		// for (int i = 0; i < size; i++) {
-		// stl[i] = list.get(i).toString();
-		// }
+		// String[] stl = { "shipToLocation1", "shipToLocation2"};
 		// item.setShipToLocations(stl);
-		// }
+		// 
 
 		if (payPalEmail != null && payPalEmail.length() > 0) {
 			item.setPayPalEmailAddress(payPalEmail);
@@ -572,7 +561,7 @@ public class TestAddListing extends AbstractEbayTestCase {
 			item.setVATDetails(vatDetails);
 		}
 
-		item.setAutoPay(setAutoPay);
+		//item.setAutoPay(setAutoPay);
 
 		int cnt = 0;
 		if (borderChecked) {
