@@ -142,10 +142,7 @@ public class AuthDemoResource extends AbstractLiberecoResource {
 		if (marketplaceService.isAuthorized(userName, MarketplaceName.EBAY) == false) {
 			// TODO: Make a generic authorization service and migrate that functionality to the service			
 			EbayAuthorizer ebayAuthorizer = ServiceManager.getEbayAuthorizer();
-			
-//			String sessionId = ebayAuthorizer.getSessionId();
-//			String ebaySignInUrl = ebayAuthorizer.buildSignInUrl(sessionId);
-						
+									
 			SignInDetails signInDetails = ebayAuthorizer.getSignInDetails();
 			String ebaySignInUrl = signInDetails.getSignInUrl(); 
 			
@@ -161,7 +158,6 @@ public class AuthDemoResource extends AbstractLiberecoResource {
 			logger.debug("Decoded response: " + response);
 
 			AuthRequestTokenDto requestToken = new AuthRequestTokenDto(signInDetails.getToken(),
-//					sessionId,
 					null);
 			marketplaceService.storeAuthRequestToken(userName,
 					MarketplaceName.EBAY, requestToken);
@@ -180,9 +176,6 @@ public class AuthDemoResource extends AbstractLiberecoResource {
 		if (marketplaceService.isAuthorized(userName, MarketplaceName.ETSY) == false) {
 			EtsyAuthorizer etsyAuthorizer = ServiceManager.getEtsyAuthorizer();
 			logger.debug("Etsy authorizer: " + etsyAuthorizer);
-//
-//			EtsySignInResponse signInResponse = etsyAuthorizer.sendSignInRequest();
-//			logger.debug("SignIn response: " + signInResponse);
 
 			SignInDetails signInResponse = etsyAuthorizer.getSignInDetails();
 			logger.debug("SignIn response: " + signInResponse);
