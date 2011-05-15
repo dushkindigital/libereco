@@ -4,10 +4,13 @@
 
 	<configuration>
 		<stop-on-errors>true</stop-on-errors>
-		<date-format>MM/dd/yyyy HH:mm</date-format> <!-- default dateformat will apply to all class maps unless the class mapping 
-			explicitly overrides it -->
-		<wildcard>true</wildcard> <!-- default wildcard policy that will apply to all class maps unless the 
-			class mapping explicitly overrides it -->
+
+		<!-- Default dateformat will apply to all class maps unless the class mapping explicitly overrides it -->
+		<date-format>MM/dd/yyyy HH:mm</date-format>
+		
+		<!-- Default wildcard policy that will apply to all class maps unless the 
+            class mapping explicitly overrides it -->
+		<wildcard>true</wildcard> 
 
 		<!-- these are always considered bi-directional -->
 		<!-- <custom-converters> -->
@@ -31,20 +34,5 @@
 			</copy-by-references> -->
 
 	</configuration>
-	
-    <mapping map-id="Marketplace">
-        <class-a>com.libereco.server.model.Marketplace</class-a>
-        <class-b>com.libereco.server.dto.MarketplaceDto</class-b>
-    </mapping>
-
-    <mapping map-id="User">
-        <class-a>com.libereco.server.model.User</class-a>
-        <class-b>com.libereco.server.dto.UserDto</class-b>
-    </mapping>
-
-    <mapping map-id="AuthRequestToken">
-        <class-a>com.libereco.server.model.AuthRequestToken</class-a>
-        <class-b>com.libereco.server.dto.AuthRequestTokenDto</class-b>
-    </mapping>
 
 </mappings>
