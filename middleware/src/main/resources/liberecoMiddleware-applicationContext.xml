@@ -240,6 +240,7 @@
 	</bean>
 
 	<!-- Marketplace service -->
+	<!-- This service is currently autowired, to test -->
 	<bean id="marketplaceService" class="com.libereco.server.service.impl.MarketplaceServiceImpl" />
 
 </beans>
