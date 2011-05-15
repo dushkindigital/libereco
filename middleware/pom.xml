@@ -6,24 +6,24 @@
 	<version>1.0-SNAPSHOT</version>
 	<packaging>jar</packaging>
 	<name>libereco-middleware</name>
-	
-	<parent> 
-		<groupId>com.dushkindigital.libereco</groupId> 
-		<artifactId>libereco</artifactId> 
-		<version>1.0-SNAPSHOT</version> 
-	</parent> 
+
+	<parent>
+		<groupId>com.dushkindigital.libereco</groupId>
+		<artifactId>libereco</artifactId>
+		<version>1.0-SNAPSHOT</version>
+	</parent>
 
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-core</artifactId>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-beans</artifactId>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context</artifactId>
@@ -41,27 +41,27 @@
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-aop</artifactId>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context-support</artifactId>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-tx</artifactId>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-orm</artifactId>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-jdbc</artifactId>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-test</artifactId>
@@ -204,7 +204,7 @@
 			</exclusions>
 		</dependency>
 	</dependencies>
-	
+
 	<build>
 		<resources>
 			<resource>
@@ -271,7 +271,7 @@
 						</component>
 					</components>
 					<componentProperties>
-						<configurationfile>/src/main/resources/fh-hibernate.cfg.xml</configurationfile>
+						<configurationfile>/src/main/resources/libereco-hibernate.cfg.xml</configurationfile>
 					</componentProperties>
 				</configuration>
 			</plugin>
