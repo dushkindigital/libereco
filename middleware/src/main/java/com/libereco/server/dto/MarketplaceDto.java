@@ -14,6 +14,10 @@ public class MarketplaceDto {
 	private Long id;
 	private String marketplaceName;
 
+	public MarketplaceDto() {
+		super();
+	}
+
 	public Long getId() {
 		return id;
 	}
@@ -29,5 +33,4 @@ public class MarketplaceDto {
 	public void setMarketplaceName(String marketplaceName) {
 		this.marketplaceName = marketplaceName;
 	}
-
 }

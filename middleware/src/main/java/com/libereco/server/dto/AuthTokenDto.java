@@ -22,6 +22,10 @@ public class AuthTokenDto implements Serializable {
 	private Timestamp expirationTime;
 
 	
+	public AuthTokenDto() {
+		super();
+	}
+
 	public String getToken() {
 		return token;
 	}

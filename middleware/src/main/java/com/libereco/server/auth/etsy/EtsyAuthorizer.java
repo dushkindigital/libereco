@@ -43,6 +43,7 @@ public class EtsyAuthorizer implements MarketplaceAuthorizer {
 	public EtsyAuthorizer(String apiKey, String sharedSecret,
 			String requestTokenEndpointUrl, String accessTokenEndpointUrl,
 			String authorizationWebsiteUrl) {
+		
 		this.apiKey = apiKey;
 		this.sharedSecret = sharedSecret;
 		this.requestTokenEndpointUrl = requestTokenEndpointUrl;
@@ -132,5 +133,14 @@ public class EtsyAuthorizer implements MarketplaceAuthorizer {
 				+ "], token secret [" + consumer.getTokenSecret() + "]");
 		
 		return token;
+	}
+
+	@Override
+	public String toString() {
+		return "EtsyAuthorizer [apiKey=" + apiKey + ", sharedSecret="
+				+ sharedSecret + ", requestTokenEndpointUrl="
+				+ requestTokenEndpointUrl + ", accessTokenEndpointUrl="
+				+ accessTokenEndpointUrl + ", authorizationWebsiteUrl="
+				+ authorizationWebsiteUrl + "]";
 	}
 }

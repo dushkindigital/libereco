@@ -29,6 +29,10 @@ public class UserDto implements Serializable {
 
 	private Set<MarketplaceAuthorizationsDto> marketplaceAuthorizations;
 
+	public UserDto() {
+		super();
+	}
+
 	public Long getId() {
 		return id;
 	}
