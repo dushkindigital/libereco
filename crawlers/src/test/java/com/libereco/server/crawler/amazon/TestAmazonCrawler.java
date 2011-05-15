@@ -94,7 +94,8 @@ public class TestAmazonCrawler extends TestCase {
 	@Test
 	public void testCrawl() throws CrawlingException {
 		AmazonCrawler amazonCrawler = new AmazonCrawler(AWS_ACCESS_KEY_ID,
-				AWS_SECRET_KEY, ENDPOINT, 1);
+				AWS_SECRET_KEY, ENDPOINT, 5000);
+		amazonCrawler.setMaxRequestRetries(5);
 		amazonCrawler.crawl(new CrawlingContext());
 	}
 
