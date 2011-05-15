@@ -37,6 +37,7 @@ import org.junit.Test;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.libereco.server.auth.SignInDetails;
 import com.libereco.server.listings.etsy.create.CreateListingResponse;
 import com.libereco.server.listings.etsy.image.upload.UploadListingImageResponse;
 
@@ -666,63 +667,20 @@ public class TestEtsyAuthorizer extends TestCase {
 		System.out.println("Create listing response: " + createListingResponse);
 
 	}
-	// @Test
-	// public void testSignpost_1_1() throws Exception {
-	//
-	// OAuthConsumer consumer = new DefaultOAuthConsumer(SANDBOX_API_KEY,
-	// SANDBOX_SHARED_SECRET, SignatureMethod.HMAC_SHA1);
-	//
-	// OAuthProvider provider = new DefaultOAuthProvider(consumer,
-	// "http://openapi.etsy.com/v2/oauth/request_token",
-	// "http://openapi.etsy.com/v2/oauth/access_token",
-	// "http://www.etsy.com/oauth/signin");
-	//
-	// System.out.println("Fetching request token from Etsy...");
-	//
-	// // we do not support callbacks, thus pass OOB
-	// String authUrl = provider.retrieveRequestToken(OAuth.OUT_OF_BAND);
-	//
-	// System.out.println("Request token: " + consumer.getToken());
-	// System.out.println("Token secret: " + consumer.getTokenSecret());
-	//
-	// System.out.println("Now visit:\n" + authUrl
-	// + "\n... and grant this app authorization");
-	// System.out
-	// .println("Enter the PIN code and hit ENTER when you're done:");
-	//
-	// BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-	// String pin = br.readLine();
-	//
-	// System.out.println("Fetching access token from Etsy...");
-	//
-	// provider.retrieveAccessToken(pin);
-	//
-	// System.out.println("Access token: " + consumer.getToken());
-	// System.out.println("Token secret: " + consumer.getTokenSecret());
-	//
-	// URL url = new URL("http://openapi.etsy.com/v2/private/users/__SELF__");
-	// HttpURLConnection request = (HttpURLConnection) url.openConnection();
-	//
-	// consumer.sign(request);
-	//
-	// System.out.println("Sending request to Etsy...");
-	// request.connect();
-	//
-	// System.out.println("Response: " + request.getResponseCode() + " "
-	// + request.getResponseMessage());
-	//
-	// System.out.println("Payload:");
-	// InputStream stream = request.getInputStream();
-	// String stringbuff = "";
-	// byte[] buffer = new byte[4096];
-	//
-	// while (stream.read(buffer) > 0) {
-	// for (byte b : buffer) {
-	// stringbuff += (char) b;
-	// }
-	// }
-	//
-	// System.out.print(stringbuff);
-	// stream.close();
-	// }
+
+	@Test
+	public void testGetSignInDetails() throws Exception {
+		
+		EtsyAuthorizer etsyAuthorizer = new EtsyAuthorizer(SANDBOX_API_KEY, SANDBOX_SHARED_SECRET,
+				"http://openapi.etsy.com/v2/sandbox/oauth/request_token",
+				"http://openapi.etsy.com/v2/sandbox/oauth/access_token",
+				"http://www.etsy.com/oauth/signin");
+		
+		SignInDetails signInDetails = etsyAuthorizer.sendSignInRequest();
+		System.out.println("Sign in details: " + signInDetails);
+		
+		
+	}
+	
+	
 }
