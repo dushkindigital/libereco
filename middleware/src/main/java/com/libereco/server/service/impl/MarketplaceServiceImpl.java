@@ -44,6 +44,7 @@ public class MarketplaceServiceImpl extends
 		AbstractBasicService<Long, Marketplace, MarketplaceDto> implements
 		MarketplaceService {
 
+	// TODO: Inject UserService instead of userDao
 	@Autowired
 	private UserDao userDao;
 
@@ -97,8 +98,13 @@ public class MarketplaceServiceImpl extends
 
 	@Override
 	public List<MarketplaceAuthorizationsDto> getAuthorizations(UserDto user) {
+		
+		// TODO: Expose toDto and toEntity methods in generic service and invoke
+		// them that way rather than calling DozerHelper and passing class as
+		// parameter
 		DozerHelper dh = new DozerHelper();
 		User userEntity = dh.map(user, User.class);
+		
 		List<MarketplaceAuthorizations> mpaEntities = marketplaceAuthorizationsDao.getAuthorizations(userEntity);
 		return dh.map(mpaEntities, MarketplaceAuthorizationsDto.class);
 	}

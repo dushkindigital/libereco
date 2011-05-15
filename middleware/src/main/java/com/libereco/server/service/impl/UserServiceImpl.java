@@ -92,6 +92,7 @@ public class UserServiceImpl extends AbstractBasicService<Long, User, UserDto> i
 		User userEntity = getUserDao().findByUserName(userName);
 
 		if (activeOnly && userEntity != null) {
+			
 			// TODO: Update status to use enum type. This is just for the prototype.
 			if (userEntity.isActive() == false) {
 				userEntity = null;
