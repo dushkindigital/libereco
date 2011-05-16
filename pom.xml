@@ -405,22 +405,6 @@
 			</snapshots>
 		</repository>
 
-		<!-- <repository> <id>mvnrepository</id> <name>MVN repository</name> <url>http://mvnrepository.com/</url> 
-			</repository> -->
-
-		<!-- <repository> <id>geogoogle</id> <name>geogoogle repo</name> <url>http://www.cs.drexel.edu/~zl25/maven2/repo</url> 
-			<releases> <updatePolicy>never</updatePolicy> <checksumPolicy>warn</checksumPolicy> 
-			<enabled>true</enabled> </releases> </repository> -->
-
-		<!-- <repository> <id>itextMavenRepository</id> <name>itext Maven Repository</name> 
-			<url>http://maven.itextpdf.com/</url> </repository> -->
-
-		<!-- <repository> <id>signpost-snapshots</id> <url>http://oss.sonatype.org/content/repositories/signpost-snapshots</url> 
-			<releases> <enabled>true</enabled> </releases> <snapshots> <enabled>true</enabled> 
-			</snapshots> </repository> <repository> <id>signpost-releases</id> <url>http://oss.sonatype.org/content/repositories/signpost-releases</url> 
-			<releases> <enabled>true</enabled> </releases> <snapshots> <enabled>false</enabled> 
-			</snapshots> </repository> -->
-
 		<repository>
 			<id>maven-restlet</id>
 			<name>Public online Restlet repository</name>
@@ -452,7 +436,7 @@
 			</releases>
 		</pluginRepository>
 	</pluginRepositories>
-	
+
 	<build>
 		<plugins>
 			<plugin>
@@ -493,7 +477,7 @@
 						</component>
 					</components>
 					<componentProperties>
-						<configurationfile>/src/main/resources/fh-hibernate.cfg.xml</configurationfile>
+						<configurationfile>/src/main/resources/libereco-hibernate.cfg.xml</configurationfile>
 					</componentProperties>
 				</configuration>
 			</plugin>
@@ -543,9 +527,9 @@
 
 		<restlet.version>2.0.5</restlet.version>
 		<!-- <logback.version>0.9.20</logback.version> -->
-		
+
 		<dozer.version>5.3.2</dozer.version>
-		
+
 		<owlapi.version>3.2.2</owlapi.version>
 	</properties>
 
