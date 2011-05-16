@@ -66,8 +66,6 @@ public class AmazonCrawler implements MarketplaceCrawler {
 
 	private List<Long> rootNodeIds = ROOT_NODE_IDS_US;
 
-	// private int maxRequestPerSecond = -1;
-
 	private double minIntervalBetweenRequests = 0;
 
 	private int maxRequestRetries = 0;
@@ -101,14 +99,6 @@ public class AmazonCrawler implements MarketplaceCrawler {
 		this.apiVersionNumber = apiVersionNumber;
 	}
 
-	// public int getMaxRequestPerSecond() {
-	// return maxRequestPerSecond;
-	// }
-	//
-	// public void setMaxRequestPerSecond(int maxRequestPerSecond) {
-	// this.maxRequestPerSecond = maxRequestPerSecond;
-	// }
-
 	@Override
 	public void crawl(CrawlingContext crawlingContext) throws CrawlingException {
 		try {
@@ -130,17 +120,12 @@ public class AmazonCrawler implements MarketplaceCrawler {
 	}
 
 	public List<AmazonCategory> getCategories(CrawlingContext crawlingContext)
-			throws BrowseNodeLookupException, UnsupportedEncodingException, InvalidKeyException, IllegalArgumentException, NoSuchAlgorithmException
-//			IOException, InvalidKeyException, IllegalArgumentException,
-//			NoSuchAlgorithmException, JAXBException,
-//			ParserConfigurationException, SAXException 
+			throws BrowseNodeLookupException, UnsupportedEncodingException,
+			InvalidKeyException, IllegalArgumentException,
+			NoSuchAlgorithmException {
 
-			
-			{
 		List<AmazonCategory> amazonCategories = new ArrayList<AmazonCategory>();
-
 		AmazonCrawlingHelper amazonCrawlingHelper = new AmazonCrawlingHelper();
-
 		getAmazonCategories(rootNodeIds, crawlingContext, amazonCrawlingHelper,
 				amazonCategories);
 
@@ -151,11 +136,8 @@ public class AmazonCrawler implements MarketplaceCrawler {
 			CrawlingContext crawlingContext,
 			AmazonCrawlingHelper amazonCrawlingHelper,
 			List<AmazonCategory> amazonCategories) throws InvalidKeyException,
-			IllegalArgumentException, NoSuchAlgorithmException, 
-			BrowseNodeLookupException, UnsupportedEncodingException
-//			JAXBException,
-//			ParserConfigurationException, SAXException, IOException 
-			{
+			IllegalArgumentException, NoSuchAlgorithmException,
+			BrowseNodeLookupException, UnsupportedEncodingException {
 
 		if (nodeIds != null) {
 			List<AmazonCategoryHelper> categoryHelpers = getCategoryHelpers(
@@ -184,39 +166,19 @@ public class AmazonCrawler implements MarketplaceCrawler {
 
 	private void throttleCheck(AmazonCrawlingHelper crawlingHelper) {
 		if (minIntervalBetweenRequests > 0) {
-			// if (crawlingHelper.getQueryCounter() % maxRequestPerSecond == 0)
-			// {
 			logger.debug("Throttling requests - going to sleep");
 			try {
 				Thread.sleep((long) minIntervalBetweenRequests);
 			} catch (InterruptedException e) {
 				logger.warn("Sleep interrupted", e);
 			}
-			// }
 		}
-
-		// if (maxRequestPerSecond > 0) {
-		// if (crawlingHelper.getQueryCounter() % maxRequestPerSecond == 0) {
-		// logger.debug("Throttling requests - going to sleep");
-		// try {
-		// Thread.sleep(1000);
-		// } catch (InterruptedException e) {
-		// logger.warn("Sleep interrupted", e);
-		// }
-		// }
-		// }
-
 	}
 
-	public List<AmazonCategory> getCategories() 
-	throws BrowseNodeLookupException, InvalidKeyException, UnsupportedEncodingException, IllegalArgumentException, NoSuchAlgorithmException
-//	IOException,
-//			InvalidKeyException, IllegalArgumentException,
-//			NoSuchAlgorithmException, JAXBException,
-//			ParserConfigurationException, SAXException 
-
-			
-			{
+	public List<AmazonCategory> getCategories()
+			throws BrowseNodeLookupException, InvalidKeyException,
+			UnsupportedEncodingException, IllegalArgumentException,
+			NoSuchAlgorithmException {
 		return getCategories(new CrawlingContext());
 	}
 
@@ -285,12 +247,10 @@ public class AmazonCrawler implements MarketplaceCrawler {
 
 	private List<AmazonCategoryHelper> getCategoryHelpers(List<Long> nodeIds,
 			CrawlingContext crawlingContext,
-			AmazonCrawlingHelper amazonCrawlingHelper) throws 
-//			JAXBException,
-//			ParserConfigurationException, SAXException, IOException,
-			
-			InvalidKeyException, IllegalArgumentException,
-			NoSuchAlgorithmException, BrowseNodeLookupException, UnsupportedEncodingException {
+			AmazonCrawlingHelper amazonCrawlingHelper)
+			throws InvalidKeyException, IllegalArgumentException,
+			NoSuchAlgorithmException, BrowseNodeLookupException,
+			UnsupportedEncodingException {
 
 		List<AmazonCategoryHelper> categoryHelpers = new ArrayList<AmazonCategoryHelper>();
 
@@ -306,12 +266,10 @@ public class AmazonCrawler implements MarketplaceCrawler {
 
 	private AmazonCategoryHelper getCategoryHelper(Long nodeId,
 			CrawlingContext crawlingContext,
-			AmazonCrawlingHelper amazonCrawlingHelper) throws BrowseNodeLookupException, InvalidKeyException, IllegalArgumentException, UnsupportedEncodingException, NoSuchAlgorithmException
-//			JAXBException,
-//			ParserConfigurationException, SAXException, IOException,
-//			InvalidKeyException, IllegalArgumentException,
-//			NoSuchAlgorithmException 
-			{
+			AmazonCrawlingHelper amazonCrawlingHelper)
+			throws BrowseNodeLookupException, InvalidKeyException,
+			IllegalArgumentException, UnsupportedEncodingException,
+			NoSuchAlgorithmException {
 
 		SignedRequestsHelper signatureHelper = SignedRequestsHelper
 				.getInstance(endpoint, awsAccessKeyId, awsSecretKey);
@@ -323,10 +281,8 @@ public class AmazonCrawler implements MarketplaceCrawler {
 	private AmazonCategoryHelper getCategoryHelper(Long nodeId,
 			CrawlingContext crawlingContext,
 			AmazonCrawlingHelper amazonCrawlingHelper,
-			SignedRequestsHelper signatureHelper) throws BrowseNodeLookupException
-//			JAXBException,
-//			ParserConfigurationException, SAXException, IOException 
-			{
+			SignedRequestsHelper signatureHelper)
+			throws BrowseNodeLookupException {
 
 		AmazonCategoryHelper categoryHelper = null;
 		int retryCounter = 0;
@@ -351,7 +307,7 @@ public class AmazonCrawler implements MarketplaceCrawler {
 				processBrowseNodeLookupException(retryCounter, e);
 			}
 		}
-		
+
 		return categoryHelper;
 	}
 
@@ -359,7 +315,11 @@ public class AmazonCrawler implements MarketplaceCrawler {
 			throws BrowseNodeLookupException {
 		if ((maxRequestRetries == 0)
 				|| ((maxRequestRetries > 0) && (retryCounter >= maxRequestRetries))) {
-			logger.debug("Browse node lookup failed, configured retry counter [" + maxRequestRetries + "], retry counter [" + retryCounter + "]");
+			logger.debug("Browse node lookup failed, configured retry counter ["
+					+ maxRequestRetries
+					+ "], retry counter ["
+					+ retryCounter
+					+ "]");
 			throw new BrowseNodeLookupException(e);
 		}
 	}
