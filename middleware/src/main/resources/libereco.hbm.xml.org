@@ -15,6 +15,14 @@
         <!--  <property name="role" type="java.lang.Integer"/> -->
     </class>
     
+    <class name="Marketplace" table="marketplace" lazy="false" >
+        <!-- <cache usage="read-only"/>  -->    
+        <id name="id" column="id" type="java.lang.Long">
+            <generator class="native" />
+        </id>       
+        <property name="marketplaceName" type="java.lang.String" not-null="true"/>
+    </class>
+    
     <class name="MarketplaceAuthorizations" table="marketplaceAuthorizations" lazy="false" > 
         <!--  
         <id name="id" column="id" type="java.lang.Long">
@@ -23,9 +31,7 @@
         -->        
         <composite-id>
             <key-many-to-one name="user" column="userId" class="com.libereco.server.model.User" />
-            <!-- RR
             <key-many-to-one name="marketplace" column="marketplaceId" class="com.libereco.server.model.Marketplace" />
-            -->
         </composite-id>
      
         <property name="token" type="java.lang.String" not-null="false"/>
@@ -37,9 +43,7 @@
     <class name="PendingMarketplaceAuthorizations" table="pendingMarketplaceAuthorizations" lazy="false" > 
         <composite-id>
             <key-many-to-one name="user" column="userId" class="com.libereco.server.model.User" />
-            <!-- RR
             <key-many-to-one name="marketplace" column="marketplaceId" class="com.libereco.server.model.Marketplace" />
-            -->
         </composite-id>
      
         <property name="requestToken" type="java.lang.String" not-null="false"/>

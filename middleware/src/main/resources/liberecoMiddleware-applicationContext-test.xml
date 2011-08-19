@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="
+    http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+    http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+    http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-3.0.xsd
+    http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd    
+    http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+    http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd
+    ">
+
+	<!-- TODO: Update code and configuration if we want to use annotations -->
+	<context:annotation-config />
+
+	<context:component-scan base-package="com.libereco" />
+
+	<!-- Configuration properties -->
+	<!-- RR -->
+	<bean id="propertyConfigurer"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="location">
+			<value>classpath:liberecoMiddleware-test.properties</value>
+		</property>
+	</bean>
+
+	<bean id="liberecoDataSource"
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName">
+			<value>${libereco.db.driverClassName}</value>
+		</property>
+		<property name="url">
+			<value>${libereco.db.url}</value>
+		</property>
+		<property name="username">
+			<value>${libereco.db.user}</value>
+		</property>
+		<property name="password">
+			<value>${libereco.db.password}</value>
+		</property>
+	</bean>
+
+	<bean id="liberecoSessionFactory"
+		class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">
+		<property name="dataSource" ref="liberecoDataSource" />
+
+		<property name="mappingResources">
+			<list>
+				<value>libereco.hbm.xml</value>
+			</list>
+		</property>
+
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.dialect">org.hibernate.dialect.MySQLInnoDBDialect</prop>
+				<!-- <prop key="java.naming.factory.initial">org.jnp.interfaces.NamingContextFactory</prop> 
+					<prop key="java.naming.provider.url">localhost:1099</prop> <prop key="connection.pool_size">10</prop> 
+					<prop key="transaction.factory_class">org.hibernate.transaction.JDBCTransactionFactory</prop> 
+					<prop key="hibernate.cache.provider_class">org.hibernate.cache.EhCacheProvider</prop> 
+					<prop key="hibernate.cache.use_query_cache">true</prop> -->
+				<!-- thread is the short name for org.hibernate.context.ThreadLocalSessionContext 
+					and let Hibernate bind the session automatically to the thread -->
+				<!-- <prop key="current_session_context_class">thread</prop> -->
+
+				<!-- Turn on for debugging -->
+				<prop key="hbm2ddl.auto">create-drop</prop>
+				<prop key="hibernate.show_sql">false</prop>
+				<prop key="hibernate.format_sql">false</prop>
+			</props>
+		</property>
+	</bean>
+
+	<!-- Hibernate session factory if we decide to use annotations -->
+	<!-- <bean id="liberecoSessionFactory" class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean"> 
+		<property name="dataSource" ref="liberecoDataSource"/> <property name="hibernateProperties"> 
+		<props> <prop key="hibernate.dialect">org.hibernate.dialect.MySQLInnoDBDialect</prop> 
+		<prop key="hbm2ddl.auto">create-drop</prop> <prop key="hibernate.show_sql">false</prop> 
+		<prop key="hibernate.format_sql">false</prop> </props> </property> <property 
+		name="annotatedClasses"> <list> <value>com.libereco.server.model.User</value> 
+		</list> </property> </bean> -->
+
+	<!-- Transaction manager for a single Hibernate SessionFactory (alternative 
+		to JTA) -->
+	<!-- <bean id="transactionManager" class="org.springframework.orm.hibernate3.HibernateTransactionManager"> 
+		<property name="sessionFactory"> <ref local="liberecoSessionFactory" /> </property> 
+		</bean> -->
+
+	<!-- Hibernate transaction manager -->
+	<!-- RR
+	<bean id="hibernateTxManager"
+		class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+		<property name="sessionFactory">
+			<ref local="liberecoSessionFactory" />
+		</property>
+		<property name="nestedTransactionAllowed" value="true" />
+	</bean>
+	-->
+
+	<!-- RR
+	<aop:config>
+		<aop:pointcut id="hibernateDaoMethods"
+			expression="execution(* com.libereco.server.dao.impl.*.*(..))" />
+		<aop:advisor advice-ref="hibernateTxAdvice" pointcut-ref="hibernateDaoMethods" />
+	</aop:config>
+	-->
+
+	<!-- RR
+	<tx:advice id="hibernateTxAdvice" transaction-manager="hibernateTxManager">
+		<tx:attributes>
+			<tx:method name="get*" read-only="true" />
+			<tx:method name="*" />
+		</tx:attributes>
+	</tx:advice>
+	-->
+
+	<!-- <aop:config> <aop:pointcut id="serviceMethods" expression="execution(* 
+		com.libereco.server.service.impl.*.*(..))"/> <aop:advisor advice-ref="serviceTxAdvice" 
+		pointcut-ref="serviceMethods"/> </aop:config> -->
+
+	<!-- TODO: Move all services to com.libereco.server.service.impl or specify 
+		the execution for all services we use -->
+	<!-- RR
+	<aop:config>
+		<aop:pointcut id="serviceMethods"
+			expression="execution(* com.libereco.server.service.impl.*.*(..))" />
+		<aop:advisor advice-ref="serviceTxAdvice" pointcut-ref="serviceMethods" />
+	</aop:config>
+	-->
+
+	<!-- RR
+	<tx:advice id="serviceTxAdvice" transaction-manager="hibernateTxManager">
+		<tx:attributes>
+			<tx:method name="get*" read-only="true" />
+			<tx:method name="find*" read-only="true" />
+			<tx:method name="has*" read-only="true" />
+			<tx:method name="*" propagation="REQUIRES_NEW" isolation="DEFAULT" />
+		</tx:attributes>
+
+	</tx:advice>
+	-->
+
+	<!-- RR -->
+	<!-- Spring JPA support using the JpaDaoSupport template approach -->
+	<bean id="entityManagerFactory"
+		class="org.springframework.orm.jpa.LocalEntityManagerFactoryBean">
+		<property name="persistenceUnitName" value="myjpacontext" />
+	</bean>
+	<bean id="jparansactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+		<property name="entityManagerFactory" ref="entityManagerFactory" />
+	</bean>
+	<tx:annotation-driven transaction-manager="jpaTransactionManager" />
+
+	<!-- DAO (Data Access Object) for JPA-driven marketplace -->
+	<bean id="marketplaceDaoJpa" class="com.libereco.server.dao.impl.jpa.MarketplaceDaoImpl">
+		<property name="entityManagerFactory" ref="entityManagerFactory" />
+	</bean>
+	
+	
+	<!-- Exception translation bean post processor -->
+	<bean
+		class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor" />
+		
+	<!-- DAO (Data Access Object) for user -->
+	<bean id="userDao" class="com.libereco.server.dao.impl.hb.UserDaoImpl">
+		<property name="sessionFactory">
+			<ref local="liberecoSessionFactory" />
+		</property>
+	</bean>
+
+	<!-- DAO (Data Access Object) for marketplace -->
+	<!-- RR
+	<bean id="marketplaceDao" class="com.libereco.server.dao.impl.hb.MarketplaceDaoImpl">
+		<property name="sessionFactory">
+			<ref local="liberecoSessionFactory" />
+		</property>
+	</bean>
+	-->
+
+	<!-- DAO (Data Access Object) for marketplace authorizations -->
+	<bean id="marketplaceAuthorizationsDao"
+		class="com.libereco.server.dao.impl.hb.MarketplaceAuthorizationsDaoImpl">
+		<property name="sessionFactory">
+			<ref local="liberecoSessionFactory" />
+		</property>
+	</bean>
+
+	<!-- DAO (Data Access Object) for pending marketplace authorizations -->
+	<bean id="pendingMarketplaceAuthorizationsDao"
+		class="com.libereco.server.dao.impl.hb.PendingMarketplaceAuthorizationsDaoImpl">
+		<property name="sessionFactory">
+			<ref local="liberecoSessionFactory" />
+		</property>
+	</bean>
+
+	<!-- eBay API Account -->
+	<bean id="ebayApiAccount" class="com.ebay.sdk.ApiAccount">
+		<property name="developer"
+			value="${libereco.server.crawler.ebay.apiContext.sandbox.apiAccount.developer}" />
+		<property name="application"
+			value="${libereco.server.crawler.ebay.apiContext.sandbox.apiAccount.application}" />
+		<property name="certificate"
+			value="${libereco.server.crawler.ebay.apiContext.sandbox.apiAccount.certificate}" />
+	</bean>
+
+	<bean id="ebayApiCredential" class="com.ebay.sdk.ApiCredential">
+		<property name="apiAccount" ref="ebayApiAccount" />
+		<property name="eBayToken"
+			value="${libereco.server.crawler.ebay.apiContext.sandbox.eBayToken}" />
+	</bean>
+
+	<bean id="ebayApiContext" class="com.ebay.sdk.ApiContext">
+		<property name="apiCredential" ref="ebayApiCredential" />
+		<property name="apiServerUrl"
+			value="${libereco.server.crawler.ebay.apiContext.sandbox.apiServerUrl}" />
+	</bean>
+
+
+	<!-- eBay authorizer -->
+	<bean id="ebayAuthorizer" class="com.libereco.server.auth.ebay.EbayAuthorizer">
+		<constructor-arg>
+			<ref bean="ebayApiContext" />
+		</constructor-arg>
+		<constructor-arg>
+			<value>${libereco.server.auth.ebay.sandbox.signInUrl}</value>
+		</constructor-arg>
+		<constructor-arg>
+			<value>${libereco.server.auth.ebay.sandbox.ruName}</value>
+		</constructor-arg>
+	</bean>
+
+	<!-- Etsy authorizer -->
+	<bean id="etsyAuthorizer" class="com.libereco.server.auth.etsy.EtsyAuthorizer">
+		<constructor-arg>
+			<value>${libereco.server.crawler.etsy.sandbox.apiKey}</value>
+		</constructor-arg>
+		<constructor-arg>
+			<value>${libereco.server.crawler.etsy.sandbox.sharedSecret}</value>
+		</constructor-arg>
+		<constructor-arg>
+			<value>${libereco.server.crawler.etsy.sandbox.requestTokenEndpointUrl}</value>
+		</constructor-arg>
+		<constructor-arg>
+			<value>${libereco.server.crawler.etsy.sandbox.accessTokenEndpointUrl}</value>
+		</constructor-arg>
+		<constructor-arg>
+			<value>${libereco.server.crawler.etsy.sandbox.authorizationWebsiteUrl}</value>
+		</constructor-arg>
+	</bean>
+
+	<!-- Marketplace authorization service -->
+	<!-- <bean id="marketplaceAuthService" class="com.libereco.server.auth.impl.MarketplaceAuthServiceImpl"> 
+		<property name="authorizers"> <list> <ref bean="ebayAuthorizer" /> </list> 
+		</property> </bean> -->
+
+	<!-- User service -->
+	<bean id="userService" class="com.libereco.server.service.impl.UserServiceImpl">
+	   <constructor-arg>
+	       <ref bean="userDao" />
+	   </constructor-arg>
+	</bean>
+
+	<!-- Marketplace service -->
+	<!-- This service is currently autowired, to test -->
+	<bean id="marketplaceService" class="com.libereco.server.service.impl.MarketplaceServiceImpl" />
+
+</beans>

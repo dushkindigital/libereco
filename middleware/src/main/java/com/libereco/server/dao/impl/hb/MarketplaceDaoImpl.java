@@ -20,7 +20,8 @@ import com.libereco.server.model.Marketplace;
  * @author Aleksandar
  * 
  */
-@Repository("marketplaceDao")
+// RR
+// @Repository("marketplaceDao")
 public class MarketplaceDaoImpl extends AbstractDaoSupport<Long, Marketplace>
 		implements MarketplaceDao {
 

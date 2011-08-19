@@ -6,6 +6,7 @@ package com.libereco.common;
 /**
  * @author rrached
  *
+ * Describes the offering stage (new, listed, etc...) of the listed item.
  * According to the Libereco Technical Specification, pp. 7
  */
 public enum ListingState {
