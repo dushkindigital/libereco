@@ -13,6 +13,8 @@ import com.libereco.server.model.Marketplace;
 
 /**
  * @author rrached
+ * 
+ * v0.2: 
  *
  */
 public class MarketplaceDaoImpl extends AbstractJpaDaoSupport<Long, Marketplace> implements
@@ -47,7 +49,7 @@ public class MarketplaceDaoImpl extends AbstractJpaDaoSupport<Long, Marketplace>
 	 */
 	@Override
 	public Marketplace find(Marketplace obj) {
-		return getJpaTemplate().find(Marketplace.class, obj.getId());
+		return entityManager.find(Marketplace.class, obj.getId());
 	}
 
 	/* (non-Javadoc)
@@ -79,10 +81,16 @@ public class MarketplaceDaoImpl extends AbstractJpaDaoSupport<Long, Marketplace>
 	 */
 	@Override
 	public boolean hasMarketplaceName(String marketplaceName) {
-		boolean found = false;		
-		final String qryString = "select m from Marketplace m where m.marketplaceName = ?1";
-		List<?> results = getJpaTemplate().find(qryString, marketplaceName);
-		found = results != null && !results.isEmpty() ? true : false;
+		boolean found = false;
+//		final String qryString = "select m from Marketplace m where m.marketplaceName = ?1";
+//		List<?> results = getJpaTemplate().find(qryString, marketplaceName);
+//		found = results != null && !results.isEmpty() ? true : false;
+		
+		Query q = entityManager.createQuery("from Marketplace where marketplaceName = :marketplaceName");
+		q.setParameter("marketplaceName", marketplaceName);
+		List<?> ls = null;
+		found = (ls = q.getResultList()) != null && !ls.isEmpty() ? true : false;
+		
 		return found;
 	}
 
@@ -91,10 +99,15 @@ public class MarketplaceDaoImpl extends AbstractJpaDaoSupport<Long, Marketplace>
 	 */
 	@Override
 	public Marketplace getMarketplace(String marketplaceName) {
-		final String qryString = "select m from Marketplace m where m.marketplaceName = ?1";
-		@SuppressWarnings("unchecked")
-		List<Marketplace> results = getJpaTemplate().find(qryString, marketplaceName);
-		return (results != null && !results.isEmpty() ? results.get(0) : null);
+//		final String qryString = "select m from Marketplace m where m.marketplaceName = ?1";
+//		@SuppressWarnings("unchecked")
+//		List<Marketplace> results = getJpaTemplate().find(qryString, marketplaceName);
+//		return (results != null && !results.isEmpty() ? results.get(0) : null);
+		
+		Query q = entityManager.createQuery("from Marketplace where marketplaceName = :marketplaceName");
+		q.setParameter("marketplaceName", marketplaceName);
+		List<?> ls = null;
+		return (Marketplace) ((ls = q.getResultList()) != null && !ls.isEmpty() ? ls.get(0) : null);
 	}
 
 	/* (non-Javadoc)
@@ -104,10 +117,12 @@ public class MarketplaceDaoImpl extends AbstractJpaDaoSupport<Long, Marketplace>
 	public List<Long> getMarketplaceIds() {
 		List<Long> marketplaceIds = new ArrayList<Long>();
 		@SuppressWarnings("unchecked")
-		List<Long> ids = getJpaTemplate().find("select id from Marketplace");
+		List<Long> ids = entityManager.createQuery("select id from Marketplace").getResultList();
+//		List<Long> ids = getJpaTemplate().find("select id from Marketplace");
 		if (ids != null && !ids.isEmpty()) {
 			marketplaceIds.addAll(ids);		
 		}
+		
 		return marketplaceIds;
 	}
 
@@ -118,7 +133,8 @@ public class MarketplaceDaoImpl extends AbstractJpaDaoSupport<Long, Marketplace>
 	public List<String> getMarketplaceNames() {
 		List<String> marketplaceNames = new ArrayList<String>();
 		@SuppressWarnings("unchecked")
-		List<String> names = getJpaTemplate().find("select marketplaceName from Marketplace");
+		List<String> names = entityManager.createQuery("select marketplaceName from Marketplace").getResultList();
+//		List<String> names = getJpaTemplate().find("select marketplaceName from Marketplace");
 		if (names != null && !names.isEmpty()) {
 			marketplaceNames.addAll(names);		
 		}

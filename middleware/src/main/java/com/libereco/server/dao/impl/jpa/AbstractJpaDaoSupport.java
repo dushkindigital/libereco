@@ -7,6 +7,11 @@ package com.libereco.server.dao.impl.jpa;
 
 /**
  * @author Aleksandar
+ * @author rrached
+ * 
+ * v0.2 drop JpaDaoSupport, this way we have "pure" POJO without direct
+ * dependency on Spring classes; just use annotations such as
+ * javax.persistence.PersistenceContext to inject the EntityManager object
  *
  */
 
@@ -14,13 +19,17 @@ import java.lang.reflect.ParameterizedType;
 import java.util.List;
 
 import javax.persistence.EntityManager;
-import javax.persistence.PersistenceException;
+import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
-import org.springframework.orm.jpa.JpaCallback;
-import org.springframework.orm.jpa.support.JpaDaoSupport;
+//public abstract class AbstractJpaDaoSupport<K, E> extends JpaDaoSupport {
+public abstract class AbstractJpaDaoSupport<K, E> {
+	@PersistenceContext
+	protected EntityManager entityManager;
 
-public abstract class AbstractJpaDaoSupport<K, E> extends JpaDaoSupport {
+	public void setEntityManager(EntityManager entityManager) {
+	this.entityManager = entityManager;
+	}
 	
 	protected Class<E> entityClass;
 
@@ -33,55 +42,59 @@ public abstract class AbstractJpaDaoSupport<K, E> extends JpaDaoSupport {
 	}
 
 	public void persist(E entity) {
-		getJpaTemplate().persist(entity);
+		entityManager.persist(entity);
 	}
 
 	public void remove(E entity) {
-		getJpaTemplate().remove(entity);
+		entityManager.remove(entity);
 	}
 
 	public E merge(E entity) {
-		return getJpaTemplate().merge(entity);
+		return entityManager.merge(entity);
 	}
 
 	public void refresh(E entity) {
-		getJpaTemplate().refresh(entity);
+		entityManager.refresh(entity);
 	}
 
 	public E findById(K id) {
-		return getJpaTemplate().find(entityClass, id);
+		return entityManager.find(entityClass, id);
 	}
 
 	public E flush(E entity) {
-		getJpaTemplate().flush();
+		entityManager.flush();
 		return entity;
 	}
 
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "unchecked" })
 	public List<E> findAll() {
-		Object res = getJpaTemplate().execute(new JpaCallback() {
-
-			public Object doInJpa(EntityManager em) throws PersistenceException {
-				Query q = em.createQuery("SELECT h FROM "
-						+ entityClass.getName() + " h");
-				return q.getResultList();
-			}
-
-		});
-
-		return (List<E>) res;
+		Query q = entityManager.createQuery("SELECT h FROM " + entityClass.getName() + " h");
+		return (List<E>) q.getResultList();
+//		Object res = entityManager.execute(new JpaCallback() {
+//
+//			public Object doInJpa(EntityManager em) throws PersistenceException {
+//				Query q = em.createQuery("SELECT h FROM "
+//						+ entityClass.getName() + " h");
+//				return q.getResultList();
+//			}
+//
+//		});
+//
+//		return (List<E>) res;
 	}
 
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+//	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public Integer removeAll() {
-		return (Integer) getJpaTemplate().execute(new JpaCallback() {
-
-			public Object doInJpa(EntityManager em) throws PersistenceException {
-				Query q = em.createQuery("DELETE FROM " + entityClass.getName()
-						+ " h");
-				return q.executeUpdate();
-			}
-
-		});
+		Query q = entityManager.createQuery("DELETE FROM " + entityClass.getName() + " h");
+		return q.executeUpdate();
+//		return (Integer) entityManager.execute(new JpaCallback() {
+//
+//			public Object doInJpa(EntityManager em) throws PersistenceException {
+//				Query q = em.createQuery("DELETE FROM " + entityClass.getName()
+//						+ " h");
+//				return q.executeUpdate();
+//			}
+//
+//		});
 	}
 }

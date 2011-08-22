@@ -30,16 +30,17 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 @SuppressWarnings("serial")
 public class Marketplace implements Serializable {
 
+	@Id
+	@Column(name = "id")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+	@Column(unique = true, nullable = false)
 	private String marketplaceName;
 	private String marketplaceShortName;
 
 	// In case we need to keep track of marketplace authorizations
 	//private Set<MarketplaceAuthorizations> marketplaceAuthorizations;
 	
-	@Id
-	@Column(name = "id")
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	public Long getId() {
 		return id;
 	}
@@ -48,7 +49,6 @@ public class Marketplace implements Serializable {
 		this.id = id;
 	}
 
-	@Column(unique = true, nullable = false)
 	public String getMarketplaceName() {
 		return marketplaceName;
 	}

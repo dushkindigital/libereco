@@ -141,7 +141,7 @@
 	<!-- Exception translation bean post processor -->
 	<bean
 		class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor" />
-
+		
 	<!-- DAO (Data Access Object) for user -->
 	<bean id="userDao" class="com.libereco.server.dao.impl.hb.UserDaoImpl">
 		<property name="sessionFactory">

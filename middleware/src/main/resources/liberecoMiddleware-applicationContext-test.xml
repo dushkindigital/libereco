@@ -144,26 +144,37 @@
 	-->
 
 	<!-- RR -->
+	<!-- the first approach used the org.springframework.orm.jpa.support.JpaDaoSupport
+		 which is not really recommended as POJOs aren't really POJOs anymore;
+		 better off using Spring with the pure JPA approach -->
 	<!-- Spring JPA support using the JpaDaoSupport template approach -->
 	<bean id="entityManagerFactory"
 		class="org.springframework.orm.jpa.LocalEntityManagerFactoryBean">
 		<property name="persistenceUnitName" value="myjpacontext" />
 	</bean>
-	<bean id="jparansactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+	<bean id="jpaTransactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
 		<property name="entityManagerFactory" ref="entityManagerFactory" />
 	</bean>
 	<tx:annotation-driven transaction-manager="jpaTransactionManager" />
-
-	<!-- DAO (Data Access Object) for JPA-driven marketplace -->
-	<bean id="marketplaceDaoJpa" class="com.libereco.server.dao.impl.jpa.MarketplaceDaoImpl">
-		<property name="entityManagerFactory" ref="entityManagerFactory" />
-	</bean>
-	
-	
-	<!-- Exception translation bean post processor -->
+		
+	<!-- Exception translation bean post processor
+		 Bean post-processor that automatically applies persistence exception translation to
+		 any bean that carries the Repository annotation, adding a corresponding 
+		 PersistenceExceptionTranslationAdvisor to the exposed proxy (either an existing AOP
+		 proxy or a newly generated proxy that implements all of the target's interfaces).
+		 Translates native resource exceptions to Spring's DataAccessException hierarchy. 
+		 Autodetects beans that implement the PersistenceExceptionTranslator interface, which
+		 are subsequently asked to translate candidate exceptions.  -->
 	<bean
 		class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor" />
 		
+	<!-- This post-processor will inject sub-interfaces of EntityManagerFactory and EntityManager
+	 	 if the annotated fields or methods are declared as such. The actual type will be verified
+	 	 early, with the exception of a shared ("transactional") EntityManager reference, where
+	 	 type mismatches might be detected as late as on the first actual invocation. -->	
+	<bean
+		class="org.springframework.orm.jpa.support.PersistenceAnnotationBeanPostProcessor" />
+	
 	<!-- DAO (Data Access Object) for user -->
 	<bean id="userDao" class="com.libereco.server.dao.impl.hb.UserDaoImpl">
 		<property name="sessionFactory">
@@ -179,7 +190,15 @@
 		</property>
 	</bean>
 	-->
+	<!-- DAO (Data Access Object) for JPA-driven marketplace -->
+	<bean id="marketplaceDao" class="com.libereco.server.dao.impl.jpa.MarketplaceDaoImpl">
+	<!-- not required anymore with the pure JPA approach -->
+		<!-- <property name="entityManagerFactory" ref="entityManagerFactory" /> -->
+	</bean>
 
+	<!-- DAO (Data Access Object) for JPA-driven Libereco Listing -->
+	<bean id="liberecoListingDao" class="com.libereco.server.dao.impl.jpa.LiberecoListingDaoImpl" />
+	
 	<!-- DAO (Data Access Object) for marketplace authorizations -->
 	<bean id="marketplaceAuthorizationsDao"
 		class="com.libereco.server.dao.impl.hb.MarketplaceAuthorizationsDaoImpl">

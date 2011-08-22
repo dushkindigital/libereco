@@ -4,45 +4,55 @@
 package com.libereco.server.model;
 
 
+import static org.junit.Assert.*;
+
 import java.util.List;
 
+import org.junit.Before;
 import org.junit.Test;
-import org.springframework.test.jpa.AbstractJpaTests;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.transaction.TransactionConfiguration;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.libereco.server.dao.MarketplaceDao;
 
 /**
  * @author rrached
+ * 
+ * v0.2: Migrated the test case from {@link AbstractJpaTests} (Spring v2.0) to
+ * {@link AbstractTransactionalJUnit4SpringContextTests} (Spring v3)
+ * This means using simpleJdbcTemplate instead of jdbcTemplate and using the Spring 3
+ * annotations along with JUnit 4 {@link SpringJUnit4ClassRunner} test runner
+ * Note that there is no need for an explicit DAO setter as in:
+ * public void setMarketplaceDao(MarketplaceDao marketplaceDao)
+ * Every method is transactional by default
  *
  */
-public class MarketplaceTest extends AbstractJpaTests {
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(locations = { "classpath:/liberecoMiddleware-applicationContext-test.xml" })
+@TransactionConfiguration(transactionManager = "jpaTransactionManager", defaultRollback = true)
+@Transactional
+public class MarketplaceTest extends AbstractTransactionalJUnit4SpringContextTests {
+	@Autowired
 	private MarketplaceDao marketplaceDao;
 	
 	private static final Long marketplaceId = 1L;
 	private static final String marketplaceName = "eBay Full Name";
 	private static final String marketplaceShortName = "eBay";
-
-	public void setMarketplaceDao(MarketplaceDao marketplaceDao) {
-		this.marketplaceDao = marketplaceDao;
-	}
 	
-	@Override
-	protected String[] getConfigLocations() {
-		return new String[] {"classpath:/liberecoMiddleware-applicationContext-test.xml"};
-	}
-	
-	@SuppressWarnings("deprecation")
-	@Override
-	protected void onSetUpInTransaction() throws Exception {
-		jdbcTemplate.execute(
-				"delete from marketplace where marketplacename = '" +
-					marketplaceName + "' and marketplaceShortName = '" +
-					marketplaceShortName + "'");
-		jdbcTemplate.execute(
-				"insert into marketplace (id, marketplaceName, marketplaceShortName) values (" +
-					marketplaceId + ", '" +
-					marketplaceName + "', '" +
-					marketplaceShortName + "')");
+	@Before
+	public final void verifyInitialDatabaseState() {
+		simpleJdbcTemplate.update("delete from marketplace where marketplacename = ?"
+						+ " and marketplaceShortName = ?", marketplaceName, marketplaceShortName);
+		simpleJdbcTemplate.update("insert into marketplace (id, marketplaceName, marketplaceShortName) "
+				+ "values (?, ?, ?)", 
+				marketplaceId,
+				marketplaceName,
+				marketplaceShortName);
 	}
 	
 	@Test
@@ -88,6 +98,12 @@ public class MarketplaceTest extends AbstractJpaTests {
 		Marketplace actual = marketplaceDao.find(marketplace);
 		assertNotNull(actual);
 		assertEquals(marketplace, actual);
+		
+//		marketplace = new Marketplace();
+//		marketplace.setId(marketplaceId);
+//		marketplace.setMarketplaceName(marketplaceName);
+//		marketplace.setMarketplaceShortName(marketplaceShortName);
+//		marketplaceDao.saveOrUpdate(marketplace);
 	}
 
 	@Test
