@@ -13,6 +13,8 @@ package com.libereco.server.dao.impl.jpa;
  * dependency on Spring classes; just use annotations such as
  * javax.persistence.PersistenceContext to inject the EntityManager object
  *
+ * v0.3 extended the reflection mechanism to discover the type parameter at runtime
+ * to support multiple inheritance
  */
 
 import java.lang.reflect.ParameterizedType;
@@ -22,7 +24,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
-//public abstract class AbstractJpaDaoSupport<K, E> extends JpaDaoSupport {
 public abstract class AbstractJpaDaoSupport<K, E> {
 	@PersistenceContext
 	protected EntityManager entityManager;
@@ -35,10 +36,23 @@ public abstract class AbstractJpaDaoSupport<K, E> {
 
 	@SuppressWarnings("unchecked")
 	public AbstractJpaDaoSupport() {
-		ParameterizedType genericSuperclass = (ParameterizedType) getClass()
-				.getGenericSuperclass();
-		this.entityClass = (Class<E>) genericSuperclass
-				.getActualTypeArguments()[1];
+//		ParameterizedType genericSuperclass = (ParameterizedType) getClass()
+//				.getGenericSuperclass();
+//		this.entityClass = (Class<E>) genericSuperclass
+//				.getActualTypeArguments()[1];
+		
+		Class<?> cl = getClass();
+		while (!cl.getSimpleName().equals(cl.getSuperclass().getSimpleName())) {
+			if (cl.getGenericSuperclass() instanceof ParameterizedType) {
+				break;
+			}
+			cl = cl.getSuperclass();
+		}
+
+		if (cl.getGenericSuperclass() instanceof ParameterizedType) {
+			entityClass = 
+				(Class<E>) ((ParameterizedType) cl.getGenericSuperclass()).getActualTypeArguments()[1];
+		}
 	}
 
 	public void persist(E entity) {
