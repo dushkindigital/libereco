@@ -35,33 +35,33 @@ public class LiberecoListing extends Marketplace {
    */
 	@Column(name = "listing_id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)	
-	public Long listingId;
+	private Long listingId;
 
-	public String userId;
+	private String userId;
 
-	public String name;
+	private String name;
 
-	public Double price;
+	private Double price;
 
-	public Integer quantity;
-
-	@Enumerated(EnumType.STRING)
-	public LiberecoCategory category;
+	private Integer quantity;
 
 	@Enumerated(EnumType.STRING)
-	public ListingCondition condition;
+	private LiberecoCategory category;
 
 	@Enumerated(EnumType.STRING)
-	public ListingState listingState;
+	private ListingCondition condition;
+
+	@Enumerated(EnumType.STRING)
+	private ListingState listingState;
 
 	@Transient
-	public Set<Marketplace> listedMarketPlaces;
+	private Set<Marketplace> listedMarketPlaces;
 
-	public String description;
+	private String description;
 
-	public Date listingDuration;
+	private Date listingDuration;
 
-	public byte[] picture;
+	private byte[] picture;
 	
 	public LiberecoListing() {
 		super();
@@ -70,30 +70,30 @@ public class LiberecoListing extends Marketplace {
 	///** 
 //*  link to shipping template
 //*/
-//public Long shippingId;
+//private Long shippingId;
 //
-//public LiberecoPaymentType paymentType;
+//private LiberecoPaymentType paymentType;
 //
 // /**
 //* 
 //* @element-type LiberecoPaymentTemplate
 //*/
-//public List<LiberecoPaymentTemplate>  payments;
+//private List<LiberecoPaymentTemplate>  payments;
 // /**
 //* 
 //* @element-type LiberecoPaymentMethod
 //*/
-//public List<LiberecoPaymentMethod>  paymentMethods;
+//private List<LiberecoPaymentMethod>  paymentMethods;
 // /**
 //* 
 //* @element-type LiberecoShippingTemplate
 //*/
-//public List<LiberecoShippingTemplate>  shipments;
+//private List<LiberecoShippingTemplate>  shipments;
 // /**
 //* 
 //* @element-type LiberecoShippingMethod
 //*/
-//public List<LiberecoShippingMethod>  shippingMethods;
+//private List<LiberecoShippingMethod>  shippingMethods;
 	
 	
 

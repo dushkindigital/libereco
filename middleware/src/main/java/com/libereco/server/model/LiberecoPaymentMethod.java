@@ -8,12 +8,12 @@ import com.libereco.common.LiberecoPaymentType;
  */
 public abstract class LiberecoPaymentMethod {
 
-	public LiberecoPaymentType paymentMethodId;
+	private LiberecoPaymentType paymentMethodId;
 
-	public String marketplaceId;
+	private String marketplaceId;
 
-	public String name;
+	private String name;
 
-	public LiberecoListing paymentLiberecoListing;
+	private LiberecoListing paymentLiberecoListing;
 
 }

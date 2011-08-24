@@ -2,12 +2,12 @@ package com.libereco.server.model;
 
 public class EbayShippingTemplate extends LiberecoShippingTemplate {
 
-  public String shippingType;
+  private String shippingType;
 
-  public String shippingService;
+  private String shippingService;
 
-  public Integer shippingPriority;
+  private Integer shippingPriority;
 
-  public Double shippingCost;
+  private Double shippingCost;
 
 }

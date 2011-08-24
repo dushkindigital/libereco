@@ -4,8 +4,6 @@ import com.libereco.common.ListingState;
 
 public class EtsyListing extends LiberecoListing {
 
-  public ListingState listingState;
-
-  public String tags;
+  private String tags;
 
 }

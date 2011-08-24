@@ -198,6 +198,9 @@
 
 	<!-- DAO (Data Access Object) for JPA-driven Libereco Listing -->
 	<bean id="liberecoListingDao" class="com.libereco.server.dao.impl.jpa.LiberecoListingDaoImpl" />
+
+	<!-- DAO (Data Access Object) for JPA-driven Ebay Listing -->
+	<bean id="ebayListingDao" class="com.libereco.server.dao.impl.jpa.EbayListingDaoImpl" />
 	
 	<!-- DAO (Data Access Object) for marketplace authorizations -->
 	<bean id="marketplaceAuthorizationsDao"

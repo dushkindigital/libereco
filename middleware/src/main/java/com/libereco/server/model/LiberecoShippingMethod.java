@@ -7,15 +7,15 @@ import com.libereco.common.ShippingLevelType;
  */
 public abstract class LiberecoShippingMethod {
 
-  public ShippingLevelType shippingMethodId;
+  private ShippingLevelType shippingMethodId;
 
-  public String marketplaceId;
+  private String marketplaceId;
 
   /** 
    *  name the marketplace uses to refer to this kind of shipping
    */
-  public String name;
+  private String name;
 
-    public LiberecoListing shippingLibererecoListing;
+    private LiberecoListing shippingLibererecoListing;
   
 }

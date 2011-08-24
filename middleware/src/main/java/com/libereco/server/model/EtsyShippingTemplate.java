@@ -5,8 +5,8 @@ public class EtsyShippingTemplate extends LiberecoShippingTemplate {
   /** 
    *  see: http://developer.etsy.com/docs/resource_shippinginfo
    */
-  public Integer shippingTemplateId;
+  private Integer shippingTemplateId;
 
-  public Double secondaryCost;
+  private Double secondaryCost;
 
 }

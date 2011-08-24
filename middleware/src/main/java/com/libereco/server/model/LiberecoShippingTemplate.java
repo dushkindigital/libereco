@@ -5,15 +5,15 @@ import java.util.Vector;
 
 public class LiberecoShippingTemplate {
 
-  public String shippingId;
+  private String shippingId;
 
-  public ShippingLevelType shippingMethod;
+  private ShippingLevelType shippingMethod;
 
-  public String postcode;
+  private String postcode;
 
-  public String country;
+  private String country;
 
-    public LiberecoListing shipping;
-    public Vector  shippingByMarketPlace;
+    private LiberecoListing shipping;
+    private Vector  shippingByMarketPlace;
 
 }
