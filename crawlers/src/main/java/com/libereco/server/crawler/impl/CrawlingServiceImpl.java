@@ -69,11 +69,14 @@ public class CrawlingServiceImpl implements CrawlingService {
 		if (crawlers != null) {
 			CrawlingContext crawlingContext = new CrawlingContext();
 			crawlingContext.setOutputConfig(outputConfig);
-
+			
+			logger.info("Start crawling");
+			
 			for (MarketplaceCrawler mpc : crawlers) {
 				MarketplaceCrawlerResult mpcResult = new MarketplaceCrawlerResult(CrawlingResultType.SUCCESS);
 				
 				try {
+					logger.info("Marketplace crawler [" + mpc.getMarketplace().getName() + "] started");
 					// TODO: Implement N retries if a failure occurs?
 					mpc.crawl(crawlingContext);
 					logger.info("Marketplace crawler [" + mpc.getMarketplace().getName() + "] successful");					

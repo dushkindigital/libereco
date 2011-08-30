@@ -24,19 +24,23 @@ public class ServiceManager {
 
 	// private static BeanFactoryReference bf;
 
-	private static String[] paths;
+//	private static String[] paths;
 	
-	private static ClassPathXmlApplicationContext ctx = null;
+	private static ClassPathXmlApplicationContext appContext = null;
 
-	static {
-		paths = new String[] { "liberecoCrawlers-applicationContext.xml" };
-		ctx = new ClassPathXmlApplicationContext(paths);
+//	static {
+//		paths = new String[] { "liberecoCrawlers-applicationContext.xml" };
+//		ctx = new ClassPathXmlApplicationContext(paths);
+//
+//		// BeanFactoryLocator bfl = SingletonBeanFactoryLocator.getInstance();
+//		// bf = bfl.useBeanFactory("com.libereco.server");
+//	}
 
-		// BeanFactoryLocator bfl = SingletonBeanFactoryLocator.getInstance();
-		// bf = bfl.useBeanFactory("com.libereco.server");
+	public static void setAppContext(ClassPathXmlApplicationContext ctx) {		
+		ServiceManager.appContext = ctx;
 	}
 
 	public static CrawlingService getCrawlingService() {
-		return (CrawlingService) ctx.getBean("crawlingService");
+		return (CrawlingService) appContext.getBean("crawlingService");
 	}
 }

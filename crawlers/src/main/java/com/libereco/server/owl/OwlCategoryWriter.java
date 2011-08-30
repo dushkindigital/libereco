@@ -11,6 +11,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.model.AddAxiom;
@@ -206,7 +207,8 @@ public class OwlCategoryWriter {
 
 		File file = new File(owlOutputFolder + File.separatorChar
 				+ (outputFileName != null ? outputFileName : "marketplaceOwl")
-				+ "." + sdf.format(new Date(System.currentTimeMillis()))
+				+ "." + sdf.format(new Date(System.currentTimeMillis())) 
+				+ "." + UUID.randomUUID().toString() 
 				+ ".owl");
 
 		logger.debug("Saving OWL to [" + file.getAbsolutePath() + "]");

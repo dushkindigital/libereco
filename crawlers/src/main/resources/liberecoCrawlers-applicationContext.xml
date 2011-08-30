@@ -160,6 +160,7 @@
 	                <prop key="org.quartz.jobStore.isClustered">true</prop>
 	                <prop key="org.quartz.jobStore.useProperties">false</prop>
 	                -->
+	                <prop key="org.quartz.threadPool.threadCount">1</prop>
 	                <prop key="org.quartz.scheduler.skipUpdateCheck">true</prop>
 	                
 	        </props>

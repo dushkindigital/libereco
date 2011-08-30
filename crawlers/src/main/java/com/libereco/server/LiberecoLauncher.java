@@ -9,6 +9,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import com.libereco.server.service.ServiceManager;
+
 /**
  * @author Aleksandar
  *
@@ -24,13 +26,14 @@ public class LiberecoLauncher {
 		
 		Thread appThread = new Thread(new Runnable() {
 			public void run() {
-				// Need to load context to initialize Cron triggers
-				new ClassPathXmlApplicationContext(paths);
+				ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext(paths);
+				
+				// Pass the context to the service manager
+				ServiceManager.setAppContext(ctx);
 				
 				while (true) {// run forever
 					try {
 						Thread.sleep(10000);
-						//wait(10000);
 					} catch(InterruptedException ie) {
 						logger.warn("Application thread interrupted while sleeping", ie);
 					}
