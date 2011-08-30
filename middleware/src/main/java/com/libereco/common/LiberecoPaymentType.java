@@ -1,6 +1,4 @@
-/**
- * 
- */
+/** * Copyright (C) 2011 Dushkin Digital Media, LLC. */
 package com.libereco.common;
 
 /** * 
@@ -18,5 +16,5 @@ public enum LiberecoPaymentType {
 	MASTERCARD,
 	PAYPAL,
 	PERSONAL_CHECK,
-	VISA
+	VISA;
 }

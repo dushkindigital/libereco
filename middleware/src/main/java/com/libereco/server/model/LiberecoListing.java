@@ -63,28 +63,25 @@ public class LiberecoListing extends Marketplace {
 
 	private byte[] picture;
 	
-	public LiberecoListing() {
-		super();
-	}
+//	/**
+//	 * link to shipping template
+//	 */
+//	private Long shippingId;
 
-	///** 
-//*  link to shipping template
-//*/
-//private Long shippingId;
-//
-//private LiberecoPaymentType paymentType;
-//
+//	private LiberecoShippingTemplate paymentId;
+
 // /**
 //* 
 //* @element-type LiberecoPaymentTemplate
 //*/
 //private List<LiberecoPaymentTemplate>  payments;
-// /**
-//* 
-//* @element-type LiberecoPaymentMethod
-//*/
-//private List<LiberecoPaymentMethod>  paymentMethods;
-// /**
+//	/**
+//	 * 
+//	 * @element-type LiberecoPaymentMethod
+//	 */
+//	private List<LiberecoPaymentMethod> paymentMethods;
+
+	// /**
 //* 
 //* @element-type LiberecoShippingTemplate
 //*/
@@ -96,6 +93,10 @@ public class LiberecoListing extends Marketplace {
 //private List<LiberecoShippingMethod>  shippingMethods;
 	
 	
+	public LiberecoListing() {
+		super();
+	}
+
 
 	/**
 	 * @return the listingId

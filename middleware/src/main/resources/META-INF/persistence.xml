@@ -8,6 +8,7 @@
     <class>com.libereco.server.model.Marketplace</class>
     <class>com.libereco.server.model.LiberecoListing</class>
     <class>com.libereco.server.model.EbayListing</class>
+    <class>com.libereco.server.model.LiberecoPaymentMethod</class>
     <properties>
         <property name="hibernate.connection.url" value="jdbc:h2:tcp://localhost:9092/~/test"/>
         <property name="hibernate.dialect" value="org.hibernate.dialect.H2Dialect"/>

@@ -15,11 +15,11 @@ import com.libereco.server.model.Marketplace;
  */
 public interface MarketplaceDao extends AbstractDao<Long, Marketplace> {
 
-	boolean hasMarketplaceName(String marketplaceName);
+	public boolean hasMarketplaceName(String marketplaceName);
 	
-	Marketplace getMarketplace(String marketplaceName);
+	public Marketplace getMarketplace(String marketplaceName);
 	
-	List<Long> getMarketplaceIds();
+	public List<Long> getMarketplaceIds();
 	
-	List<String> getMarketplaceNames();
+	public List<String> getMarketplaceNames();
 }

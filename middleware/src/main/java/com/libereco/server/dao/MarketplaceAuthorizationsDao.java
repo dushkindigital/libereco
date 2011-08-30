@@ -19,10 +19,10 @@ public interface MarketplaceAuthorizationsDao
 		extends
 		AbstractDao<MarketplaceAuthorizations.CompositeKey, MarketplaceAuthorizations> {
 
-	MarketplaceAuthorizations getAuthorization(User user,
+	public MarketplaceAuthorizations getAuthorization(User user,
 			Marketplace marketplace);
 
-	List<MarketplaceAuthorizations> getAuthorizations(User user);
+	public List<MarketplaceAuthorizations> getAuthorizations(User user);
 	
-	boolean isAuthorized(String userName, String marketplaceName);	
+	public boolean isAuthorized(String userName, String marketplaceName);	
 }

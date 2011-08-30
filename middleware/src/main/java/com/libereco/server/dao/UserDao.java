@@ -13,9 +13,9 @@ import com.libereco.server.model.User;
  */
 public interface UserDao extends AbstractDao<Long, User> {
 
-	boolean hasUserName(String userName);
+	public boolean hasUserName(String userName);
 	
-	User findByUserName(String userName);
+	public User findByUserName(String userName);
 	
-	void deleteByUserName(String userName);
+	public void deleteByUserName(String userName);
 }

@@ -15,11 +15,11 @@ public interface LiberecoListingDao extends AbstractDao<Long, LiberecoListing> {
 
 	public LiberecoListing findByListingId(Long listingId);
 	
-	boolean hasLiberecoListingName(String name);
+	public boolean hasLiberecoListingName(String name);
 	
-	LiberecoListing getLiberecoListing(String name);
+	public LiberecoListing getLiberecoListing(String name);
 	
-	List<Long> getLiberecoListingIds();
+	public List<Long> getLiberecoListingIds();
 	
-	List<String> getLiberecoListingNames();
+	public List<String> getLiberecoListingNames();
 }
