@@ -176,6 +176,7 @@ public class EtsyCrawler implements MarketplaceCrawler {
 
 	public void crawl(CrawlingContext crawlingContext) throws CrawlingException {
 		try {
+			logger.debug("Start crawling");
 			List<EtsyCategory> etsyCategories = getCategories(crawlingContext);
 			logger.debug("Finished retrieving categories");
 			generateOwl(etsyCategories, crawlingContext);

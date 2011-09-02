@@ -223,6 +223,7 @@ public class EbayCrawler implements MarketplaceCrawler {
 
 	public void crawl(CrawlingContext crawlingContext) throws CrawlingException {
 		try {
+			logger.debug("Start crawling");
 			List<EbayCategory> ebayCategories = getCategories(crawlingContext);
 			logger.debug("Finished retrieving categories");
 			generateOwl(ebayCategories, crawlingContext);
