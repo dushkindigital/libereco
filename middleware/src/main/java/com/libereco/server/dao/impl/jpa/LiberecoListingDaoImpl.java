@@ -40,7 +40,7 @@ public class LiberecoListingDaoImpl extends AbstractJpaDaoSupport<Long, Libereco
 	 */
 	@Override
 	public LiberecoListing find(LiberecoListing obj) {
-		return entityManager.find(LiberecoListing.class, obj.getId());
+		return entityManager.find(LiberecoListing.class, obj.getListingId());
 	}
 
 	/* (non-Javadoc)

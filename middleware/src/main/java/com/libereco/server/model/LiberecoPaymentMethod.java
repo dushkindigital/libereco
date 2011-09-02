@@ -44,8 +44,8 @@ public class LiberecoPaymentMethod implements Serializable {
 	/**
 	 * @return the paymentMethodId
 	 */
-	public LiberecoPaymentType getPaymentMethodId() {
-		return paymentMethodType;
+	public Long getPaymentMethodId() {
+		return paymentMethodId;
 	}
 	
 	/**

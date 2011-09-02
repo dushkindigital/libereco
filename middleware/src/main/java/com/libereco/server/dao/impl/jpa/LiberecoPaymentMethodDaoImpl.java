@@ -43,7 +43,7 @@ public class LiberecoPaymentMethodDaoImpl extends AbstractJpaDaoSupport<Long, Li
 	 */
 	@Override
 	public LiberecoPaymentMethod find(LiberecoPaymentMethod obj) {
-		return entityManager.find(LiberecoPaymentMethod.class, obj.getId());
+		return entityManager.find(LiberecoPaymentMethod.class, obj.getPaymentMethodId());
 	}
 
 	/* (non-Javadoc)
