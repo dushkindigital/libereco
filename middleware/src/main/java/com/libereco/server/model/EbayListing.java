@@ -1,15 +1,23 @@
+/** * Copyright (C) 2011 Dushkin Digital Media, LLC. */
 package com.libereco.server.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.IdClass;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.Table;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
+import com.libereco.common.ListingState;
 import com.libereco.common.ReturnPolicy;
 
 @Entity
@@ -18,12 +26,49 @@ import com.libereco.common.ReturnPolicy;
 /**
  * @author rrached
  */
-public class EbayListing extends LiberecoListing {
+public class EbayListing implements Listing {
 
+	@Id
+	@Column(name = "id")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long listingId;
+	
+	private ListingState listingState;
+	
 	@Enumerated(EnumType.STRING)
 	private ReturnPolicy returnPolicy;
-
+	
 	private Integer dispatchTimeMax;
+	
+	private List<Marketplace> marketplaces;
+
+	/**
+	 * @return the listingId
+	 */
+	public Long getListingId() {
+		return listingId;
+	}
+
+	/**
+	 * @param listingId the listingId to set
+	 */
+	public void setListingId(Long listingId) {
+		this.listingId = listingId;
+	}
+
+	/**
+	 * @return the listingState
+	 */
+	public ListingState getListingState() {
+		return listingState;
+	}
+
+	/**
+	 * @param listingState the listingState to set
+	 */
+	public void setListingState(ListingState listingState) {
+		this.listingState = listingState;
+	}
 
 	/**
 	 * @return the returnPolicy
@@ -56,6 +101,19 @@ public class EbayListing extends LiberecoListing {
 	}
 	
 	@Override
+	public List<Marketplace> getMarketplaces() {
+		if (marketplaces == null) {
+			marketplaces = new ArrayList<Marketplace>();
+		}
+		return marketplaces;
+	}
+	
+	@Override
+	public void addMarketplace(Marketplace marketplace) {
+		getMarketplaces().add(marketplace);
+	}	
+	
+	@Override
 	public boolean equals(Object obj) {
 		if (obj instanceof EbayListing == false) {
 			return false;
@@ -65,7 +123,6 @@ public class EbayListing extends LiberecoListing {
 		}
 		EbayListing rhs = (EbayListing) obj;
 		return new EqualsBuilder()
-				.appendSuper(super.equals(rhs))
 				.append(returnPolicy, rhs.returnPolicy)
 				.append(dispatchTimeMax, rhs.dispatchTimeMax)
 				.isEquals();
@@ -74,7 +131,6 @@ public class EbayListing extends LiberecoListing {
 	@Override
 	public int hashCode() {
 		return new HashCodeBuilder(17, 37)
-			.appendSuper(super.hashCode())
 			.append(returnPolicy)
 			.append(dispatchTimeMax)
 			.toHashCode();

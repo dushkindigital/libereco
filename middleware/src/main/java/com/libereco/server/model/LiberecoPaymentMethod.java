@@ -10,7 +10,6 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
@@ -23,6 +22,8 @@ import com.libereco.common.LiberecoPaymentType;
 /** 
  *  meta-data class encapsulating the LiberecoPaymentType and other details,
  *  and maintains a relationship with the LiberecoListing used by each payment template class
+ *  We won't list the marketplaces attribute, we have a unidirectional association between 
+ *  Marketplace and LiberecoPaymentMethod.
  */
 @Entity
 @Table(name = "Libereco_Payment_Method")
@@ -31,58 +32,41 @@ public class LiberecoPaymentMethod implements Serializable {
 	@Id
 	@Column(name = "id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+	private Long paymentMethodId;
 	
 	@Enumerated(EnumType.STRING)
 	private LiberecoPaymentType paymentMethodType;
 	
-	@ManyToOne
-	private Marketplace marketplace;
-
 	@SuppressWarnings("unused")
 	@Transient
 	private String name;
 
-	/**
-	 * @return the id
-	 */
-	public Long getId() {
-		return id;
-	}
-
-	/**
-	 * @param id the id to set
-	 */
-	public void setId(Long id) {
-		this.id = id;
-	}
-	
 	/**
 	 * @return the paymentMethodId
 	 */
 	public LiberecoPaymentType getPaymentMethodId() {
 		return paymentMethodType;
 	}
-
+	
+	/**
+	 * @param id the id to set
+	 */
+	public void setPaymentMethodId(Long id) {
+		this.paymentMethodId = id;
+	}
+	
+	/**
+	 * @return the paymentMethodType
+	 */
+	public LiberecoPaymentType getPaymentMethodType() {
+		return paymentMethodType;
+	}
+	
 	/**
 	 * @param paymentMethodType the paymentMethodType to set
 	 */
-	public void setPaymentMethodId(LiberecoPaymentType paymentMethodType) {
+	public void setPaymentMethodType(LiberecoPaymentType paymentMethodType) {
 		this.paymentMethodType = paymentMethodType;
-	}
-
-	/**
-	 * @return the marketplace
-	 */
-	public Marketplace getMarketplace() {
-		return marketplace;
-	}
-
-	/**
-	 * @param marketplace the marketplace to set
-	 */
-	public void setMarketplace(Marketplace marketplace) {
-		this.marketplace = marketplace;
 	}
 
 	/**
@@ -102,18 +86,16 @@ public class LiberecoPaymentMethod implements Serializable {
 		}
 		LiberecoPaymentMethod rhs = (LiberecoPaymentMethod) obj;
 		return new EqualsBuilder()
-				.append(id, rhs.id)
+				.append(paymentMethodId, rhs.paymentMethodId)
 				.append(paymentMethodType, rhs.paymentMethodType)
-				.append(marketplace, rhs.marketplace)
 				.isEquals();
 	}
 	
 	@Override
 	public int hashCode() {
 		return new HashCodeBuilder(17, 37)
-			.append(id)
+			.append(paymentMethodId)
 			.append(paymentMethodType)
-			.append(marketplace)
 			.toHashCode();
 	}
 	

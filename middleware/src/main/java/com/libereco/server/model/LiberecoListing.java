@@ -1,12 +1,11 @@
+/** * Copyright (C) 2011 Dushkin Digital Media, LLC. */
 package com.libereco.server.model;
 
-import com.libereco.common.ListingCondition;
-import java.util.List;
-import com.libereco.common.LiberecoCategory;
-import java.util.Set;
-import com.libereco.common.LiberecoPaymentType;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -14,26 +13,33 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.IdClass;
+//import javax.persistence.IdClass;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
+import com.libereco.common.LiberecoCategory;
+import com.libereco.common.ListingCondition;
 import com.libereco.common.ListingState;
 
+/**
+ * @author rrached
+ *
+ */
 @Entity
 @Table(name = "Libereco_Listing")
-@IdClass(LiberecoListingPK.class)
+//@IdClass(LiberecoListingPK.class)
 @SuppressWarnings("serial")
-public class LiberecoListing extends Marketplace {
+public class LiberecoListing implements Listing {
 
   /** 
    *  no need to repeat the listingId attribute on child classes
    */
-	@Column(name = "listing_id")
+	@Id
+	@Column(name = "id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)	
 	private Long listingId;
 
@@ -54,44 +60,27 @@ public class LiberecoListing extends Marketplace {
 	@Enumerated(EnumType.STRING)
 	private ListingState listingState;
 
-	@Transient
-	private Set<Marketplace> listedMarketPlaces;
-
 	private String description;
 
 	private Date listingDuration;
 
 	private byte[] picture;
 	
-//	/**
-//	 * link to shipping template
-//	 */
-//	private Long shippingId;
-
-//	private LiberecoShippingTemplate paymentId;
-
-// /**
-//* 
-//* @element-type LiberecoPaymentTemplate
-//*/
-//private List<LiberecoPaymentTemplate>  payments;
-//	/**
-//	 * 
-//	 * @element-type LiberecoPaymentMethod
-//	 */
-//	private List<LiberecoPaymentMethod> paymentMethods;
-
-	// /**
-//* 
-//* @element-type LiberecoShippingTemplate
-//*/
-//private List<LiberecoShippingTemplate>  shipments;
-// /**
-//* 
-//* @element-type LiberecoShippingMethod
-//*/
-//private List<LiberecoShippingMethod>  shippingMethods;
+	private List<Marketplace> marketplaces;
 	
+	/**
+	 * 
+	 * @element-type LiberecoPaymentTemplate
+	 */
+	@OneToOne(cascade = CascadeType.PERSIST)
+	private LiberecoPaymentTemplate listingPayment;
+
+	/**
+	 * 
+	 * @element-type LiberecoShippingTemplate
+	 */
+	@OneToOne(cascade = CascadeType.PERSIST)
+	private LiberecoShippingTemplate listingShipping;
 	
 	public LiberecoListing() {
 		super();
@@ -219,21 +208,6 @@ public class LiberecoListing extends Marketplace {
 	}
 
 	/**
-	 * @return the listedMarketPlaces
-	 */
-	public Set<Marketplace> getListedMarketPlaces() {
-		return listedMarketPlaces;
-	}
-
-	/**
-	 * @param listedMarketPlaces
-	 *            the listedMarketPlaces to set
-	 */
-	public void setListedMarketPlaces(Set<Marketplace> listedMarketPlaces) {
-		this.listedMarketPlaces = listedMarketPlaces;
-	}
-
-	/**
 	 * @return the description
 	 */
 	public String getDescription() {
@@ -278,6 +252,35 @@ public class LiberecoListing extends Marketplace {
 		this.picture = picture;
 	}
 	
+	public LiberecoPaymentTemplate getListingPayment() {
+		return listingPayment;
+	}
+	
+	public void setListingPayment(LiberecoPaymentTemplate listingPayment) {
+		this.listingPayment = listingPayment;
+	}
+	
+	public LiberecoShippingTemplate getListingShipping() {
+		return listingShipping;
+	}
+	
+	public void setListingShipping(LiberecoShippingTemplate listingShipping) {
+		this.listingShipping = listingShipping;
+	}
+	
+	@Override
+	public List<Marketplace> getMarketplaces() {
+		if (marketplaces == null) {
+			marketplaces = new ArrayList<Marketplace>();
+		}
+		return marketplaces;
+	}
+	
+	@Override
+	public void addMarketplace(Marketplace marketplace) {
+		getMarketplaces().add(marketplace);
+	}	
+	
 	@Override
 	public boolean equals(Object obj) {
 		if (obj instanceof LiberecoListing == false) {
@@ -296,8 +299,10 @@ public class LiberecoListing extends Marketplace {
 				.append(category, rhs.category)
 				.append(condition, rhs.condition)
 				.append(listingState, rhs.listingState)
-				.append(listedMarketPlaces, rhs.listedMarketPlaces)
 				.append(listingDuration, rhs.listingDuration)
+				.append(listingPayment, rhs.listingPayment)
+				.append(listingShipping, rhs.listingShipping)
+				.append(marketplaces, rhs.marketplaces)
 				.isEquals();
 	}
 	
@@ -312,8 +317,10 @@ public class LiberecoListing extends Marketplace {
 			.append(category)
 			.append(condition)
 			.append(listingState)
-			.append(listedMarketPlaces)
 			.append(listingDuration)
+			.append(listingPayment)
+			.append(listingShipping)
+			.append(marketplaces)
 			.toHashCode();
 	}
 	
@@ -321,5 +328,4 @@ public class LiberecoListing extends Marketplace {
 	public String toString() {
 		return ToStringBuilder.reflectionToString(this);
 	}
-
 }

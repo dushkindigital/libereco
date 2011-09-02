@@ -6,6 +6,8 @@
 package com.libereco.server.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -22,7 +24,7 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 
 /**
  * @author Aleksandar
- *
+ * @author rrached
  */
 @Entity
 @Table(name = "marketplace")
@@ -37,6 +39,16 @@ public class Marketplace implements Serializable {
 	@Column(unique = true, nullable = false)
 	private String marketplaceName;
 	private String marketplaceShortName;
+	/**
+	 * 
+	 * @element-type LiberecoShippingMethod
+	 */
+	public List<LiberecoShippingMethod> shippingMethods;
+	/**
+	 * 
+	 * @element-type LiberecoPaymentMethod
+	 */
+	public List<LiberecoPaymentMethod> paymentMethods;
 
 	// In case we need to keep track of marketplace authorizations
 	//private Set<MarketplaceAuthorizations> marketplaceAuthorizations;
@@ -65,7 +77,45 @@ public class Marketplace implements Serializable {
 	public void setMarketplaceShortName(String marketplaceShortName) {
 		this.marketplaceShortName = marketplaceShortName;
 	}
+	
+	public List<LiberecoPaymentMethod> getPaymentMethods() {
+		if (paymentMethods == null) {
+			paymentMethods = new ArrayList<LiberecoPaymentMethod>();
+		}
+		return this.paymentMethods;
+	}
+	
+	public void setPaymentMethods(List<LiberecoPaymentMethod> paymentMethods) {
+		this.paymentMethods = paymentMethods;
+	}
+	
+	/**
+	 * Helper method...
+	 * @param paymentMethod
+	 */
+	public void addPaymentMethod(LiberecoPaymentMethod paymentMethod) {
+		getPaymentMethods().add(paymentMethod);
+	}
+	
+	public List<LiberecoShippingMethod> getShippingMethods() {
+		if (shippingMethods == null) {
+			shippingMethods = new ArrayList<LiberecoShippingMethod>();
+		}
+		return this.shippingMethods;
+	}
+	
+	public void setShippingMethods(List<LiberecoShippingMethod> shippingMethods) {
+		this.shippingMethods = shippingMethods;
+	}
 
+	/**
+	 * Helper method...
+	 * @param shippingMethod
+	 */
+	public void addShippingMethod(LiberecoShippingMethod shippingMethod) {
+		getShippingMethods().add(shippingMethod);
+	}
+	
 	@Override
 	public boolean equals(Object obj) {
 		if (obj instanceof Marketplace == false) {
@@ -79,6 +129,8 @@ public class Marketplace implements Serializable {
 				.append(id, rhs.id)
 				.append(marketplaceName, rhs.marketplaceName)
 				.append(marketplaceShortName, rhs.marketplaceShortName)
+				.append(paymentMethods, rhs.paymentMethods)
+				.append(shippingMethods, rhs.shippingMethods)
 				.isEquals();
 	}
 	
@@ -88,6 +140,8 @@ public class Marketplace implements Serializable {
 			.append(id)
 			.append(marketplaceName)
 			.append(marketplaceShortName)
+			.append(paymentMethods)
+			.append(shippingMethods)
 			.toHashCode();
 	}
 	
