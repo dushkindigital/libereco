@@ -3,6 +3,13 @@ package com.libereco.server.model;
 
 import java.io.Serializable;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
@@ -11,9 +18,17 @@ import org.apache.commons.lang.builder.ToStringBuilder;
  * @author rrached
  * 
  */
+@Entity
+@Table(name = "Libereco_Shipping_Template")
 @SuppressWarnings("serial")
 public class LiberecoShippingTemplate implements Serializable {
 
+	/**
+	 * no need to repeat the paymentId attributes on children classes
+	 */
+	@Id
+	@Column(name = "id")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long shippingId;
 
 	private String postcode;
@@ -75,7 +90,6 @@ public class LiberecoShippingTemplate implements Serializable {
 		}
 		LiberecoShippingTemplate rhs = (LiberecoShippingTemplate) obj;
 		return new EqualsBuilder()
-				.append(shippingId, rhs.shippingId)
 				.append(postcode, rhs.postcode)
 				.append(country, rhs.country)
 				.isEquals();
@@ -84,7 +98,6 @@ public class LiberecoShippingTemplate implements Serializable {
 	@Override
 	public int hashCode() {
 		return new HashCodeBuilder(17, 37)
-			.append(shippingId)
 			.append(postcode)
 			.append(country)
 			.toHashCode();

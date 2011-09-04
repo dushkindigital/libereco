@@ -13,7 +13,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-//import javax.persistence.IdClass;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -66,7 +66,12 @@ public class LiberecoListing implements Listing {
 
 	private byte[] picture;
 	
-	private List<Marketplace> marketplaces;
+	/**
+	 * amazingly enough the Hibernate JPA provider does NOT properly support the EAGER
+	 * fetching strategy! Must rely on the default fetching strategy 
+	 */
+	@OneToMany(cascade = { CascadeType.PERSIST })
+	private List<Marketplace> marketplaces = new ArrayList<Marketplace>();
 	
 	/**
 	 * 
@@ -270,9 +275,6 @@ public class LiberecoListing implements Listing {
 	
 	@Override
 	public List<Marketplace> getMarketplaces() {
-		if (marketplaces == null) {
-			marketplaces = new ArrayList<Marketplace>();
-		}
 		return marketplaces;
 	}
 	

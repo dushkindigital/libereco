@@ -3,7 +3,11 @@ package com.libereco.server.model;
 
 import static java.sql.Types.*;
 
+import java.util.ArrayList;
+import java.util.Currency;
 import java.util.Date;
+import java.util.List;
+import java.util.Locale;
 
 import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
 
@@ -12,6 +16,7 @@ import com.libereco.common.LiberecoPaymentType;
 import com.libereco.common.ListingCondition;
 import com.libereco.common.ListingState;
 import com.libereco.common.ReturnPolicy;
+import com.libereco.common.ShippingLevelType;
 
 /**
  * @author rrached
@@ -23,7 +28,16 @@ public abstract class AbstractJpaDaoSupportUtils extends AbstractTransactionalJU
 	 * @return
 	 */
 	public int deleteFromTables() {
-		return deleteFromTables("libereco_payment_method", "ebay_listing", "libereco_listing", "marketplace");
+		return deleteFromTables("libereco_shipping_method",
+								"libereco_payment_method",
+								"libereco_listing_marketplace",
+								"ebay_listing", 
+								"libereco_listing",
+								"libereco_payment_template",
+								"libereco_shipping_template",
+								"marketplace_libereco_payment_method",
+								"marketplace_libereco_shipping_method",
+								"marketplace");
 	}
 	
 	/**
@@ -43,7 +57,6 @@ public abstract class AbstractJpaDaoSupportUtils extends AbstractTransactionalJU
 	}
 	
 	/**
-	 * @param marketplaceId
 	 * @param listingId
 	 * @param userId
 	 * @param name
@@ -55,10 +68,11 @@ public abstract class AbstractJpaDaoSupportUtils extends AbstractTransactionalJU
 	 * @param description
 	 * @param listingDuration
 	 * @param picture
+	 * @param listingPaymentId
+	 * @param listingShippingId
 	 * @return
 	 */
-	public int updateLiberecoListing(final Long marketplaceId,
-									 final Long listingId,
+	public int updateLiberecoListing(final Long listingId,
 									 final String userId,
 									 final String name,
 									 final Double price,
@@ -68,10 +82,11 @@ public abstract class AbstractJpaDaoSupportUtils extends AbstractTransactionalJU
 									 final ListingState listingState,
 									 final String description,
 									 final Date listingDuration,
-									 final byte[] picture) {
+									 final byte[] picture,
+									 final Long  listingPaymentId,
+									 final Long listingShippingId) {
 		return simpleJdbcTemplate.getJdbcOperations().update(
 					"insert into libereco_listing (id"
-					+ ",listing_id"
 					+ ", userid"
 					+ ", name"
 					+ ", price"
@@ -81,10 +96,11 @@ public abstract class AbstractJpaDaoSupportUtils extends AbstractTransactionalJU
 					+ ", listingstate"
 					+ ", description"
 					+ ", listingduration"
-					+ ", picture) "
-					+ "values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-					new Object[] { marketplaceId,
-					listingId,
+					+ ", picture"
+					+ ", listingPayment_Id"
+					+ ", listingShipping_Id) "
+					+ "values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+					new Object[] { listingId,
 					userId,
 					name,
 					price,
@@ -94,9 +110,10 @@ public abstract class AbstractJpaDaoSupportUtils extends AbstractTransactionalJU
 					listingState.toString(),
 					description,
 					listingDuration,
-					picture},
+					picture,
+					listingPaymentId,
+					listingShippingId},
 					new int[] { BIGINT,
-					BIGINT,
 					VARCHAR,
 					VARCHAR,
 					DOUBLE,
@@ -106,27 +123,62 @@ public abstract class AbstractJpaDaoSupportUtils extends AbstractTransactionalJU
 					VARCHAR,
 					VARCHAR,
 					TIMESTAMP,
-					BINARY});
+					BINARY,
+					BIGINT,
+					BIGINT});
 	}
 	
 	/**
-	 * @param marketplaceId
-	 * @param returnPolicy
-	 * @param dispatchTimeMax
+	 * @param paymentId
 	 * @return
 	 */
-	public int updateEbayListing(final Long marketplaceId,
+	public int updateLiberecoPaymentTemplate(final Long paymentId) {
+		return simpleJdbcTemplate.getJdbcOperations().update(
+				"insert into libereco_payment_template (id"
+				+ ", currency) "
+				+ "values (?, ?)",
+				new Object[] { paymentId,
+				Currency.getInstance(Locale.getDefault()).getCurrencyCode()},
+				new int[] { BIGINT,
+				VARCHAR});
+	}
+	
+	/**
+	 * @param shippingId
+	 * @param postcode
+	 * @return
+	 */
+	public int updateLiberecoShippingTemplate(final Long shippingId,
+											  final String postcode) {
+		return simpleJdbcTemplate.getJdbcOperations().update(
+				"insert into libereco_shipping_template (id"
+				+ ", country"
+				+ ", postcode) "
+				+ "values (?, ?, ?)",
+				new Object[] { shippingId,
+				Locale.getDefault().getDisplayCountry(),
+				postcode},
+				new int[] { BIGINT,
+				VARCHAR,
+				VARCHAR});
+	}
+	
+	public int updateEbayListing(final Long listingId,
+								 final ListingState listingState,
 								 final ReturnPolicy returnPolicy,
 								 final Integer dispatchTimeMax) {
 		return simpleJdbcTemplate.getJdbcOperations().update(
-				"insert into ebay_listing (id"
+				"insert into ebay_listing (listingId"
+				+ ", listingState"
 				+ ", returnPolicy"
 				+ ", dispatchTimeMax) "
-				+ "values (?, ?, ?)",
-				new Object[] { marketplaceId,
+				+ "values (?, ?, ?, ?)",
+				new Object[] { listingId,
+				listingState.toString(),
 				returnPolicy.toString(),
 				dispatchTimeMax},
 				new int[] { BIGINT,
+				VARCHAR,
 				VARCHAR,
 				INTEGER});
 	}
@@ -134,23 +186,87 @@ public abstract class AbstractJpaDaoSupportUtils extends AbstractTransactionalJU
 	/**
 	 * @param id
 	 * @param paymentType
-	 * @param marketplaceId
 	 * @return
 	 */
 	public int updateLiberecoPaymentMethod(final Long id,
-										   final LiberecoPaymentType paymentType,
-										   final Long marketplaceId) {
+										   final LiberecoPaymentType paymentType) {
 		return simpleJdbcTemplate.getJdbcOperations().update(
 					"insert into libereco_payment_method (id"
-					+ ",paymentMethodType"
-					+ ", marketplace_id) "
-					+ "values (?, ?, ?)",
+					+ ",paymentMethodType) "
+					+ "values (?, ?)",
 					new Object[] { id,
-					paymentType.toString(),
-					marketplaceId },
+					paymentType.toString() },
 					new int[] { BIGINT,
-					VARCHAR,
-					BIGINT });	
+					VARCHAR });	
+	}
+	
+	/**
+	 * @param id
+	 * @param shippingType
+	 * @return
+	 */
+	public int updateLiberecoShippingMethod(final Long id,
+										    final ShippingLevelType shippingType) {
+		return simpleJdbcTemplate.getJdbcOperations().update(
+					"insert into libereco_shipping_method (id"
+					+ ",shippingLevelType) "
+					+ "values (?, ?)",
+					new Object[] { id,
+					shippingType.toString() },
+					new int[] { BIGINT,
+					VARCHAR });	
+	}
+	
+	/**
+	 * @param marketplaceName
+	 * @param marketplaceShortName
+	 * @return {@link Marketplace}
+	 */
+	public static Marketplace createMarketplace(String marketplaceName,
+												String marketplaceShortName) {
+		Marketplace marketplace = new Marketplace();
+		marketplace.setMarketplaceName(marketplaceName);
+		marketplace.setMarketplaceShortName(marketplaceShortName);
+		marketplace.setPaymentMethods(createLiberecoPaymentMethodList());
+		marketplace.setShippingMethods(createLiberecoShippingMethodList());
+		return marketplace;
+	}	
+	
+	
+	/**
+	 * @return {@link List<LiberecoPaymentMethod>}
+	 */
+	public static List<LiberecoPaymentMethod> createLiberecoPaymentMethodList() {
+		LiberecoPaymentMethod paymentMethod = new LiberecoPaymentMethod();
+		paymentMethod.setPaymentMethodType(LiberecoPaymentType.AMERICAN_EXPRESS);
+		List<LiberecoPaymentMethod> paymentMethods = new ArrayList<LiberecoPaymentMethod>();
+		paymentMethods.add(paymentMethod);
+		return paymentMethods;
+	}
+	
+	/**
+	 * @return {@link List<LiberecoShippingMethod>}
+	 */
+	public static List<LiberecoShippingMethod> createLiberecoShippingMethodList() {
+		LiberecoShippingMethod shippingMethod = new LiberecoShippingMethod();
+		shippingMethod.setName("name");
+		shippingMethod.setShippingLevelType(ShippingLevelType.OVERNIGHT);
+		List<LiberecoShippingMethod> shippingMethods = new ArrayList<LiberecoShippingMethod>();
+		shippingMethods.add(shippingMethod);
+		return shippingMethods;
+	}
+	
+	public static LiberecoPaymentTemplate createLiberecoPaymentTemplate() {
+		LiberecoPaymentTemplate template = new LiberecoPaymentTemplate();
+		template.setCurrency(Currency.getInstance(Locale.getDefault()));
+		return template;
 	}
 
+	public static LiberecoShippingTemplate createLiberecoShippingTemplate() {
+		LiberecoShippingTemplate template = new LiberecoShippingTemplate();
+		template.setCountry(Locale.getDefault().getDisplayCountry());
+		template.setPostcode("07030");
+		return template;
+	}
+	
 }

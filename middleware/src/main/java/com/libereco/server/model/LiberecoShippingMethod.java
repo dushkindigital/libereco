@@ -3,6 +3,15 @@ package com.libereco.server.model;
 
 import java.io.Serializable;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
@@ -16,10 +25,16 @@ import com.libereco.common.ShippingLevelType;
  * have a unidirectional association between Marketplace and
  * LiberecoShippingMethod
  */
+@Entity
+@Table(name = "Libereco_Shipping_Method")
 @SuppressWarnings("serial")
 public class LiberecoShippingMethod implements Serializable {
+	@Id
+	@Column(name = "id")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long shippingMethodId;
 
+	@Enumerated(EnumType.STRING)
 	private ShippingLevelType shippingLevelType;
 
 	/**

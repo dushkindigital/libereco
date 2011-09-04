@@ -203,6 +203,9 @@
 	<bean id="ebayListingDao" class="com.libereco.server.dao.impl.jpa.EbayListingDaoImpl" />
 	
 	<!-- DAO (Data Access Object) for JPA-driven Libereco Payment Method (encapsulates payment type) -->
+	<bean id="liberecoShippingMethodDao" class="com.libereco.server.dao.impl.jpa.LiberecoShippingMethodDaoImpl" />
+	
+	<!-- DAO (Data Access Object) for JPA-driven Libereco Payment Method (encapsulates payment type) -->
 	<bean id="liberecoPaymentMethodDao" class="com.libereco.server.dao.impl.jpa.LiberecoPaymentMethodDaoImpl" />
 	
 	<!-- DAO (Data Access Object) for marketplace authorizations -->

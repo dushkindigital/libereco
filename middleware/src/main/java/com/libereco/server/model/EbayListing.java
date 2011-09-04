@@ -4,6 +4,7 @@ package com.libereco.server.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -11,6 +12,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
@@ -33,6 +35,7 @@ public class EbayListing implements Listing {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long listingId;
 	
+	@Enumerated(EnumType.STRING)
 	private ListingState listingState;
 	
 	@Enumerated(EnumType.STRING)
@@ -40,7 +43,12 @@ public class EbayListing implements Listing {
 	
 	private Integer dispatchTimeMax;
 	
-	private List<Marketplace> marketplaces;
+	/**
+	 * amazingly enough the Hibernate JPA provider does NOT properly support the EAGER
+	 * fetching strategy! Must rely on the default fetching strategy 
+	 */
+	@OneToMany(cascade = { CascadeType.PERSIST })
+	private List<Marketplace> marketplaces = new ArrayList<Marketplace>();
 
 	/**
 	 * @return the listingId
@@ -102,9 +110,6 @@ public class EbayListing implements Listing {
 	
 	@Override
 	public List<Marketplace> getMarketplaces() {
-		if (marketplaces == null) {
-			marketplaces = new ArrayList<Marketplace>();
-		}
 		return marketplaces;
 	}
 	
@@ -124,7 +129,8 @@ public class EbayListing implements Listing {
 		EbayListing rhs = (EbayListing) obj;
 		return new EqualsBuilder()
 				.append(returnPolicy, rhs.returnPolicy)
-				.append(dispatchTimeMax, rhs.dispatchTimeMax)
+				.append(dispatchTimeMax, rhs.dispatchTimeMax)			
+				.append(marketplaces, rhs.marketplaces)
 				.isEquals();
 	}
 	
@@ -133,6 +139,7 @@ public class EbayListing implements Listing {
 		return new HashCodeBuilder(17, 37)
 			.append(returnPolicy)
 			.append(dispatchTimeMax)
+			.append(marketplaces)
 			.toHashCode();
 	}
 	

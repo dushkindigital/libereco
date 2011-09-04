@@ -4,6 +4,7 @@ package com.libereco.server.model;
 
 import static org.junit.Assert.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Before;
@@ -17,6 +18,7 @@ import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.libereco.server.dao.MarketplaceDao;
+import com.libereco.server.dao.impl.jpa.MarketplaceDaoImpl;
 
 /**
  * @author rrached
@@ -28,13 +30,16 @@ import com.libereco.server.dao.MarketplaceDao;
  * Note that there is no need for an explicit DAO setter as in:
  * public void setMarketplaceDao(MarketplaceDao marketplaceDao)
  * Every method is transactional by default
+ * 
+ * v0.3: Updated Marketplace model classes to reflect the one-to-many relationship
+ * with shipping methods and payment methods
  *
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { "classpath:/liberecoMiddleware-applicationContext-test.xml" })
 @TransactionConfiguration(transactionManager = "jpaTransactionManager", defaultRollback = true)
 @Transactional
-public class MarketplaceTest extends AbstractTransactionalJUnit4SpringContextTests {
+public class MarketplaceTest extends AbstractJpaDaoSupportUtils {
 	@Autowired
 	private MarketplaceDao marketplaceDao;
 	
@@ -44,13 +49,22 @@ public class MarketplaceTest extends AbstractTransactionalJUnit4SpringContextTes
 	
 	@Before
 	public final void verifyInitialDatabaseState() {
-		simpleJdbcTemplate.update("delete from marketplace where marketplacename = ?"
-						+ " and marketplaceShortName = ?", marketplaceName, marketplaceShortName);
-		simpleJdbcTemplate.update("insert into marketplace (id, marketplaceName, marketplaceShortName) "
-				+ "values (?, ?, ?)", 
-				marketplaceId,
-				marketplaceName,
-				marketplaceShortName);
+		deleteFromTables();
+		updateMarketplace(marketplaceId, marketplaceName, marketplaceShortName);
+	}
+	
+	@Test
+	public final void testPersistMarketplace() {
+		Marketplace entity = new Marketplace();
+		entity.setMarketplaceName("marketplaceName");
+		entity.setMarketplaceShortName("marketplaceShortName");
+		entity.setPaymentMethods(createLiberecoPaymentMethodList());
+		entity.setShippingMethods(createLiberecoShippingMethodList());
+		((MarketplaceDaoImpl) marketplaceDao).persist(entity);
+		
+		Marketplace actual = marketplaceDao.find(entity);
+		assertNotNull(actual);
+		assertEquals(actual.toString(), entity, actual);
 	}
 	
 	@Test
@@ -59,6 +73,8 @@ public class MarketplaceTest extends AbstractTransactionalJUnit4SpringContextTes
 		marketplace.setId(1L);
 		marketplace.setMarketplaceName("eBay Full Name");
 		marketplace.setMarketplaceShortName("eBay");
+		marketplace.setPaymentMethods(new ArrayList<LiberecoPaymentMethod>());
+		marketplace.setShippingMethods(new ArrayList<LiberecoShippingMethod>());
 		Marketplace actual = marketplaceDao.find(marketplace);
 		assertNotNull(actual);
 		assertEquals(marketplace, actual);
@@ -70,6 +86,8 @@ public class MarketplaceTest extends AbstractTransactionalJUnit4SpringContextTes
 		marketplace.setId(1L);
 		marketplace.setMarketplaceName("eBay Full Name");
 		marketplace.setMarketplaceShortName("eBay");
+		marketplace.setPaymentMethods(new ArrayList<LiberecoPaymentMethod>());
+		marketplace.setShippingMethods(new ArrayList<LiberecoShippingMethod>());		
 		Marketplace actual = marketplaceDao.findById(marketplaceId);
 		assertNotNull(actual);
 		assertEquals(marketplace, actual);
@@ -81,6 +99,8 @@ public class MarketplaceTest extends AbstractTransactionalJUnit4SpringContextTes
 		marketplace.setId(1L);
 		marketplace.setMarketplaceName("eBay Full Name");
 		marketplace.setMarketplaceShortName("eBay");
+		marketplace.setPaymentMethods(new ArrayList<LiberecoPaymentMethod>());
+		marketplace.setShippingMethods(new ArrayList<LiberecoShippingMethod>());		
 		List<Marketplace> actual = marketplaceDao.findAll();
 		assertNotNull(actual);
 		assertTrue(actual.size() == 1);
@@ -96,12 +116,6 @@ public class MarketplaceTest extends AbstractTransactionalJUnit4SpringContextTes
 		Marketplace actual = marketplaceDao.find(marketplace);
 		assertNotNull(actual);
 		assertEquals(marketplace, actual);
-		
-//		marketplace = new Marketplace();
-//		marketplace.setId(marketplaceId);
-//		marketplace.setMarketplaceName(marketplaceName);
-//		marketplace.setMarketplaceShortName(marketplaceShortName);
-//		marketplaceDao.saveOrUpdate(marketplace);
 	}
 
 	@Test
@@ -117,6 +131,8 @@ public class MarketplaceTest extends AbstractTransactionalJUnit4SpringContextTes
 		marketplace.setId(1L);
 		marketplace.setMarketplaceName("eBay Full Name");
 		marketplace.setMarketplaceShortName("eBay");
+		marketplace.setPaymentMethods(new ArrayList<LiberecoPaymentMethod>());
+		marketplace.setShippingMethods(new ArrayList<LiberecoShippingMethod>());		
 		Marketplace actual = marketplaceDao.getMarketplace(marketplaceName);
 		assertNotNull(actual);
 		assertEquals(marketplace, actual);
@@ -140,5 +156,4 @@ public class MarketplaceTest extends AbstractTransactionalJUnit4SpringContextTes
 		assertFalse(actual.isEmpty());
 		assertEquals(marketplaceName, actual.get(0));
 	}
-	
 }

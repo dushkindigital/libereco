@@ -13,7 +13,7 @@ import com.libereco.server.model.EbayListing;
  * @author rrached
  *
  */
-public class EbayListingDaoImpl extends LiberecoListingDaoImpl implements EbayListingDao {
+public class EbayListingDaoImpl extends AbstractJpaDaoSupport<Long, EbayListing> implements EbayListingDao {
 
 	/**
 	 * 
@@ -58,6 +58,36 @@ public class EbayListingDaoImpl extends LiberecoListingDaoImpl implements EbayLi
 			ebayListingNames.addAll(names);		
 		}
 		return ebayListingNames;
+	}
+
+	@Override
+	public EbayListing saveOrUpdate(EbayListing obj) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void delete(EbayListing obj) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public EbayListing find(EbayListing obj) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Integer deleteAll() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public EbayListing findByListingId(Long listingId) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

@@ -1,7 +1,6 @@
 /** * Copyright (C) 2011 Dushkin Digital Media, LLC. */
 package com.libereco.server.model;
 
-import static java.sql.Types.*;
 import static org.junit.Assert.*;
 
 import java.util.Date;
@@ -12,7 +11,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,6 +19,7 @@ import com.libereco.common.LiberecoCategory;
 import com.libereco.common.ListingCondition;
 import com.libereco.common.ListingState;
 import com.libereco.server.dao.LiberecoListingDao;
+import com.libereco.server.dao.impl.jpa.LiberecoListingDaoImpl;
 
 /**
  * @author rrached
@@ -30,13 +29,18 @@ import com.libereco.server.dao.LiberecoListingDao;
 @ContextConfiguration(locations = { "classpath:/liberecoMiddleware-applicationContext-test.xml" })
 @TransactionConfiguration(transactionManager = "jpaTransactionManager", defaultRollback = true)
 @Transactional
-public class LiberecoListingTest extends AbstractTransactionalJUnit4SpringContextTests {
+public class LiberecoListingTest extends AbstractJpaDaoSupportUtils {
 	@Autowired
 	private LiberecoListingDao liberecoListingDao;
 	
 	private static final Long marketplaceId = 1L;
 	private static final String marketplaceName = "eBay Full Name";
 	private static final String marketplaceShortName = "eBay";
+	
+	private static final Long paymentId = 3001L;
+	
+	private static final Long shippingId = 4001L;
+	private static final String postcode = "07030";
 	
 	private static final Date duration = new Date();
 	
@@ -54,59 +58,43 @@ public class LiberecoListingTest extends AbstractTransactionalJUnit4SpringContex
 
 	@Before
 	public final void verifyInitialDatabaseState() {
-		deleteFromTables("libereco_listing", "marketplace");
+		deleteFromTables();
+		updateMarketplace(marketplaceId, marketplaceName, marketplaceShortName);
+		updateLiberecoPaymentTemplate(paymentId);
+		updateLiberecoShippingTemplate(shippingId, postcode);
+		updateLiberecoListing(listingId, userId, name,
+							  price, quantity, category,
+							  condition, listingState, description,
+							  listingDuration, picture, paymentId,
+							  shippingId);
+	}
+	
+	@Test
+	public final void testPersistLiberecoListing() {
+		LiberecoListing entity = new LiberecoListing();
+		entity.setUserId(userId);
+		entity.setName(name);
+		entity.setPrice(price);
+		entity.setQuantity(quantity);
+		entity.setCategory(category);
+		entity.setCondition(condition);
+		entity.setListingState(listingState);
+		entity.setDescription(description);
+		entity.setListingDuration(listingDuration);
+		entity.setPicture(picture);
+		entity.addMarketplace(createMarketplace(marketplaceName + "XX", marketplaceShortName + "XX"));
+		entity.setListingPayment(createLiberecoPaymentTemplate());
+		entity.setListingShipping(createLiberecoShippingTemplate());
+		((LiberecoListingDaoImpl) liberecoListingDao).persist(entity);
 		
-		simpleJdbcTemplate.update("insert into marketplace (id, marketplaceName, marketplaceShortName) "
-				+ "values (?, ?, ?)", 
-				marketplaceId,
-				marketplaceName,
-				marketplaceShortName);
-		simpleJdbcTemplate.getJdbcOperations().update(
-				"insert into libereco_listing (id"
-				+ ",listing_id"
-				+ ", userid"
-				+ ", name"
-				+ ", price"
-				+ ", quantity"
-				+ ", category"
-				+ ", condition"
-				+ ", listingstate"
-				+ ", description"
-				+ ", listingduration"
-				+ ", picture) "
-				+ "values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-				new Object[] { marketplaceId,
-				listingId,
-				userId,
-				name,
-				price,
-				quantity,
-				category.toString(),
-				condition.toString(),
-				listingState.toString(),
-				description,
-				listingDuration,
-				picture},
-				new int[] { BIGINT,
-				BIGINT,
-				VARCHAR,
-				VARCHAR,
-				DOUBLE,
-				INTEGER,
-				VARCHAR,
-				VARCHAR,
-				VARCHAR,
-				VARCHAR,
-				TIMESTAMP,
-				BINARY});
+		LiberecoListing actual = liberecoListingDao.find(entity);
+		assertNotNull(actual);
+		assertEquals(actual.toString(), entity, actual);
 	}
 	
 	@Test
 	public final void testFindLiberecoListing() throws Exception {
 		LiberecoListing listing = new LiberecoListing();
-		listing.setId(1L);
-		listing.setMarketplaceName("eBay Full Name");
-		listing.setMarketplaceShortName("eBay");
 		listing.setListingId(1000L);
 		listing.setUserId("UID");
 		listing.setName("Libereco Listing Name");
@@ -118,6 +106,8 @@ public class LiberecoListingTest extends AbstractTransactionalJUnit4SpringContex
 		listing.setDescription("desc");
 		listing.setListingDuration(duration);
 		listing.setPicture(null);
+		listing.setListingPayment(createLiberecoPaymentTemplate());
+		listing.setListingShipping(createLiberecoShippingTemplate());
 		LiberecoListing actual = liberecoListingDao.find(listing);
 		assertNotNull(actual);
 		assertEquals(listing, actual);
@@ -126,9 +116,6 @@ public class LiberecoListingTest extends AbstractTransactionalJUnit4SpringContex
 	@Test
 	public final void testFindByIdLiberecoListing() throws Exception {
 		LiberecoListing listing = new LiberecoListing();
-		listing.setId(1L);
-		listing.setMarketplaceName("eBay Full Name");
-		listing.setMarketplaceShortName("eBay");
 		listing.setListingId(1000L);
 		listing.setUserId("UID");
 		listing.setName("Libereco Listing Name");
@@ -140,39 +127,16 @@ public class LiberecoListingTest extends AbstractTransactionalJUnit4SpringContex
 		listing.setDescription("desc");
 		listing.setListingDuration(duration);
 		listing.setPicture(null);
-		LiberecoListing actual = liberecoListingDao.findById(marketplaceId);
+		listing.setListingPayment(createLiberecoPaymentTemplate());
+		listing.setListingShipping(createLiberecoShippingTemplate());
+		LiberecoListing actual = liberecoListingDao.findById(listingId);
 		assertNotNull(actual);
 		assertEquals(listing, actual);
 	}
 
 	@Test
-	public final void testFindByListingIdLiberecoListing() throws Exception {
-		LiberecoListing listing = new LiberecoListing();
-		listing.setId(1L);
-		listing.setMarketplaceName("eBay Full Name");
-		listing.setMarketplaceShortName("eBay");
-		listing.setListingId(1000L);
-		listing.setUserId("UID");
-		listing.setName("Libereco Listing Name");
-		listing.setPrice(5.67D);
-		listing.setQuantity(1);
-		listing.setCategory(LiberecoCategory.CAT_BOOKS);
-		listing.setCondition(ListingCondition.GOOD);
-		listing.setListingState( ListingState.NEW);
-		listing.setDescription("desc");
-		listing.setListingDuration(duration);
-		listing.setPicture(null);
-		LiberecoListing actual = liberecoListingDao.findByListingId(listingId);
-		assertNotNull(actual);
-		assertEquals(listing, actual);
-	}
-	
-	@Test
 	public final void testFindAllLiberecoListing() throws Exception {
 		LiberecoListing listing = new LiberecoListing();
-		listing.setId(1L);
-		listing.setMarketplaceName("eBay Full Name");
-		listing.setMarketplaceShortName("eBay");
 		listing.setListingId(1000L);
 		listing.setUserId("UID");
 		listing.setName("Libereco Listing Name");
@@ -184,6 +148,8 @@ public class LiberecoListingTest extends AbstractTransactionalJUnit4SpringContex
 		listing.setDescription("desc");
 		listing.setListingDuration(duration);
 		listing.setPicture(null);
+		listing.setListingPayment(createLiberecoPaymentTemplate());
+		listing.setListingShipping(createLiberecoShippingTemplate());
 		List<LiberecoListing> actual = liberecoListingDao.findAll();
 		assertNotNull(actual);
 		assertTrue(actual.size() == 1);
@@ -193,8 +159,6 @@ public class LiberecoListingTest extends AbstractTransactionalJUnit4SpringContex
 	@Test
 	public final void testSaveOrUpdateLiberecoListing() throws Exception {
 		LiberecoListing listing = new LiberecoListing();
-		listing.setMarketplaceName("eBay Full Name Updated");
-		listing.setMarketplaceShortName("eBay Updated");
 		listing.setUserId("UID Updated");
 		listing.setName("Libereco Listing Name");
 		listing.setPrice(5.67D);
@@ -205,6 +169,8 @@ public class LiberecoListingTest extends AbstractTransactionalJUnit4SpringContex
 		listing.setDescription("desc");
 		listing.setListingDuration(duration);
 		listing.setPicture(null);
+		listing.setListingPayment(createLiberecoPaymentTemplate());
+		listing.setListingShipping(createLiberecoShippingTemplate());
 		liberecoListingDao.saveOrUpdate(listing);
 		LiberecoListing actual = liberecoListingDao.find(listing);
 		assertNotNull(actual);
@@ -221,9 +187,7 @@ public class LiberecoListingTest extends AbstractTransactionalJUnit4SpringContex
 	@Test
 	public final void testGetLiberecoListingLiberecoListing() throws Exception {
 		LiberecoListing listing = new LiberecoListing();
-		listing.setId(1L);
-		listing.setMarketplaceName("eBay Full Name");
-		listing.setMarketplaceShortName("eBay");
+		listing.setListingId(1000L);
 		listing.setListingId(1000L);
 		listing.setUserId("UID");
 		listing.setName("Libereco Listing Name");
@@ -235,6 +199,8 @@ public class LiberecoListingTest extends AbstractTransactionalJUnit4SpringContex
 		listing.setDescription("desc");
 		listing.setListingDuration(duration);
 		listing.setPicture(null);
+		listing.setListingPayment(createLiberecoPaymentTemplate());
+		listing.setListingShipping(createLiberecoShippingTemplate());
 		LiberecoListing actual = liberecoListingDao.getLiberecoListing(name);
 		assertNotNull(actual);
 		assertEquals(listing, actual);
@@ -248,7 +214,7 @@ public class LiberecoListingTest extends AbstractTransactionalJUnit4SpringContex
 		List<Long> actual = liberecoListingDao.getLiberecoListingIds();
 		assertNotNull(actual);
 		assertFalse(actual.isEmpty());
-		assertEquals(marketplaceId, actual.get(0));
+		assertEquals(listingId, actual.get(0));
 	}
 	
 	@Test

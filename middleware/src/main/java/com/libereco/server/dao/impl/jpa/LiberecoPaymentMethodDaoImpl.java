@@ -117,9 +117,7 @@ public class LiberecoPaymentMethodDaoImpl extends AbstractJpaDaoSupport<Long, Li
 	@Override
 	public List<LiberecoPaymentMethod> findLiberecoPaymentMethodsByMarketplace(Marketplace marketplace) {
 		List<LiberecoPaymentMethod> liberecoPaymentMethods = null;
-		Query q = entityManager.createQuery("select m FROM "
-				+ entityClass.getName() + " m WHERE marketplace = :entity");
-		q.setParameter("entity", marketplace);
+		Query q = entityManager.createQuery("select paymentMethods FROM Marketplace");
 		return (List<LiberecoPaymentMethod>) ((liberecoPaymentMethods = q.getResultList()) != null && !liberecoPaymentMethods.isEmpty() ? liberecoPaymentMethods : null);
 	}
 

@@ -81,7 +81,6 @@ public class LiberecoPaymentTemplate implements Serializable {
 		}
 		LiberecoPaymentTemplate rhs = (LiberecoPaymentTemplate) obj;
 		return new EqualsBuilder()
-				.append(paymentId, rhs.paymentId)
 				.append(currency, rhs.currency)
 				.isEquals();
 	}
@@ -89,7 +88,6 @@ public class LiberecoPaymentTemplate implements Serializable {
 	@Override
 	public int hashCode() {
 		return new HashCodeBuilder(17, 37)
-			.append(paymentId)
 			.append(currency)
 			.toHashCode();
 	}
