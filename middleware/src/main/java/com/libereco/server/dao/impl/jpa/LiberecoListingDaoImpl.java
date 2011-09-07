@@ -76,7 +76,7 @@ public class LiberecoListingDaoImpl extends AbstractJpaDaoSupport<Long, Libereco
 	@Override
 	public boolean hasLiberecoListingName(String name) {
 		boolean found = false;	
-		Query q = entityManager.createQuery("from LiberecoListing where name = :_name");
+		Query q = entityManager.createQuery("from LiberecoListing where listingAttribute.name = :_name");
 		q.setParameter("_name", name);
 		List<?> ls = null;
 		found = (ls = q.getResultList()) != null && !ls.isEmpty() ? true : false;
@@ -89,8 +89,8 @@ public class LiberecoListingDaoImpl extends AbstractJpaDaoSupport<Long, Libereco
 	 */
 	@Override
 	public LiberecoListing getLiberecoListing(String name) {
-		Query q = entityManager.createQuery("from LiberecoListing where name = :name");
-		q.setParameter("name", name);
+		Query q = entityManager.createQuery("from LiberecoListing where listingAttribute.name = :_name");
+		q.setParameter("_name", name);
 		List<?> ls = null;
 		return (LiberecoListing) ((ls = q.getResultList()) != null && !ls.isEmpty() ? ls.get(0) : null);
 	}
@@ -117,7 +117,7 @@ public class LiberecoListingDaoImpl extends AbstractJpaDaoSupport<Long, Libereco
 	public List<String> getLiberecoListingNames() {
 		List<String> liberecoListingNames = new ArrayList<String>();
 		@SuppressWarnings("unchecked")
-		List<String> names = entityManager.createQuery("select name from LiberecoListing").getResultList();
+		List<String> names = entityManager.createQuery("select name from GenericListing").getResultList();
 		if (names != null && !names.isEmpty()) {
 			liberecoListingNames.addAll(names);		
 		}

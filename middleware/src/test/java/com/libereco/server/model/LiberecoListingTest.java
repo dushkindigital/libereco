@@ -19,6 +19,7 @@ import com.libereco.common.LiberecoCategory;
 import com.libereco.common.ListingCondition;
 import com.libereco.common.ListingState;
 import com.libereco.server.dao.LiberecoListingDao;
+import com.libereco.server.dao.MarketplaceDao;
 import com.libereco.server.dao.impl.jpa.LiberecoListingDaoImpl;
 
 /**
@@ -33,6 +34,9 @@ public class LiberecoListingTest extends AbstractJpaDaoSupportUtils {
 	@Autowired
 	private LiberecoListingDao liberecoListingDao;
 	
+	@Autowired
+	private MarketplaceDao marketplaceDao;
+	
 	private static final Long marketplaceId = 1L;
 	private static final String marketplaceName = "eBay Full Name";
 	private static final String marketplaceShortName = "eBay";
@@ -43,6 +47,8 @@ public class LiberecoListingTest extends AbstractJpaDaoSupportUtils {
 	private static final String postcode = "07030";
 	
 	private static final Date duration = new Date();
+	private static final LiberecoPaymentTemplate liberecoPaymentTemplate = createLiberecoPaymentTemplate();
+	private static final LiberecoShippingTemplate liberecoShippingTemplate = createLiberecoShippingTemplate();
 	
 	private static final Long listingId = 1000L;
 	private static final String userId = "UID";
@@ -55,6 +61,32 @@ public class LiberecoListingTest extends AbstractJpaDaoSupportUtils {
 	private static final String description = "desc";
 	private static final Date listingDuration = duration;
 	private static final byte[] picture = null;
+	private static final GenericListing gListing = createGenericListing(userId,
+																	    name,
+																	    price,
+																	    quantity,
+																	    category,
+																	    condition,
+																	    listingState, 
+																	    description, 
+																	    listingDuration, 
+																	    picture,
+																	    liberecoPaymentTemplate,
+																	    liberecoShippingTemplate);
+	private static final GenericListing gListingWithId = 
+		createGenericListingWithId(listingId,
+								   userId, 
+								   name, 
+								   price, 
+								   quantity, 
+								   category, 
+								   condition, 
+								   listingState, 
+								   description, 
+								   listingDuration, 
+								   picture, 
+								   liberecoPaymentTemplate, 
+								   liberecoShippingTemplate);
 
 	@Before
 	public final void verifyInitialDatabaseState() {
@@ -62,29 +94,19 @@ public class LiberecoListingTest extends AbstractJpaDaoSupportUtils {
 		updateMarketplace(marketplaceId, marketplaceName, marketplaceShortName);
 		updateLiberecoPaymentTemplate(paymentId);
 		updateLiberecoShippingTemplate(shippingId, postcode);
-		updateLiberecoListing(listingId, userId, name,
-							  price, quantity, category,
-							  condition, listingState, description,
-							  listingDuration, picture, paymentId,
-							  shippingId);
+		updateListing(listingId, userId, name,
+		  price, quantity, category,
+		  condition, listingState, description,
+		  listingDuration, picture, paymentId,
+		  shippingId);
+		updateLiberecoListing(listingId, listingId);
 	}
 	
 	@Test
 	public final void testPersistLiberecoListing() {
 		LiberecoListing entity = new LiberecoListing();
-		entity.setUserId(userId);
-		entity.setName(name);
-		entity.setPrice(price);
-		entity.setQuantity(quantity);
-		entity.setCategory(category);
-		entity.setCondition(condition);
-		entity.setListingState(listingState);
-		entity.setDescription(description);
-		entity.setListingDuration(listingDuration);
-		entity.setPicture(picture);
+		entity.setListingAttribute(gListing);
 		entity.addMarketplace(createMarketplace(marketplaceName + "XX", marketplaceShortName + "XX"));
-		entity.setListingPayment(createLiberecoPaymentTemplate());
-		entity.setListingShipping(createLiberecoShippingTemplate());
 		((LiberecoListingDaoImpl) liberecoListingDao).persist(entity);
 		
 		LiberecoListing actual = liberecoListingDao.find(entity);
@@ -94,87 +116,55 @@ public class LiberecoListingTest extends AbstractJpaDaoSupportUtils {
 	
 	@Test
 	public final void testFindLiberecoListing() throws Exception {
-		LiberecoListing listing = new LiberecoListing();
-		listing.setListingId(1000L);
-		listing.setUserId("UID");
-		listing.setName("Libereco Listing Name");
-		listing.setPrice(5.67D);
-		listing.setQuantity(1);
-		listing.setCategory(LiberecoCategory.CAT_BOOKS);
-		listing.setCondition(ListingCondition.GOOD);
-		listing.setListingState( ListingState.NEW);
-		listing.setDescription("desc");
-		listing.setListingDuration(duration);
-		listing.setPicture(null);
-		listing.setListingPayment(createLiberecoPaymentTemplate());
-		listing.setListingShipping(createLiberecoShippingTemplate());
-		LiberecoListing actual = liberecoListingDao.find(listing);
+		LiberecoListing l = new LiberecoListing();
+		l.setListingId(listingId);
+		l.setListingAttribute(gListingWithId);
+		LiberecoListing actual = liberecoListingDao.find(l);
 		assertNotNull(actual);
-		assertEquals(listing, actual);
+		assertEquals(l, actual);
 	}
 
 	@Test
 	public final void testFindByIdLiberecoListing() throws Exception {
-		LiberecoListing listing = new LiberecoListing();
-		listing.setListingId(1000L);
-		listing.setUserId("UID");
-		listing.setName("Libereco Listing Name");
-		listing.setPrice(5.67D);
-		listing.setQuantity(1);
-		listing.setCategory(LiberecoCategory.CAT_BOOKS);
-		listing.setCondition(ListingCondition.GOOD);
-		listing.setListingState( ListingState.NEW);
-		listing.setDescription("desc");
-		listing.setListingDuration(duration);
-		listing.setPicture(null);
-		listing.setListingPayment(createLiberecoPaymentTemplate());
-		listing.setListingShipping(createLiberecoShippingTemplate());
+		LiberecoListing l = new LiberecoListing();
+		l.setListingId(listingId);
+		l.setListingAttribute(gListingWithId);
 		LiberecoListing actual = liberecoListingDao.findById(listingId);
 		assertNotNull(actual);
-		assertEquals(listing, actual);
+		assertEquals(l, actual);
 	}
 
 	@Test
 	public final void testFindAllLiberecoListing() throws Exception {
-		LiberecoListing listing = new LiberecoListing();
-		listing.setListingId(1000L);
-		listing.setUserId("UID");
-		listing.setName("Libereco Listing Name");
-		listing.setPrice(5.67D);
-		listing.setQuantity(1);
-		listing.setCategory(LiberecoCategory.CAT_BOOKS);
-		listing.setCondition(ListingCondition.GOOD);
-		listing.setListingState( ListingState.NEW);
-		listing.setDescription("desc");
-		listing.setListingDuration(duration);
-		listing.setPicture(null);
-		listing.setListingPayment(createLiberecoPaymentTemplate());
-		listing.setListingShipping(createLiberecoShippingTemplate());
+		LiberecoListing l = new LiberecoListing();
+		l.setListingId(listingId);
+		l.setListingAttribute(gListingWithId);
 		List<LiberecoListing> actual = liberecoListingDao.findAll();
 		assertNotNull(actual);
 		assertTrue(actual.size() == 1);
-		assertEquals(listing, actual.get(0));
+		assertEquals(l, actual.get(0));
 	}
 	
 	@Test
 	public final void testSaveOrUpdateLiberecoListing() throws Exception {
-		LiberecoListing listing = new LiberecoListing();
-		listing.setUserId("UID Updated");
-		listing.setName("Libereco Listing Name");
-		listing.setPrice(5.67D);
-		listing.setQuantity(1);
-		listing.setCategory(LiberecoCategory.CAT_BOOKS);
-		listing.setCondition(ListingCondition.GOOD);
-		listing.setListingState( ListingState.NEW);
-		listing.setDescription("desc");
-		listing.setListingDuration(duration);
-		listing.setPicture(null);
-		listing.setListingPayment(createLiberecoPaymentTemplate());
-		listing.setListingShipping(createLiberecoShippingTemplate());
-		liberecoListingDao.saveOrUpdate(listing);
-		LiberecoListing actual = liberecoListingDao.find(listing);
+		GenericListing listing = createGenericListing("UID Updated",
+													  "Libereco Listing Name Updated",
+													  price,
+													  quantity,
+													  category, 
+													  condition, 
+													  listingState, 
+													  description, 
+													  listingDuration, 
+													  picture, 
+													  createLiberecoPaymentTemplate(), 
+													  createLiberecoShippingTemplate());
+		LiberecoListing l = new LiberecoListing();
+		l.setListingAttribute(listing);
+		liberecoListingDao.saveOrUpdate(l);
+		LiberecoListing actual = liberecoListingDao.find(l);
 		assertNotNull(actual);
-		assertEquals(listing, actual);
+		assertEquals(l, actual);
 	}
 
 	@Test
@@ -186,24 +176,12 @@ public class LiberecoListingTest extends AbstractJpaDaoSupportUtils {
 
 	@Test
 	public final void testGetLiberecoListingLiberecoListing() throws Exception {
-		LiberecoListing listing = new LiberecoListing();
-		listing.setListingId(1000L);
-		listing.setListingId(1000L);
-		listing.setUserId("UID");
-		listing.setName("Libereco Listing Name");
-		listing.setPrice(5.67D);
-		listing.setQuantity(1);
-		listing.setCategory(LiberecoCategory.CAT_BOOKS);
-		listing.setCondition(ListingCondition.GOOD);
-		listing.setListingState( ListingState.NEW);
-		listing.setDescription("desc");
-		listing.setListingDuration(duration);
-		listing.setPicture(null);
-		listing.setListingPayment(createLiberecoPaymentTemplate());
-		listing.setListingShipping(createLiberecoShippingTemplate());
+		LiberecoListing l = new LiberecoListing();
+		l.setListingId(listingId);
+		l.setListingAttribute(gListingWithId);
 		LiberecoListing actual = liberecoListingDao.getLiberecoListing(name);
 		assertNotNull(actual);
-		assertEquals(listing, actual);
+		assertEquals(l, actual);
 		
 		actual = liberecoListingDao.getLiberecoListing("UGUIJLJQYDVBHJKCQN");
 		assertNull(actual);
@@ -223,6 +201,31 @@ public class LiberecoListingTest extends AbstractJpaDaoSupportUtils {
 		assertNotNull(actual);
 		assertFalse(actual.isEmpty());
 		assertEquals(name, actual.get(0));
+	}
+	
+	@Test
+	public final void testAddMarketplaceToLiberecoListing() throws Exception {
+		Marketplace marketplace = marketplaceDao.findById(marketplaceId);
+		
+		GenericListing listing = createGenericListing("UID Updated Again",
+				"Libereco Listing Name Updated Again", price, quantity, category,
+				condition, listingState, description, listingDuration, picture,
+				createLiberecoPaymentTemplate(),
+				createLiberecoShippingTemplate());
+
+		LiberecoListing entity = new LiberecoListing();
+		entity.setListingAttribute(listing);
+		entity.addMarketplace(marketplace);
+		((LiberecoListingDaoImpl) liberecoListingDao).persist(entity);
+		
+		LiberecoListing actual = liberecoListingDao.find(entity);
+		assertNotNull(actual);
+		assertEquals(actual.toString(), entity, actual);
+		List<Marketplace> actualMarketplaces = actual.getMarketplaces();
+		assertNotNull(actualMarketplaces);
+		assertTrue(actualMarketplaces.size() == 1);
+		Marketplace actualMarketplace = actualMarketplaces.get(0);
+		assertEquals(actualMarketplace.toString(), marketplace, actualMarketplace);
 	}
 	
 }
