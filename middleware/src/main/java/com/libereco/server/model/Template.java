@@ -11,6 +11,6 @@ package com.libereco.server.model;
  * @author rrached
  *
  */
-@SuppressWarnings("serial")
-public class EtsyShippingMethod extends LiberecoShippingMethod {
+public interface Template {
+
 }

@@ -176,11 +176,15 @@
 		class="org.springframework.orm.jpa.support.PersistenceAnnotationBeanPostProcessor" />
 	
 	<!-- DAO (Data Access Object) for user -->
+	<!--
 	<bean id="userDao" class="com.libereco.server.dao.impl.hb.UserDaoImpl">
 		<property name="sessionFactory">
 			<ref local="liberecoSessionFactory" />
 		</property>
 	</bean>
+	-->
+	<!-- DAO (Data Access Object) for JPA-driven user -->
+	<bean id="userDao" class="com.libereco.server.dao.impl.jpa.UserDaoImpl" />
 
 	<!-- DAO (Data Access Object) for marketplace -->
 	<!-- RR

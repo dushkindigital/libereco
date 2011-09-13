@@ -44,9 +44,9 @@ public class LiberecoListingTest extends AbstractJpaDaoSupportUtils {
 	private static final Long paymentId = 3001L;
 	
 	private static final Long shippingId = 4001L;
-	private static final String postcode = "07030";
 	
 	private static final Date duration = new Date();
+	private static final Address shippingAddress = createAddress("2001 Garden St", "Apt #489", "HoHoKus", "08902", null);
 	private static final LiberecoPaymentTemplate liberecoPaymentTemplate = createLiberecoPaymentTemplate();
 	private static final LiberecoShippingTemplate liberecoShippingTemplate = createLiberecoShippingTemplate();
 	
@@ -93,7 +93,7 @@ public class LiberecoListingTest extends AbstractJpaDaoSupportUtils {
 		deleteFromTables();
 		updateMarketplace(marketplaceId, marketplaceName, marketplaceShortName);
 		updateLiberecoPaymentTemplate(paymentId);
-		updateLiberecoShippingTemplate(shippingId, postcode);
+		updateLiberecoShippingTemplate(shippingId, shippingAddress);
 		updateListing(listingId, userId, name,
 		  price, quantity, category,
 		  condition, listingState, description,
@@ -115,12 +115,36 @@ public class LiberecoListingTest extends AbstractJpaDaoSupportUtils {
 	}
 	
 	@Test
+	public final void testFindByCriteriaAllLiberecoListing() {
+		List<LiberecoListing> allListings =((LiberecoListingDaoImpl) liberecoListingDao).findByCriteriaAllLiberecoListing();
+		assertNotNull(allListings);
+		assertTrue(allListings.size() == 1);
+		System.out.println(allListings.get(0));
+	}
+	
+	@Test
 	public final void testFindLiberecoListing() throws Exception {
 		LiberecoListing l = new LiberecoListing();
 		l.setListingId(listingId);
 		l.setListingAttribute(gListingWithId);
 		LiberecoListing actual = liberecoListingDao.find(l);
 		assertNotNull(actual);
+		
+		System.out.println("listing cat: " + actual.getListingAttribute().getCategory());
+		System.out.println("listing cat: " + actual.getListingAttribute().getDescription());
+		System.out.println("listing cat: " + actual.getListingAttribute().getName());
+		System.out.println("listing cat: " + actual.getListingAttribute().getUserId());
+		System.out.println("listing cat: " + actual.getListingAttribute().getListingId());
+		System.out.println("listing cat: " + actual.getListingAttribute().getPrice());
+		System.out.println("listing cat: " + actual.getListingAttribute().getQuantity());
+		System.out.println("listing cat: " + actual.getListingAttribute().getCondition());
+		System.out.println("listing cat: " + actual.getListingAttribute().getListingDuration());
+		System.out.println("listing cat: " + actual.getListingAttribute().getListingPayment().getPaymentId());
+		System.out.println("listing cat: " + actual.getListingAttribute().getListingPayment().getCurrency());
+		System.out.println("listing cat: " + actual.getListingAttribute().getListingShipping().getShippingId());
+		System.out.println("listing cat: " + actual.getListingAttribute().getListingShipping().getAddress());
+		System.out.println("listing cat: " + actual.getListingAttribute().getListingState());
+		
 		assertEquals(l, actual);
 	}
 
@@ -130,6 +154,10 @@ public class LiberecoListingTest extends AbstractJpaDaoSupportUtils {
 		l.setListingId(listingId);
 		l.setListingAttribute(gListingWithId);
 		LiberecoListing actual = liberecoListingDao.findById(listingId);
+		
+		System.out.println("testFindByIdLiberecoListing: " + actual);
+
+		
 		assertNotNull(actual);
 		assertEquals(l, actual);
 	}
@@ -190,6 +218,7 @@ public class LiberecoListingTest extends AbstractJpaDaoSupportUtils {
 	@Test
 	public final void testGetLiberecoListingIdsLiberecoListing() throws Exception {
 		List<Long> actual = liberecoListingDao.getLiberecoListingIds();
+		System.out.println("testGetLiberecoListingIdsLiberecoListing: " + actual);
 		assertNotNull(actual);
 		assertFalse(actual.isEmpty());
 		assertEquals(listingId, actual.get(0));
@@ -198,6 +227,7 @@ public class LiberecoListingTest extends AbstractJpaDaoSupportUtils {
 	@Test
 	public final void testGetLiberecoListingNamesLiberecoListing() throws Exception {
 		List<String> actual = liberecoListingDao.getLiberecoListingNames();
+		System.out.println("testGetLiberecoListingNamesLiberecoListing: " + actual);
 		assertNotNull(actual);
 		assertFalse(actual.isEmpty());
 		assertEquals(name, actual.get(0));
@@ -219,6 +249,7 @@ public class LiberecoListingTest extends AbstractJpaDaoSupportUtils {
 		((LiberecoListingDaoImpl) liberecoListingDao).persist(entity);
 		
 		LiberecoListing actual = liberecoListingDao.find(entity);
+		System.out.println("testAddMarketplaceToLiberecoListing: " + actual);
 		assertNotNull(actual);
 		assertEquals(actual.toString(), entity, actual);
 		List<Marketplace> actualMarketplaces = actual.getMarketplaces();

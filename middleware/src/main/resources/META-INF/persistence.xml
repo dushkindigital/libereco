@@ -5,14 +5,6 @@
     version="1.0">
   <persistence-unit name="myjpacontext">
     <provider>org.hibernate.ejb.HibernatePersistence</provider>
-    <class>com.libereco.server.model.Marketplace</class>
-    <class>com.libereco.server.model.GenericListing</class>
-    <class>com.libereco.server.model.LiberecoListing</class>
-    <class>com.libereco.server.model.EbayListing</class>
-    <class>com.libereco.server.model.LiberecoPaymentMethod</class>
-    <class>com.libereco.server.model.LiberecoShippingMethod</class>
-    <class>com.libereco.server.model.LiberecoPaymentTemplate</class>
-    <class>com.libereco.server.model.LiberecoShippingTemplate</class>    
     <properties>
         <property name="hibernate.connection.url" value="jdbc:h2:tcp://localhost:9092/~/test"/>
         <property name="hibernate.dialect" value="org.hibernate.dialect.H2Dialect"/>

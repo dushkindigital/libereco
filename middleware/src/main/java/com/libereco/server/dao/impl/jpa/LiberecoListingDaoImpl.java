@@ -1,12 +1,23 @@
 /**
- * 
- */
+  *  Copyright (C) 2011 Dushkin Digital Media, LLC
+  *  500 E 77th Street, Ste. 806
+  *  New York, NY 10162
+  *
+  *  All rights reserved.
+  **/
 package com.libereco.server.dao.impl.jpa;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Query;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
+import javax.persistence.metamodel.EntityType;
+import javax.persistence.metamodel.Metamodel;
+import javax.persistence.metamodel.PluralAttribute;
 
 import com.libereco.server.dao.LiberecoListingDao;
 import com.libereco.server.model.LiberecoListing;
@@ -41,6 +52,27 @@ public class LiberecoListingDaoImpl extends AbstractJpaDaoSupport<Long, Libereco
 	@Override
 	public LiberecoListing find(LiberecoListing obj) {
 		return entityManager.find(LiberecoListing.class, obj.getListingId());
+	}
+	
+	public List<LiberecoListing> findByCriteriaAllLiberecoListing() {
+		CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+		CriteriaQuery<LiberecoListing> cq = cb.createQuery(entityClass);
+		Root<LiberecoListing> liberecoListing = cq.from(entityClass);
+		cq.select(liberecoListing);
+		
+		TypedQuery<LiberecoListing> q = entityManager.createQuery(cq);
+		List<LiberecoListing> allLiberecoListings = q.getResultList();
+		
+		/*
+		 * 
+		 */
+		Metamodel m = entityManager.getMetamodel();
+		EntityType<LiberecoListing> LiberecoListing_ = m.entity(entityClass);
+		for (PluralAttribute<LiberecoListing, ?, ?> pluralAttribute : LiberecoListing_.getDeclaredPluralAttributes()) {
+			System.out.println(pluralAttribute.getName());
+		}
+		
+		return allLiberecoListings;
 	}
 
 	/* (non-Javadoc)

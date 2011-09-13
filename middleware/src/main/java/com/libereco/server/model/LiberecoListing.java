@@ -1,4 +1,10 @@
-/** * Copyright (C) 2011 Dushkin Digital Media, LLC. */
+/**
+  *  Copyright (C) 2011 Dushkin Digital Media, LLC
+  *  500 E 77th Street, Ste. 806
+  *  New York, NY 10162
+  *
+  *  All rights reserved.
+  **/
 package com.libereco.server.model;
 
 import java.util.ArrayList;
@@ -36,7 +42,7 @@ public class LiberecoListing implements Listing {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)	
 	private Long listingId;
 	
-	@OneToOne(cascade = { CascadeType.PERSIST})
+	@OneToOne(cascade = { CascadeType.PERSIST })
 	private GenericListing listingAttribute;
 	
 	/**
@@ -88,7 +94,11 @@ public class LiberecoListing implements Listing {
 	@Override
 	public void addMarketplace(Marketplace marketplace) {
 		getMarketplaces().add(marketplace);
-	}	
+	}
+	
+	public void setMarketplaces(List<Marketplace> marketplaces) {
+		this.marketplaces = marketplaces;
+	}
 	
 	@Override
 	public boolean equals(Object obj) {

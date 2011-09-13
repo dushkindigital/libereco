@@ -1,4 +1,10 @@
-/** * Copyright (C) 2011 Dushkin Digital Media, LLC. */
+/**
+  *  Copyright (C) 2011 Dushkin Digital Media, LLC
+  *  500 E 77th Street, Ste. 806
+  *  New York, NY 10162
+  *
+  *  All rights reserved.
+  **/
 package com.libereco.server.model;
 
 import java.io.Serializable;
@@ -22,7 +28,7 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 @Entity
 @Table(name = "Libereco_Payment_Template")
 @SuppressWarnings("serial")
-public class LiberecoPaymentTemplate implements Serializable {
+public class LiberecoPaymentTemplate implements Serializable, Template {
 
 	/**
 	 * no need to repeat the paymentId attributes on children classes
