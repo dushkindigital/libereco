@@ -8,7 +8,7 @@ package com.libereco.server.dto;
 import java.io.Serializable;
 import java.sql.Timestamp;
 
-import com.libereco.server.model.MarketplaceAuthorizations.CompositeKey;
+import com.libereco.server.model.MarketplaceAuthorizationsCompositeKey;
 
 /**
  * @author Aleksandar
@@ -18,7 +18,7 @@ import com.libereco.server.model.MarketplaceAuthorizations.CompositeKey;
 public class MarketplaceAuthorizationsDto implements Serializable {
 
 	// TODO: Update with a DTO-related class
-	private CompositeKey key;
+	private MarketplaceAuthorizationsCompositeKey key;
 	
 	private UserDto user;
 
@@ -31,11 +31,11 @@ public class MarketplaceAuthorizationsDto implements Serializable {
 	
 	private Timestamp expirationTime;
 
-	public CompositeKey getKey() {
+	public MarketplaceAuthorizationsCompositeKey getKey() {
 		return key;
 	}
 
-	public void setKey(CompositeKey key) {
+	public void setKey(MarketplaceAuthorizationsCompositeKey key) {
 		this.key = key;
 	}
 

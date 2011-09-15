@@ -11,7 +11,6 @@ import java.io.Serializable;
 import java.sql.Timestamp;
 
 import javax.persistence.Column;
-import javax.persistence.Embeddable;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -29,50 +28,53 @@ import javax.persistence.Table;
 public class MarketplaceAuthorizations implements Serializable {
 
 	@EmbeddedId
-	private CompositeKey key;
-	
-	private User user;
+//	private CompositeKey key;
+	private MarketplaceAuthorizationsCompositeKey key;
 
+	// we probably don't need to a bi-directional relationship here
+//	@ManyToOne(fetch = FetchType.EAGER)
+//	@JoinColumn(name = "userId", nullable = false)
+//	private User user;
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "marketplaceId", nullable = false, updatable = false, insertable = false)
 	private Marketplace marketplace;
 
 	// TODO: Replace individual token-related members with an AuthToken data member
+	@Column(name = "token")
 	private String token;
 	
+	@Column(name = "tokenSecret")
 	private String tokenSecret;
 	
+	@Column(name = "expirationTime")
 	private Timestamp expirationTime;
 	
 	
-	public MarketplaceAuthorizations() {
-		super();
-	}
+	public MarketplaceAuthorizations() {}
 
 	public MarketplaceAuthorizations(User user, Marketplace marketplace,
-			AuthToken authToken) {
+			AuthToken authToken, boolean shouldGenerateKey) {
 		super();
-		this.user = user;
+//		this.user = user;
 		this.marketplace = marketplace;
 		this.token = authToken.getToken();
 		this.tokenSecret = authToken.getTokenSecret();
 		this.expirationTime = authToken.getExpirationTime();
 		
-		if (user != null && marketplace != null) {
-			key = new CompositeKey(user.getId(), marketplace.getId());
+		if (shouldGenerateKey && user != null && marketplace != null) {
+			key = new MarketplaceAuthorizationsCompositeKey(user.getId(), marketplace.getId());
 		}
 	}
 	
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "userId", nullable = false)
-	public User getUser() {
-		return user;
-	}
+//	public User getUser() {
+//		return user;
+//	}
+//
+//	public void setUser(User user) {
+//		this.user = user;
+//	}
 
-	public void setUser(User user) {
-		this.user = user;
-	}
-
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "marketplaceId", nullable = false)
 	public Marketplace getMarketplace() {
 		return marketplace;
 	}
@@ -81,7 +83,6 @@ public class MarketplaceAuthorizations implements Serializable {
 		this.marketplace = marketplace;
 	}
 
-	@Column(name = "token")
 	public String getToken() {
 		return token;
 	}
@@ -90,7 +91,6 @@ public class MarketplaceAuthorizations implements Serializable {
 		this.token = token;
 	}
 	
-	@Column(name = "tokenSecret")
 	public String getTokenSecret() {
 		return tokenSecret;
 	}
@@ -99,7 +99,6 @@ public class MarketplaceAuthorizations implements Serializable {
 		this.tokenSecret = tokenSecret;
 	}
 	
-	@Column(name = "expirationTime")
 	public Timestamp getExpirationTime() {
 		return expirationTime;
 	}
@@ -108,11 +107,11 @@ public class MarketplaceAuthorizations implements Serializable {
 		this.expirationTime = expirationTime;
 	}
 
-	public CompositeKey getKey() {
+	public MarketplaceAuthorizationsCompositeKey getKey() {
 		return key;
 	}
 
-	public void setKey(CompositeKey key) {
+	public void setKey(MarketplaceAuthorizationsCompositeKey key) {
 		this.key = key;
 	}
 
@@ -142,78 +141,76 @@ public class MarketplaceAuthorizations implements Serializable {
 	}
 
 
-	@Embeddable
-	public class CompositeKey implements Serializable {
-	    @Column
-	    private Long userId;
-
-	    @Column
-	    private Long marketplaceId;
-
-		public CompositeKey() {
-			super();
-		}
-
-		public CompositeKey(Long userId, Long marketplaceId) {
-			super();
-			this.userId = userId;
-			this.marketplaceId = marketplaceId;
-		}
-
-		public Long getUserId() {
-			return userId;
-		}
-
-		public void setUserId(Long userId) {
-			this.userId = userId;
-		}
-
-		public Long getMarketplaceId() {
-			return marketplaceId;
-		}
-
-		public void setMarketplaceId(Long marketplaceId) {
-			this.marketplaceId = marketplaceId;
-		}
-
-		@Override
-		public int hashCode() {
-			final int prime = 31;
-			int result = 1;
-			result = prime * result + getOuterType().hashCode();
-			result = prime * result
-					+ ((marketplaceId == null) ? 0 : marketplaceId.hashCode());
-			result = prime * result
-					+ ((userId == null) ? 0 : userId.hashCode());
-			return result;
-		}
-
-		@Override
-		public boolean equals(Object obj) {
-			if (this == obj)
-				return true;
-			if (obj == null)
-				return false;
-			if (getClass() != obj.getClass())
-				return false;
-			CompositeKey other = (CompositeKey) obj;
-			if (!getOuterType().equals(other.getOuterType()))
-				return false;
-			if (marketplaceId == null) {
-				if (other.marketplaceId != null)
-					return false;
-			} else if (!marketplaceId.equals(other.marketplaceId))
-				return false;
-			if (userId == null) {
-				if (other.userId != null)
-					return false;
-			} else if (!userId.equals(other.userId))
-				return false;
-			return true;
-		}
-
-		private MarketplaceAuthorizations getOuterType() {
-			return MarketplaceAuthorizations.this;
-		}	    
-	}
+//	@Embeddable
+//	public class CompositeKey implements Serializable {
+//	    @Column
+//	    private Long userId;
+//
+//	    @Column
+//	    private Long marketplaceId;
+//
+//		public CompositeKey() {
+//		}
+//
+//		public CompositeKey(Long userId, Long marketplaceId) {
+//			this.userId = userId;
+//			this.marketplaceId = marketplaceId;
+//		}
+//
+//		public Long getUserId() {
+//			return userId;
+//		}
+//
+//		public void setUserId(Long userId) {
+//			this.userId = userId;
+//		}
+//
+//		public Long getMarketplaceId() {
+//			return marketplaceId;
+//		}
+//
+//		public void setMarketplaceId(Long marketplaceId) {
+//			this.marketplaceId = marketplaceId;
+//		}
+//
+//		@Override
+//		public int hashCode() {
+//			final int prime = 31;
+//			int result = 1;
+////			result = prime * result + getOuterType().hashCode();
+//			result = prime * result
+//					+ ((marketplaceId == null) ? 0 : marketplaceId.hashCode());
+//			result = prime * result
+//					+ ((userId == null) ? 0 : userId.hashCode());
+//			return result;
+//		}
+//
+//		@Override
+//		public boolean equals(Object obj) {
+//			if (this == obj)
+//				return true;
+//			if (obj == null)
+//				return false;
+//			if (getClass() != obj.getClass())
+//				return false;
+//			CompositeKey other = (CompositeKey) obj;
+//			if (!getOuterType().equals(other.getOuterType()))
+//				return false;
+//			if (marketplaceId == null) {
+//				if (other.marketplaceId != null)
+//					return false;
+//			} else if (!marketplaceId.equals(other.marketplaceId))
+//				return false;
+//			if (userId == null) {
+//				if (other.userId != null)
+//					return false;
+//			} else if (!userId.equals(other.userId))
+//				return false;
+//			return true;
+//		}
+//
+//		private MarketplaceAuthorizations getOuterType() {
+//			return MarketplaceAuthorizations.this;
+//		}	    
+//	}
 }

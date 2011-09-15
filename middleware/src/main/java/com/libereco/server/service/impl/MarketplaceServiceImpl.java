@@ -161,7 +161,7 @@ public class MarketplaceServiceImpl extends
 		AuthToken authorizationTokenEntity = new DozerHelper().map(
 				authorizationToken, AuthToken.class);
 		MarketplaceAuthorizations mpa = new MarketplaceAuthorizations(user,
-				marketplace, authorizationTokenEntity);
+				marketplace, authorizationTokenEntity, true);
 
 		marketplaceAuthorizationsDao.saveOrUpdate(mpa);
 	}

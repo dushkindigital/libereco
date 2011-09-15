@@ -48,11 +48,13 @@
 		class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">
 		<property name="dataSource" ref="liberecoDataSource" />
 
+		<!--
 		<property name="mappingResources">
 			<list>
 				<value>libereco.hbm.xml</value>
 			</list>
 		</property>
+		-->
 
 		<property name="hibernateProperties">
 			<props>

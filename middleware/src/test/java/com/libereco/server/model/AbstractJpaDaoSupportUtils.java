@@ -1,8 +1,15 @@
-/** * Copyright (C) 2011 Dushkin Digital Media, LLC. */
+/**
+  *  Copyright (C) 2011 Dushkin Digital Media, LLC
+  *  500 E 77th Street, Ste. 806
+  *  New York, NY 10162
+  *
+  *  All rights reserved.
+  **/
 package com.libereco.server.model;
 
 import static java.sql.Types.*;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Currency;
 import java.util.Date;
@@ -17,6 +24,7 @@ import com.libereco.common.ListingCondition;
 import com.libereco.common.ListingState;
 import com.libereco.common.ReturnPolicy;
 import com.libereco.common.ShippingLevelType;
+import com.libereco.common.UserStatus;
 
 /**
  * @author rrached
@@ -42,7 +50,11 @@ public abstract class AbstractJpaDaoSupportUtils extends AbstractTransactionalJU
 //								"libereco_shipping_template_address",
 								"marketplace_libereco_payment_method",
 								"marketplace_libereco_shipping_method",
-								"marketplace");
+								"liberecoUser_marketplaceauthorizations",
+								"marketplaceauthorizations",
+								"liberecoUser",
+								"marketplace"
+								);
 	}
 	
 	/**
@@ -272,6 +284,76 @@ public abstract class AbstractJpaDaoSupportUtils extends AbstractTransactionalJU
 					VARCHAR });	
 	}
 	
+	/**
+	 * @param userId
+	 * @param userName
+	 * @param password
+	 * @param created
+	 * @param lastUpdated
+	 * @param status
+	 * @return
+	 */
+	public int updateUser(final Long userId,
+						  final String userName,
+						  final String password,
+						  final Timestamp created,
+						  final Timestamp lastUpdated,
+						  final UserStatus status,
+						  final MarketplaceAuthorizations marketplaceAuthorization) {
+		int updateResult = simpleJdbcTemplate.getJdbcOperations().update(
+					"insert into liberecoUser (id"
+					+ ", userName"
+					+ ", password"
+					+ ", created"
+					+ ", lastUpdated"
+					+ ", status) "
+					+ "values (?, ?, ?, ?, ?, ?)",
+					new Object[] { userId,
+					userName,
+					password,
+					created,
+					lastUpdated,
+					status.toString()},
+					new int[] { BIGINT,
+					VARCHAR,
+					VARCHAR,
+					TIMESTAMP,
+					TIMESTAMP,
+					VARCHAR});	
+		
+		updateResult += simpleJdbcTemplate.getJdbcOperations().update(
+				"insert into marketplaceAuthorizations (marketplaceid"
+				+ ", userid"
+				+ ", expirationtime"
+				+ ", token"
+				+ ", tokensecret) "
+				+ "values (?, ?, ?, ?, ?)",
+				new Object[] { marketplaceAuthorization.getKey().getMarketplaceId(),
+				marketplaceAuthorization.getKey().getUserId(),
+				marketplaceAuthorization.getExpirationTime(),
+				marketplaceAuthorization.getToken(),
+				marketplaceAuthorization.getTokenSecret()},
+				new int[] { BIGINT,
+				BIGINT,
+				TIMESTAMP,
+				VARCHAR,
+				VARCHAR});	
+		
+		updateResult += simpleJdbcTemplate.getJdbcOperations().update(
+				"insert into liberecouser_marketplaceAuthorizations (liberecouser_id"
+				+ ", marketplaceAuthorizations_marketplaceid"
+				+ ", marketplaceAuthorizations_userid) "
+				+ "values (?, ?, ?)",
+				new Object[] { userId,
+				marketplaceAuthorization.getKey().getMarketplaceId(),
+				marketplaceAuthorization.getKey().getUserId()},
+				new int[] { BIGINT,
+				BIGINT,
+				BIGINT});	
+		
+		return updateResult;
+	}
+	
 	public static GenericListing createGenericListing(final String userId,
 													  final String name,
 													  final Double price,
@@ -318,11 +400,6 @@ public abstract class AbstractJpaDaoSupportUtils extends AbstractTransactionalJU
 		return listing;
 	}
 
-	/**
-	 * @param marketplaceName
-	 * @param marketplaceShortName
-	 * @return {@link Marketplace}
-	 */
 	public static Marketplace createMarketplace(final String marketplaceName,
 												final String marketplaceShortName) {
 		Marketplace marketplace = new Marketplace();
@@ -334,9 +411,6 @@ public abstract class AbstractJpaDaoSupportUtils extends AbstractTransactionalJU
 	}	
 	
 	
-	/**
-	 * @return {@link List<LiberecoPaymentMethod>}
-	 */
 	public static List<LiberecoPaymentMethod> createLiberecoPaymentMethodList() {
 		LiberecoPaymentMethod paymentMethod = new LiberecoPaymentMethod();
 		paymentMethod.setPaymentMethodType(LiberecoPaymentType.AMERICAN_EXPRESS);
@@ -345,9 +419,6 @@ public abstract class AbstractJpaDaoSupportUtils extends AbstractTransactionalJU
 		return paymentMethods;
 	}
 	
-	/**
-	 * @return {@link List<LiberecoShippingMethod>}
-	 */
 	public static List<LiberecoShippingMethod> createLiberecoShippingMethodList() {
 		LiberecoShippingMethod shippingMethod = new LiberecoShippingMethod();
 		shippingMethod.setName("name");
@@ -382,6 +453,25 @@ public abstract class AbstractJpaDaoSupportUtils extends AbstractTransactionalJU
 		LiberecoShippingTemplate template = new LiberecoShippingTemplate();
 		template.setAddress(address);
 		return template;
+	}
+	
+	public static MarketplaceAuthorizations createMarketplaceAuthorizations(final Long userId,
+																			final Long marketplaceId, 
+																			final Timestamp updateTime) {
+		String randomizer = new Double(Math.random()).toString();
+		User user = new User().id(userId)
+							  .userName("userName" + randomizer)
+							  .password("password")
+							  .lastUpdated(updateTime)
+							  .status(UserStatus.ACTIVE);
+		Marketplace marketplace = createMarketplace("marketplaceName", "marketplaceShortName");
+		marketplace.setId(marketplaceId);
+		AuthToken authToken = new AuthToken();
+		authToken.setToken("token" + randomizer);
+		authToken.setTokenSecret("salt");
+		authToken.setExpirationTime(new Timestamp(new Date().getTime()));
+		MarketplaceAuthorizations authz = new MarketplaceAuthorizations(user, marketplace, authToken, true);
+		return authz;
 	}
 	
 }

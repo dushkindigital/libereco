@@ -7,9 +7,13 @@
   **/
 package com.libereco.server.dao.impl.jpa;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Query;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.libereco.server.dao.UserDao;
 import com.libereco.server.model.Template;
@@ -19,8 +23,10 @@ import com.libereco.server.model.User;
  * @author rrached
  *
  */
-public class UserDaoImpl extends AbstractJpaDaoSupport<Long, User> implements
-		UserDao {
+public class UserDaoImpl extends AbstractJpaDaoSupport<Long, User> implements UserDao {
+	private static final Logger logger = LoggerFactory.getLogger(UserDaoImpl.class);
+	
+	private List<Template> templates = new ArrayList<Template>();
 
 	/* (non-Javadoc)
 	 * @see com.libereco.server.dao.AbstractDao#saveOrUpdate(java.lang.Object)
@@ -83,7 +89,7 @@ public class UserDaoImpl extends AbstractJpaDaoSupport<Long, User> implements
 	@Override
 	public User findByUserName(String userName) {
 		Query q = entityManager.createQuery("from User where userName = :_name");
-		q.setParameter("userName", userName);
+		q.setParameter("_name", userName);
 		List<?> ls = null;
 		return (User) ((ls = q.getResultList()) != null && !ls.isEmpty() ? ls.get(0) : null);
 	}
@@ -99,14 +105,27 @@ public class UserDaoImpl extends AbstractJpaDaoSupport<Long, User> implements
 		}
 	}
 	
+	/**
+	 * @param name
+	 * @return {@link Template}
+	 */
 	public Template createTemplate(String name) {
 		Template template = null;
+		final String className = "com.libereco.server.model.Libereco" + name + "Template";
 		try {
-			template = (Template) Class.forName("Libereco" + name + "Template").newInstance();
+			template = (Template) Class.forName(className).newInstance();
+			templates.add(template);
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error("unable to create instance of class [" + className + "]", e);
 		}
 		return template;
+	}
+	
+	/**
+	 * @return {@link List<Template>}
+	 */
+	public List<Template> getTemplates() {
+		return templates;
 	}
 
 }

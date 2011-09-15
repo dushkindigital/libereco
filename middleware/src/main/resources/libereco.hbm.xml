@@ -3,6 +3,7 @@
 
 <hibernate-mapping package="com.libereco.server.model" schema="libereco">
     
+    <!--
     <class name="User" table="liberecoUser" lazy="false" >      
         <id name="id" column="id" type="java.lang.Long">
             <generator class="native" />
@@ -12,26 +13,9 @@
         <property name="created" type="java.sql.Timestamp" not-null="true"/>
         <property name="lastUpdated" type="java.sql.Timestamp" not-null="true"/>        
         <property name="status" type="java.lang.Integer" not-null="true"/>
-        <!--  <property name="role" type="java.lang.Integer"/> -->
     </class>
+    -->
     
-    <class name="MarketplaceAuthorizations" table="marketplaceAuthorizations" lazy="false" > 
-        <!--  
-        <id name="id" column="id" type="java.lang.Long">
-            <generator class="native" />
-        </id> 
-        -->        
-        <composite-id>
-            <key-many-to-one name="user" column="userId" class="com.libereco.server.model.User" />
-            <!-- RR
-            <key-many-to-one name="marketplace" column="marketplaceId" class="com.libereco.server.model.Marketplace" />
-            -->
-        </composite-id>
-     
-        <property name="token" type="java.lang.String" not-null="false"/>
-        <property name="tokenSecret" type="java.lang.String" not-null="false"/>
-        <property name="expirationTime" type="java.sql.Timestamp" not-null="false"/>
-    </class>
 
 
     <class name="PendingMarketplaceAuthorizations" table="pendingMarketplaceAuthorizations" lazy="false" > 

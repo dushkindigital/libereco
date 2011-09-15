@@ -5,6 +5,8 @@
  */
 package com.libereco.server.service.impl;
 
+import static com.libereco.common.UserStatus.*;
+
 import java.sql.Timestamp;
 
 import org.slf4j.Logger;
@@ -15,7 +17,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.libereco.server.dao.UserDao;
 import com.libereco.server.dto.UserDto;
 import com.libereco.server.model.User;
-import com.libereco.server.model.UserConstants;
 import com.libereco.server.service.UserService;
 
 /**
@@ -70,14 +71,15 @@ public class UserServiceImpl extends AbstractBasicService<Long, User, UserDto> i
 		User userEntity = toEntity(userDto);
 		
 		// TODO: Update status to use enum type. This is just for the prototype.
-		userEntity.setStatus(UserConstants.UserStatus.DELETED);
+//		userEntity.setStatus(UserConstants.UserStatus.DELETED);
+		userEntity.setStatus(DELETED);
 		getUserDao().saveOrUpdate(userEntity);
 	}
 
 	@Override
 	public void deleteUser(String userName) {
 		User userEntity = getUserDao().findByUserName(userName);
-		userEntity.setStatus(UserConstants.UserStatus.DELETED);		
+		userEntity.setStatus(DELETED);		
 		getUserDao().saveOrUpdate(userEntity);
 	}
 

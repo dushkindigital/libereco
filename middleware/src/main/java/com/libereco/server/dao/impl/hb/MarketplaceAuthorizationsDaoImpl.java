@@ -16,7 +16,7 @@ import org.springframework.stereotype.Repository;
 import com.libereco.server.dao.MarketplaceAuthorizationsDao;
 import com.libereco.server.model.Marketplace;
 import com.libereco.server.model.MarketplaceAuthorizations;
-import com.libereco.server.model.MarketplaceAuthorizations.CompositeKey;
+import com.libereco.server.model.MarketplaceAuthorizationsCompositeKey;
 import com.libereco.server.model.User;
 
 /**
@@ -25,7 +25,7 @@ import com.libereco.server.model.User;
  */
 @Repository("marketplaceAuthorizationsDao")
 public class MarketplaceAuthorizationsDaoImpl extends
-		AbstractDaoSupport<CompositeKey, MarketplaceAuthorizations> implements
+		AbstractDaoSupport<MarketplaceAuthorizationsCompositeKey, MarketplaceAuthorizations> implements
 		MarketplaceAuthorizationsDao {
 
 

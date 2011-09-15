@@ -11,6 +11,7 @@ import java.util.List;
 
 import com.libereco.server.model.Marketplace;
 import com.libereco.server.model.MarketplaceAuthorizations;
+import com.libereco.server.model.MarketplaceAuthorizationsCompositeKey;
 import com.libereco.server.model.User;
 
 /**
@@ -19,7 +20,7 @@ import com.libereco.server.model.User;
  */
 public interface MarketplaceAuthorizationsDao
 		extends
-		AbstractDao<MarketplaceAuthorizations.CompositeKey, MarketplaceAuthorizations> {
+		AbstractDao<MarketplaceAuthorizationsCompositeKey, MarketplaceAuthorizations> {
 
 	public MarketplaceAuthorizations getAuthorization(User user,
 			Marketplace marketplace);

@@ -13,7 +13,6 @@ import java.util.List;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
-import org.springframework.stereotype.Repository;
 
 import com.libereco.server.dao.MarketplaceDao;
 import com.libereco.server.model.Marketplace;
