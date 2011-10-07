@@ -61,7 +61,7 @@ public class TestAddListing extends AbstractEbayTestCase {
 
 		EbayListingItem ebayListingItem = new EbayListingItem();
 
-		ebayListingItem.setItemTitle("Test item");
+		ebayListingItem.setItemTitle("RR Test item");
 		ebayListingItem.setSubTitle("Subtitle");
 		ebayListingItem.setDescription("Description");
 		ebayListingItem.setListingDuration("Days_7");
@@ -599,7 +599,8 @@ public class TestAddListing extends AbstractEbayTestCase {
 
 	private String[] getPicturePathList() {
 		// String[] pathList = { "C:\\Temp//testThumbnail2.jpg" };
-		String[] pathList = { "C:\\Temp\\testThumbnail2.jpg" };
+		// String[] pathList = { "C:\\Temp\\testThumbnail2.jpg" };
+		String[] pathList = { "C:\\Program Files\\PC-Doctor\\Images\\application_icon.png" };
 		return pathList;
 	}
 
