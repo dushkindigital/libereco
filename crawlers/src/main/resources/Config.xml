@@ -10,9 +10,9 @@
   <!--LogFilePath>SanityTest.log</LogFilePath-->
 
   <ApiCredential>
-    <Developer>6c424592-6983-4bb1-b9f8-274e91ff1761</Developer>
-    <Application>Aleksand-6699-40c8-91ae-cc29c24be427</Application>
-    <Certificate>ebbe888d-741c-48c9-bfff-f43cd1fb76b4</Certificate>
+    <Developer>74c52e41-c565-4b16-8989-44b4a1d7fb2d</Developer>
+    <Application>RegCared-f1ed-4eb7-923d-cb91e99d8518</Application>
+    <Certificate>83ae77ea-4b93-48f6-9535-4d7b60c417d8</Certificate>
   </ApiCredential>
 
   <eBayCredential>

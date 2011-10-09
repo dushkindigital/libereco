@@ -25,7 +25,7 @@ public class TestEbayAuthorizer extends TestCase {
 	protected static final String SANDBOX_SERVER_URL = "https://api.sandbox.ebay.com/wsapi";
 
 	// protected static final String SANDBOX_RUNAME = "Aleksandar_Milj-Aleksand-6699-4-aymgtotbu";
-	protected static final String SANDBOX_RUNAME = "test_rr184184";
+	protected static final String SANDBOX_RUNAME = "Reg_Cared-RegCared-f1ed-4-vhypqmfay";
 
     private static final String SANDBOX_SIGNIN_URL = "https://signin.sandbox.ebay.com/ws/eBayISAPI.dll?SignIn&RuName=";
     
@@ -40,10 +40,12 @@ public class TestEbayAuthorizer extends TestCase {
 		apiContext = setupApiContext();
 	}
 
+	@Test
 	public void testGetSessionId() throws Exception {
 		EbayAuthorizer ebayAuthorizer = new EbayAuthorizer(apiContext,
 				SANDBOX_SIGNIN_URL, SANDBOX_RUNAME);
-		ebayAuthorizer.getSessionId();
+		String sessionId = ebayAuthorizer.getSessionId();
+		assertNotNull(sessionId);
 	}
 
 	@Test
@@ -64,9 +66,12 @@ public class TestEbayAuthorizer extends TestCase {
 	
 	private ApiAccount initApiAccount() {
 		ApiAccount apiAccount = new ApiAccount();
-		apiAccount.setDeveloper("6c424592-6983-4bb1-b9f8-274e91ff1761");
-		apiAccount.setApplication("Aleksand-6699-40c8-91ae-cc29c24be427");
-		apiAccount.setCertificate("ebbe888d-741c-48c9-bfff-f43cd1fb76b4");
+//		apiAccount.setDeveloper("6c424592-6983-4bb1-b9f8-274e91ff1761");
+//		apiAccount.setApplication("Aleksand-6699-40c8-91ae-cc29c24be427");
+//		apiAccount.setCertificate("ebbe888d-741c-48c9-bfff-f43cd1fb76b4");
+		apiAccount.setDeveloper("74c52e41-c565-4b16-8989-44b4a1d7fb2d");
+		apiAccount.setApplication("RegCared-f1ed-4eb7-923d-cb91e99d8518");
+		apiAccount.setCertificate("83ae77ea-4b93-48f6-9535-4d7b60c417d8");
 
 		return apiAccount;
 	}
