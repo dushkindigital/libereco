@@ -77,9 +77,9 @@ public class RestletApplication extends Application {
 		// User-related methods
 		router.attach("/users/user/edit/id/{id}", UserResource.class);
 		router.attach("/users/user/remove/id/{id}", UserResource.class);
-		router.attach("/users/user/add", UserResource.class);
-		router.attach("/users/user/", UserResource.class).setMatchingMode(
-				Template.MODE_STARTS_WITH);
+		router.attach("/users/user/add/{id}", UserResource.class);
+//		router.attach("/users/user/", UserResource.class).setMatchingMode(
+//				Template.MODE_STARTS_WITH);
 
 		// User-related authorization demo methods
 		router.attach("/users/authDemo/startEbayAuth", AuthDemoResource.class);				

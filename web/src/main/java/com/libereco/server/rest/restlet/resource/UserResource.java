@@ -36,7 +36,7 @@ import com.libereco.server.utils.json.GsonFactory;
  * @author Aleksandar
  * 
  */
-public class UserResource extends AbstractLiberecoResource {
+public class UserResource extends AbstractLiberecoResource implements IUserResource {
 
 	private Logger logger = LoggerFactory.getLogger(UserResource.class);
 
@@ -49,16 +49,18 @@ public class UserResource extends AbstractLiberecoResource {
 	protected void doInit() throws ResourceException {
 		super.doInit();
 
-		// this.getVariants().add(RestletConstants.TEXT_XML_VARIANT);
-		// this.getVariants().add(RestletConstants.APPLICATION_XML_VARIANT);
-		// this.getVariants().add(RestletConstants.APPLICATION_JSON_VARIANT);
+		// you should not use getVariants and annotation in the same resource
+//		 this.getVariants().add(RestletConstants.TEXT_XML_VARIANT);
+//		 this.getVariants().add(RestletConstants.APPLICATION_XML_VARIANT);
+//		 this.getVariants().add(RestletConstants.APPLICATION_JSON_VARIANT);
+//		 this.getVariants().add(RestletConstants.APPLICATION_WWW_FORM_VARIANT);
 
 		logReferenceInfo();
 
 		userId = (String) getRequest().getAttributes().get("id");
 	}
 
-	@Get
+	@Get("xml|html|json")
 	public String getResource() {
 		return represent();
 	}
@@ -81,18 +83,20 @@ public class UserResource extends AbstractLiberecoResource {
 	// that we don't have to process reference path to determine request type.
 	@Post
 	public String processPostRequest(Representation entity)
-			throws ResourceException {
+			throws ResourceException, IOException {
 
 		String response = null;
 
-		logger.debug("processPostRequest, representation: " + entity);
+		if (logger.isDebugEnabled()) {
+			logger.debug("processPostRequest, representation: " + entity +
+							"\tMedia Type: " + entity.getMediaType().toString()
+							);		
+		}
 
 		if (entity != null
-				&& (entity
-						.isCompatible(RestletConstants.APPLICATION_XML_VARIANT)
-						|| entity
-								.isCompatible(RestletConstants.APPLICATION_JSON_VARIANT) || entity
-						.isCompatible(RestletConstants.TEXT_XML_VARIANT))) {
+				&& (entity.isCompatible(RestletConstants.APPLICATION_XML_VARIANT) ||
+					entity.isCompatible(RestletConstants.APPLICATION_JSON_VARIANT) ||
+					entity.isCompatible(RestletConstants.TEXT_XML_VARIANT))) {
 
 			try {
 				// TODO: Confirm that entity's text doesn't get modified and

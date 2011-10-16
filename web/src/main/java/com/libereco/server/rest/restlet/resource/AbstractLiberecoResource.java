@@ -39,7 +39,7 @@ import com.libereco.server.utils.json.GsonFactory;
 public abstract class AbstractLiberecoResource extends ServerResource {
 
 	private static final Logger logger = LoggerFactory
-			.getLogger(UserResource.class);
+			.getLogger(AbstractLiberecoResource.class);
 
 	protected Logger getLiberecoResourceLogger() {
 		return logger;

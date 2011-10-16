@@ -61,7 +61,7 @@ public class TestAddListing extends AbstractEbayTestCase {
 
 		EbayListingItem ebayListingItem = new EbayListingItem();
 
-		ebayListingItem.setItemTitle("RR Test item");
+		ebayListingItem.setItemTitle("RR11 Test item");
 		ebayListingItem.setSubTitle("Subtitle");
 		ebayListingItem.setDescription("Description");
 		ebayListingItem.setListingDuration("Days_7");
@@ -111,6 +111,13 @@ public class TestAddListing extends AbstractEbayTestCase {
 		item.setConditionID(1000);
 
 		api.setItem(item);
+		
+		/**
+		 * Defines a single new item and lists it on a specified eBay site. Also for Half.com. 
+		 * Returns the item ID for the new listing, and returns fees the seller will incur for
+		 * the listing (not including the Final Value Fee, which cannot be calculated until
+		 * the item is sold). 
+		 */
 		FeesType fees = api.addItem();
 
 		String itemId = item.getItemID();
@@ -136,7 +143,7 @@ public class TestAddListing extends AbstractEbayTestCase {
 
 		EbayListingItem ebayListingItem = new EbayListingItem();
 
-		ebayListingItem.setItemTitle("Test item");
+		ebayListingItem.setItemTitle("RR2 Test item");
 		ebayListingItem.setSubTitle("Subtitle");
 		ebayListingItem.setDescription("Description");
 		ebayListingItem.setListingDuration("Days_7");
@@ -200,6 +207,13 @@ public class TestAddListing extends AbstractEbayTestCase {
 		item.setConditionID(1000);
 
 		api.setItem(item);
+		
+		/**
+		 * Defines a single new item and lists it on a specified eBay site. Also for Half.com. 
+		 * Returns the item ID for the new listing, and returns fees the seller will incur for
+		 * the listing (not including the Final Value Fee, which cannot be calculated until
+		 * the item is sold). 
+		 */
 		FeesType fees = api.addItem();
 
 		String itemId = item.getItemID();
@@ -233,7 +247,7 @@ public class TestAddListing extends AbstractEbayTestCase {
 
 		EbayListingItem ebayListingItem = new EbayListingItem();
 
-		ebayListingItem.setItemTitle("Test item");
+		ebayListingItem.setItemTitle("RR3 Test item");
 		//ebayListingItem.setSubTitle("Subtitle");
 		ebayListingItem.setDescription("Description");
 		ebayListingItem.setListingDuration("Days_7");
@@ -270,6 +284,13 @@ public class TestAddListing extends AbstractEbayTestCase {
 		item.setConditionID(3000);
 
 		api.setItem(item);
+		
+		/**
+		 * Defines a single new item and lists it on a specified eBay site. Also for Half.com. 
+		 * Returns the item ID for the new listing, and returns fees the seller will incur for
+		 * the listing (not including the Final Value Fee, which cannot be calculated until
+		 * the item is sold). 
+		 */
 		FeesType fees = api.addItem();
 
 		String itemId = item.getItemID();

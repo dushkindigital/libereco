@@ -29,7 +29,8 @@ public class ServiceManager {
 	private static ClassPathXmlApplicationContext ctx = null;
 
 	static {
-		paths = new String[] { "liberecoWeb-applicationContext.xml",  "liberecoMiddleware-applicationContext.xml"};
+		// paths = new String[] { "liberecoWeb-applicationContext.xml",  "liberecoMiddleware-applicationContext.xml"};
+		paths = new String[] { "liberecoWeb-applicationContext.xml",  "liberecoMiddleware-applicationContext-test.xml"};
 		ctx = new ClassPathXmlApplicationContext(paths);
 
 		// BeanFactoryLocator bfl = SingletonBeanFactoryLocator.getInstance();
